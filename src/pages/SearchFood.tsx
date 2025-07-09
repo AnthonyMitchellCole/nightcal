@@ -97,18 +97,18 @@ const SearchFood = () => {
                     <div className="flex-1">
                       <h3 className="font-medium text-text">{food.name}</h3>
                       <p className="text-sm text-text-muted">{food.brand || 'No brand'}</p>
-                      <div className="flex space-x-4 mt-2 text-xs text-text-muted">
-                        <span>F: {food.fat_per_100g}g</span>
-                        <span>C: {food.carbs_per_100g}g</span>
-                        <span>P: {food.protein_per_100g}g</span>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-lg font-semibold text-text">
-                        {food.calories_per_100g}
-                      </span>
-                      <p className="text-xs text-text-muted">Cal/100g</p>
-                    </div>
+                       <div className="flex space-x-4 mt-2 text-xs text-text-muted">
+                         <span>F: {food.fat_per_serving || food.fat_per_100g}g</span>
+                         <span>C: {food.carbs_per_serving || food.carbs_per_100g}g</span>
+                         <span>P: {food.protein_per_serving || food.protein_per_100g}g</span>
+                       </div>
+                     </div>
+                     <div className="text-right">
+                       <span className="text-lg font-semibold text-text">
+                         {food.calories_per_serving || food.calories_per_100g}
+                       </span>
+                       <p className="text-xs text-text-muted">{food.serving_display || 'per 100g'}</p>
+                     </div>
                   </div>
                 </CardContent>
               </Card>
