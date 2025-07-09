@@ -16,7 +16,7 @@ interface MacroProgressCardProps {
 
 export const MacroProgressCard = ({ macros }: MacroProgressCardProps) => {
   const getMacroPercentage = (current: number, goal: number) => {
-    return Math.min((current / goal) * 100, 100);
+    return (current / goal) * 100; // Allow over 100%
   };
 
   const MacroRing = ({ label, current, goal, color }: { 
@@ -33,6 +33,7 @@ export const MacroProgressCard = ({ macros }: MacroProgressCardProps) => {
 
     return (
       <div className="flex flex-col items-center">
+        <p className="text-base font-semibold text-text mb-2">{label}</p>
         <div className="relative w-24 h-24 mb-3">
           <svg className="w-24 h-24 transform -rotate-90" viewBox="0 0 100 100">
             {/* Background ring */}
@@ -74,7 +75,6 @@ export const MacroProgressCard = ({ macros }: MacroProgressCardProps) => {
           </div>
         </div>
         <div className="text-center">
-          <p className="text-base font-semibold text-text">{label}</p>
           <p className="text-sm text-text-muted">{current}g / {goal}g</p>
           <p className="text-xs text-text-muted">
             ({Math.round(percentage)}% of goal)
@@ -89,7 +89,6 @@ export const MacroProgressCard = ({ macros }: MacroProgressCardProps) => {
       <CardContent className="p-6">
         <div className="mb-4">
           <h3 className="text-lg font-semibold text-text">Macro Progress</h3>
-          <p className="text-sm text-text-muted">Daily nutrition breakdown</p>
         </div>
         <div className="flex justify-between items-center">
           <MacroRing

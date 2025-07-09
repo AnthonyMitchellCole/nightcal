@@ -8,7 +8,7 @@ interface CalorieSummaryCardProps {
 }
 
 export const CalorieSummaryCard = ({ calories }: CalorieSummaryCardProps) => {
-  const percentage = Math.min((calories.current / calories.goal) * 100, 100);
+  const percentage = (calories.current / calories.goal) * 100; // Allow over 100%
   const remaining = calories.goal - calories.current;
   const circumference = 2 * Math.PI * 60;
   const strokeDasharray = circumference;
@@ -19,7 +19,6 @@ export const CalorieSummaryCard = ({ calories }: CalorieSummaryCardProps) => {
       <CardContent className="p-6">
         <div className="mb-4">
           <h3 className="text-lg font-semibold text-text">Calorie Summary</h3>
-          <p className="text-sm text-text-muted">Daily energy intake</p>
         </div>
         <div className="flex flex-col items-center">
           <div className="relative w-32 h-32 mb-4">
