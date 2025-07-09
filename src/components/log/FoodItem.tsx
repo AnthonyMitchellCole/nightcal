@@ -31,26 +31,20 @@ export const FoodItem = ({ food, dailyGoals }: FoodItemProps) => {
         )}
         <div className="flex items-center gap-2 mb-1">
           <span className="text-xs font-semibold text-info bg-info/15 px-1.5 py-0.5 rounded">
-            C: {food.carbs}g
+            C: {food.carbs}g <span className="opacity-75">({foodCarbPercentage}%)</span>
           </span>
           <span className="text-xs font-semibold text-success bg-success/15 px-1.5 py-0.5 rounded">
-            P: {food.protein}g
+            P: {food.protein}g <span className="opacity-75">({foodProteinPercentage}%)</span>
           </span>
           <span className="text-xs font-semibold text-warning bg-warning/15 px-1.5 py-0.5 rounded">
-            F: {food.fat}g
+            F: {food.fat}g <span className="opacity-75">({foodFatPercentage}%)</span>
           </span>
-        </div>
-        <div className="text-xs text-text-muted">
-          {foodCarbPercentage}% • {foodProteinPercentage}% • {foodFatPercentage}% of daily goals
         </div>
       </div>
       <div className="text-right ml-3">
         <span className="font-semibold text-text text-lg">
-          {food.calories} Cal
+          {food.calories} Cal <span className="text-xs opacity-75">({foodCalPercentage}%)</span>
         </span>
-        <div className="text-xs text-text-muted">
-          {foodCalPercentage}% of goal
-        </div>
       </div>
     </div>
   );

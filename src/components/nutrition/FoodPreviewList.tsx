@@ -83,26 +83,19 @@ export const FoodPreviewList = ({ foods, dailyGoals }: FoodPreviewListProps) => 
                   
                   <div className="flex items-center gap-2 mb-1">
                     <span className="text-xs font-semibold text-info bg-info/15 px-1.5 py-0.5 rounded">
-                      C: {food.macros.carbs}g
+                      C: {food.macros.carbs}g <span className="opacity-75">({carbPercentage}%)</span>
                     </span>
                     <span className="text-xs font-semibold text-success bg-success/15 px-1.5 py-0.5 rounded">
-                      P: {food.macros.protein}g
+                      P: {food.macros.protein}g <span className="opacity-75">({proteinPercentage}%)</span>
                     </span>
                     <span className="text-xs font-semibold text-warning bg-warning/15 px-1.5 py-0.5 rounded">
-                      F: {food.macros.fat}g
+                      F: {food.macros.fat}g <span className="opacity-75">({fatPercentage}%)</span>
                     </span>
-                  </div>
-                  
-                  <div className="text-xs text-text-muted">
-                    {carbPercentage}% • {proteinPercentage}% • {fatPercentage}% of daily goals
                   </div>
                 </div>
                 
                 <div className="text-right ml-3">
-                  <span className="font-semibold text-primary text-lg">{food.calories} Cal</span>
-                  <div className="text-xs text-text-muted">
-                    {calPercentage}% of goal
-                  </div>
+                  <span className="font-semibold text-primary text-lg">{food.calories} Cal <span className="text-xs opacity-75">({calPercentage}%)</span></span>
                   <div className="w-6 h-6 rounded-full bg-bg-light border border-border flex items-center justify-center group-hover:bg-primary/10 transition-colors mt-2">
                     <div className="w-2 h-2 rounded-full bg-primary opacity-60 group-hover:opacity-100 transition-opacity"></div>
                   </div>
