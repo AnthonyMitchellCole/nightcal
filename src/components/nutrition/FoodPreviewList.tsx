@@ -34,18 +34,8 @@ export const FoodPreviewList = ({ foods, dailyGoals }: FoodPreviewListProps) => 
   };
 
   const getMealBadgeColor = (meal: string) => {
-    switch (meal.toLowerCase()) {
-      case 'breakfast':
-        return 'bg-info/20 text-info border-info/30';
-      case 'lunch':
-        return 'bg-success/20 text-success border-success/30';
-      case 'dinner':
-        return 'bg-warning/20 text-warning border-warning/30';
-      case 'snacks':
-        return 'bg-secondary/20 text-secondary border-secondary/30';
-      default:
-        return 'bg-primary/20 text-primary border-primary/30';
-    }
+    // Neutral styling for all meal badges
+    return 'bg-border/30 text-text-muted border-border/50';
   };
 
   return (
@@ -74,7 +64,7 @@ export const FoodPreviewList = ({ foods, dailyGoals }: FoodPreviewListProps) => 
                     {food.isQuickAdd && (
                       <Badge 
                         variant="outline" 
-                        className="text-xs bg-warning/20 text-warning border-warning/30"
+                        className="text-xs bg-border/30 text-text-muted border-border/50"
                       >
                         Quick Add
                       </Badge>
