@@ -42,9 +42,14 @@ export const MealCard = ({ meal, dailyGoals }: MealCardProps) => {
   return (
     <Card className="bg-glass border-glass backdrop-blur-glass shadow-soft">
       <CardHeader className="pb-3">
-        <CardTitle className="flex justify-between items-start">
-          <div className="flex flex-col gap-1">
+        <CardTitle className="flex justify-between items-center">
+          {/* Meal Name Section */}
+          <div className="flex-shrink-0">
             <span className="text-lg font-semibold text-text">{meal.name}</span>
+          </div>
+          
+          {/* Macros Section */}
+          <div className="flex flex-col items-center gap-1 flex-1 mx-4">
             <div className="flex items-center gap-3 text-sm">
               <span className="font-bold text-info bg-info/20 px-2 py-1 rounded">
                 C: {meal.totals.carbs}g
@@ -60,7 +65,9 @@ export const MealCard = ({ meal, dailyGoals }: MealCardProps) => {
               {mealCarbPercentage}% • {mealProteinPercentage}% • {mealFatPercentage}% of daily goals
             </div>
           </div>
-          <div className="text-right">
+          
+          {/* Calories Section */}
+          <div className="text-right flex-shrink-0">
             <span className="text-xl font-bold text-primary">
               {meal.totals.calories} Cal
             </span>

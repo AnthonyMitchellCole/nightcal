@@ -69,7 +69,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-bg text-text">
       {/* Header with Logo */}
-      <div className="flex justify-center py-6 px-4">
+      <div className="flex justify-center pt-3 px-4">
         <img 
           src={logoUrl} 
           alt="NightCal" 
