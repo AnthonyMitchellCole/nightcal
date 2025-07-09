@@ -9,16 +9,16 @@ All colors MUST be HSL.
 @layer base {
   :root {
     /* Nutrition Tracker Color Theme */
-    --bg-dark: 233 99% 4%;
-    --bg: 224 84% 6%;
-    --bg-light: 219 61% 10%;
-    --text: 219 100% 100%;
-    --text-muted: 219 69% 75%;
-    --highlight: 219 36% 43%;
-    --border: 219 46% 32%;
-    --border-muted: 220 65% 21%;
-    --primary: 219 78% 75%;
-    --secondary: 39 54% 61%;
+    --bg-dark: 242 84% 4%;
+    --bg: 237 61% 7%;
+    --bg-light: 234 42% 12%;
+    --text: 231 100% 100%;
+    --text-muted: 232 64% 78%;
+    --highlight: 233 27% 46%;
+    --border: 234 33% 35%;
+    --border-muted: 237 43% 25%;
+    --primary: 232 73% 79%;
+    --secondary: 49 44% 58%;
     --danger: 9 47% 65%;
     --warning: 51 32% 52%;
     --success: 149 31% 55%;
@@ -44,23 +44,23 @@ All colors MUST be HSL.
     --radius: 0.75rem;
 
     /* Glassmorphic effects */
-    --glass-bg: 219 61% 10% / 0.8;
-    --glass-border: 219 78% 75% / 0.2;
-    --shadow-soft: 0 4px 20px hsl(224 84% 6% / 0.3);
-    --shadow-layered: 0 2px 10px hsl(224 84% 6% / 0.2), 0 8px 30px hsl(224 84% 6% / 0.4);
+    --glass-bg: 234 42% 12% / 0.8;
+    --glass-border: 232 73% 79% / 0.2;
+    --shadow-soft: 0 4px 20px hsl(237 61% 7% / 0.3);
+    --shadow-layered: 0 2px 10px hsl(237 61% 7% / 0.2), 0 8px 30px hsl(237 61% 7% / 0.4);
   }
 
   .light {
-    --bg-dark: 218 100% 93%;
-    --bg: 218 100% 98%;
-    --bg-light: 218 100% 100%;
-    --text: 234 100% 9%;
-    --text-muted: 219 46% 32%;
-    --highlight: 219 100% 100%;
-    --border: 219 37% 55%;
-    --border-muted: 219 52% 67%;
-    --primary: 219 51% 32%;
-    --secondary: 43 100% 15%;
+    --bg-dark: 230 100% 94%;
+    --bg: 230 100% 99%;
+    --bg-light: 230 100% 100%;
+    --text: 248 97% 9%;
+    --text-muted: 234 33% 35%;
+    --highlight: 231 100% 100%;
+    --border: 232 31% 58%;
+    --border-muted: 232 46% 70%;
+    --primary: 235 36% 36%;
+    --secondary: 51 100% 12%;
     --danger: 8 36% 41%;
     --warning: 52 58% 28%;
     --success: 152 45% 31%;
@@ -85,10 +85,10 @@ All colors MUST be HSL.
     --ring: var(--primary);
 
     /* Light mode glassmorphic effects */
-    --glass-bg: 218 100% 100% / 0.9;
-    --glass-border: 219 51% 32% / 0.2;
-    --shadow-soft: 0 4px 20px hsl(218 100% 93% / 0.3);
-    --shadow-layered: 0 2px 10px hsl(218 100% 93% / 0.2), 0 8px 30px hsl(218 100% 93% / 0.4);
+    --glass-bg: 230 100% 100% / 0.9;
+    --glass-border: 235 36% 36% / 0.2;
+    --shadow-soft: 0 4px 20px hsl(230 100% 94% / 0.3);
+    --shadow-layered: 0 2px 10px hsl(230 100% 94% / 0.2), 0 8px 30px hsl(230 100% 94% / 0.4);
   }
 }
 
