@@ -97,7 +97,7 @@ export const MealCard = ({ meal, dailyGoals }: MealCardProps) => {
                 quantity={food.quantity}
                 servingSizeId={food.servingSizeId}
                 mealId={meal.id}
-                isQuickAdd={food.name.includes('Quick Add') || !food.id}
+                isQuickAdd={!food.id || food.name === 'Quick Add Entry' || food.name.includes('Quick Add')}
                 dailyGoals={dailyGoals} 
               />
             ))}

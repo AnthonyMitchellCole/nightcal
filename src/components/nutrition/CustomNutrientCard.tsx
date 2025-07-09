@@ -15,7 +15,7 @@ export const CustomNutrientCard = ({ nutrient }: CustomNutrientCardProps) => {
   const percentage = Math.min((nutrient.current / nutrient.goal) * 100, 100);
 
   return (
-    <Card className="w-[calc(100vw-3rem)] md:w-full md:flex-1 md:max-w-sm bg-glass border-glass backdrop-blur-glass shadow-layered snap-center-force flex-shrink-0">
+    <Card className="w-[calc(100vw-3rem)] md:w-full md:flex-1 md:max-w-sm glass-elevated shadow-deep backdrop-blur-glass snap-center-force flex-shrink-0">
       <CardContent className="p-6">
         <div className="mb-4 flex items-center justify-between">
           <div>
@@ -38,7 +38,7 @@ export const CustomNutrientCard = ({ nutrient }: CustomNutrientCardProps) => {
           <div className="space-y-2">
             <Progress 
               value={percentage} 
-              className="h-3 bg-border-muted"
+              className="h-4 bg-border-muted shadow-inner"
             />
             <div className="flex justify-between text-xs text-text-muted">
               <span>0{nutrient.unit}</span>

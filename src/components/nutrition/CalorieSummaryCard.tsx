@@ -14,7 +14,7 @@ export const CalorieSummaryCard = ({ calories }: CalorieSummaryCardProps) => {
   const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
   return (
-    <Card className="w-[calc(100vw-3rem)] md:w-full md:flex-1 md:max-w-sm bg-glass border-glass backdrop-blur-glass shadow-layered snap-center-force flex-shrink-0">
+    <Card className="w-[calc(100vw-3rem)] md:w-full md:flex-1 md:max-w-sm glass-elevated shadow-deep backdrop-blur-glass snap-center-force flex-shrink-0">
       <CardContent className="p-6">
         <div className="mb-4">
           <h3 className="text-lg font-semibold text-text">Calorie Summary</h3>
@@ -22,7 +22,7 @@ export const CalorieSummaryCard = ({ calories }: CalorieSummaryCardProps) => {
         </div>
         <div className="flex flex-col items-center">
           <div className="relative w-32 h-32 mb-4">
-            <svg className="w-32 h-32 transform -rotate-90" viewBox="0 0 140 140">
+            <svg className="w-32 h-32 transform -rotate-90 ring-enhanced" viewBox="0 0 140 140">
               {/* Background ring */}
               <circle
                 cx="70"
@@ -32,18 +32,25 @@ export const CalorieSummaryCard = ({ calories }: CalorieSummaryCardProps) => {
                 stroke="hsl(var(--border-muted))"
                 strokeWidth="24"
               />
-              {/* Progress ring */}
+              {/* Progress ring with gradient */}
+              <defs>
+                <linearGradient id="calorie-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="hsl(var(--primary))" />
+                  <stop offset="50%" stopColor="hsl(var(--primary-glow))" />
+                  <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0.8" />
+                </linearGradient>
+              </defs>
               <circle
                 cx="70"
                 cy="70"
                 r="55"
                 fill="none"
-                stroke="hsl(var(--primary))"
+                stroke="url(#calorie-gradient)"
                 strokeWidth="24"
                 strokeLinecap="round"
                 strokeDasharray={strokeDasharray}
                 strokeDashoffset={strokeDashoffset}
-                className="transition-all duration-1000 ease-out"
+                className="transition-all duration-1000 ease-out filter drop-shadow-lg ring-glow"
               />
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">

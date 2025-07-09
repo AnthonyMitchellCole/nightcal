@@ -9,7 +9,7 @@ const FullLog = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-bg text-text">
+      <div className="min-h-screen page-gradient text-text">
         <FullLogHeader />
         <div className="flex items-center justify-center p-8">
           <div className="flex items-center space-x-2">
@@ -22,7 +22,7 @@ const FullLog = () => {
   }
 
   return (
-    <div className="min-h-screen bg-bg text-text">
+    <div className="min-h-screen page-gradient text-text">
       <FullLogHeader />
       
       <div className="p-4 space-y-4">

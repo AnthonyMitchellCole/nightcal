@@ -18,11 +18,18 @@ All colors MUST be HSL.
     --border: 233 47% 37%;
     --border-muted: 237 59% 27%;
     --primary: 229 100% 80%;
+    --primary-glow: 229 100% 85%;
     --secondary: 47 58% 53%;
     --danger: 8 68% 66%;
     --warning: 52 59% 44%;
     --success: 152 45% 49%;
     --info: 217 80% 68%;
+
+    /* Enhanced color variants */
+    --primary-variant: 217 80% 68%;
+    --success-variant: 152 55% 59%;
+    --warning-variant: 52 69% 54%;
+    --info-variant: 229 90% 75%;
 
     /* Standard mappings for components */
     --background: var(--bg);
@@ -49,12 +56,15 @@ All colors MUST be HSL.
     --shadow-soft: 0 4px 20px hsl(238 77% 8% / 0.3);
     --shadow-layered: 0 2px 10px hsl(238 77% 8% / 0.2), 0 8px 30px hsl(238 77% 8% / 0.4);
     --shadow-deep: 0 20px 40px hsl(238 77% 8% / 0.5), 0 4px 12px hsl(238 77% 8% / 0.3);
+    --shadow-glow: 0 0 40px hsl(var(--primary-glow) / 0.4);
     
     /* Enhanced gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--info)) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary-variant)) 100%);
     --gradient-surface: linear-gradient(135deg, hsl(var(--bg-light)) 0%, hsl(var(--bg)) 100%);
     --gradient-glass: linear-gradient(135deg, hsl(var(--glass-bg)) 0%, hsl(233 59% 13% / 0.6) 100%);
     --gradient-accent: linear-gradient(135deg, hsl(var(--primary) / 0.1) 0%, hsl(var(--info) / 0.1) 100%);
+    --gradient-card: radial-gradient(ellipse at top, hsl(var(--bg-light)) 0%, hsl(var(--bg)) 100%);
+    --gradient-ring: conic-gradient(from 0deg, hsl(var(--primary)) 0deg, hsl(var(--info)) 120deg, hsl(var(--success)) 240deg, hsl(var(--primary)) 360deg);
   }
 
   .light {
@@ -97,12 +107,15 @@ All colors MUST be HSL.
     --shadow-soft: 0 4px 20px hsl(227 100% 95% / 0.3);
     --shadow-layered: 0 2px 10px hsl(227 100% 95% / 0.2), 0 8px 30px hsl(227 100% 95% / 0.4);
     --shadow-deep: 0 20px 40px hsl(227 100% 95% / 0.5), 0 4px 12px hsl(227 100% 95% / 0.3);
+    --shadow-glow: 0 0 40px hsl(var(--primary) / 0.3);
     
     /* Light mode gradients */
     --gradient-primary: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--info)) 100%);
     --gradient-surface: linear-gradient(135deg, hsl(var(--bg-light)) 0%, hsl(var(--bg)) 100%);
     --gradient-glass: linear-gradient(135deg, hsl(var(--glass-bg)) 0%, hsl(227 100% 100% / 0.7) 100%);
     --gradient-accent: linear-gradient(135deg, hsl(var(--primary) / 0.1) 0%, hsl(var(--info) / 0.1) 100%);
+    --gradient-card: radial-gradient(ellipse at top, hsl(var(--bg-light)) 0%, hsl(var(--bg)) 100%);
+    --gradient-ring: conic-gradient(from 0deg, hsl(var(--primary)) 0deg, hsl(var(--info)) 120deg, hsl(var(--success)) 240deg, hsl(var(--primary)) 360deg);
   }
 }
 
@@ -170,5 +183,27 @@ All colors MUST be HSL.
 
   .gradient-accent {
     background: var(--gradient-accent);
+  }
+
+  .gradient-card {
+    background: var(--gradient-card);
+  }
+
+  .gradient-ring {
+    background: var(--gradient-ring);
+  }
+
+  /* Page backgrounds with subtle gradients */
+  .page-gradient {
+    background: linear-gradient(180deg, hsl(var(--bg)) 0%, hsl(var(--bg-dark)) 100%);
+  }
+
+  /* Enhanced ring depth */
+  .ring-enhanced {
+    filter: drop-shadow(0 0 8px hsl(var(--primary) / 0.5));
+  }
+
+  .ring-glow {
+    box-shadow: var(--shadow-glow);
   }
 }

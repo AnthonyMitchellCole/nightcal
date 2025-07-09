@@ -82,7 +82,10 @@ export default {
 				'gradient-primary': 'var(--gradient-primary)',
 				'gradient-surface': 'var(--gradient-surface)', 
 				'gradient-glass': 'var(--gradient-glass)',
-				'gradient-accent': 'var(--gradient-accent)'
+				'gradient-accent': 'var(--gradient-accent)',
+				'gradient-card': 'var(--gradient-card)',
+				'gradient-ring': 'var(--gradient-ring)',
+				'page-gradient': 'linear-gradient(180deg, hsl(var(--bg)) 0%, hsl(var(--bg-dark)) 100%)'
 			},
 			borderColor: {
 				'glass': 'hsl(var(--glass-border))'

@@ -61,7 +61,7 @@ const Index = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-bg text-text flex items-center justify-center">
+      <div className="min-h-screen page-gradient text-text flex items-center justify-center">
         <div className="flex items-center space-x-2">
           <LoadingEmblem />
           <span>Loading your nutrition data...</span>
@@ -71,7 +71,7 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen bg-bg text-text">
+    <div className="min-h-screen page-gradient text-text">
       {/* Header with Logo */}
       <div className="flex justify-center pt-3 px-4">
         <img 
