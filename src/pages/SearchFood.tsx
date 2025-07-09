@@ -107,7 +107,7 @@ const SearchFood = () => {
                        <span className="text-lg font-semibold text-text">
                          {food.calories_per_serving || food.calories_per_100g}
                        </span>
-                       <p className="text-xs text-text-muted">{food.serving_display || 'per 100g'}</p>
+                       <p className="text-xs text-text-muted">Cal/{food.serving_display || 'per 100g'}</p>
                      </div>
                   </div>
                 </CardContent>
