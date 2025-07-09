@@ -52,7 +52,7 @@ export const DailyTotalsCard = ({ dailyTotals, dailyGoals }: DailyTotalsCardProp
             </div>
             <Progress 
               value={(dailyTotals.fat / dailyGoals.fat) * 100} 
-              className="h-3 [&>div]:bg-warning" 
+              className="h-3 bg-border-muted [&>div]:bg-warning" 
             />
           </div>
           <div>
@@ -62,7 +62,7 @@ export const DailyTotalsCard = ({ dailyTotals, dailyGoals }: DailyTotalsCardProp
             </div>
             <Progress 
               value={(dailyTotals.carbs / dailyGoals.carbs) * 100} 
-              className="h-3 [&>div]:bg-info" 
+              className="h-3 bg-border-muted [&>div]:bg-info" 
             />
           </div>
           <div>
@@ -72,7 +72,7 @@ export const DailyTotalsCard = ({ dailyTotals, dailyGoals }: DailyTotalsCardProp
             </div>
             <Progress 
               value={(dailyTotals.protein / dailyGoals.protein) * 100} 
-              className="h-3 [&>div]:bg-success" 
+              className="h-3 bg-border-muted [&>div]:bg-success" 
             />
           </div>
         </div>
