@@ -70,7 +70,7 @@ export const MacroProgressCard = ({ macros }: MacroProgressCardProps) => {
   };
 
   return (
-    <Card className="min-w-[280px] bg-glass border-glass backdrop-blur-glass shadow-layered snap-start">
+    <Card className="w-[calc(100vw-2rem)] md:w-full md:flex-1 md:max-w-sm bg-glass border-glass backdrop-blur-glass shadow-layered snap-start flex-shrink-0">
       <CardContent className="p-6">
         <div className="mb-4">
           <h3 className="text-lg font-semibold text-text">Macro Progress</h3>

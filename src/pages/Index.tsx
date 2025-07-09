@@ -37,7 +37,7 @@ const Index = () => {
       <div className="pb-20">
         {/* Top Carousel */}
         <div className="p-4">
-          <div className="flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory">
+          <div className="flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory md:justify-center">
             <MacroProgressCard macros={mockData.macros} />
             <CalorieSummaryCard calories={mockData.calories} />
             <CustomNutrientCard nutrient={mockData.customNutrient} />
