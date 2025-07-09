@@ -5,6 +5,7 @@ import { FoodPreviewList } from "@/components/nutrition/FoodPreviewList";
 import { useDailySummary, useFoodLogs } from "@/hooks/useFoodLogs";
 import { useProfile } from "@/hooks/useProfile";
 import { LoadingEmblem } from "@/components/ui/loading-emblem";
+import nutritrackLogo from "@/assets/nutritrack-logo.png";
 
 const Index = () => {
   const { summary, loading: summaryLoading } = useDailySummary();
@@ -66,6 +67,15 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-bg text-text">
+      {/* Header with Logo */}
+      <div className="flex justify-center py-6 px-4">
+        <img 
+          src={nutritrackLogo} 
+          alt="NutriTrack" 
+          className="h-12 w-auto object-contain"
+        />
+      </div>
+
       {/* Top Carousel */}
       <div className="w-full my-6">
         <div className="flex overflow-x-auto scrollbar-hide snap-x-mandatory px-4 gap-4 md:justify-center md:px-4">

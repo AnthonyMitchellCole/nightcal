@@ -32,8 +32,8 @@ export const MacroProgressCard = ({ macros }: MacroProgressCardProps) => {
 
     return (
       <div className="flex flex-col items-center">
-        <div className="relative w-32 h-32 mb-3">
-          <svg className="w-32 h-32 transform -rotate-90" viewBox="0 0 100 100">
+        <div className="relative w-28 h-28 mb-3">
+          <svg className="w-28 h-28 transform -rotate-90" viewBox="0 0 100 100">
             {/* Background ring */}
             <circle
               cx="50"
