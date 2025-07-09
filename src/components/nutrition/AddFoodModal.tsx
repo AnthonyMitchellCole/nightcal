@@ -79,12 +79,12 @@ export const AddFoodModal = ({ isOpen, onClose }: AddFoodModalProps) => {
   return (
     <>
       <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="bg-bg border-border w-[95vw] max-w-md mx-auto">
-          <DialogHeader>
+        <DialogContent className="bg-bg border-border w-[95vw] max-w-md mx-auto p-6">
+          <DialogHeader className="pb-2">
             <DialogTitle className="text-text text-center text-xl">Add Food</DialogTitle>
           </DialogHeader>
           
-          <div className="flex gap-1 py-4">
+          <div className="flex gap-1 py-4 -mx-2">
             {options.map((option) => {
               const Icon = option.icon;
               const isSelected = selectedOption === option.id;
@@ -110,7 +110,7 @@ export const AddFoodModal = ({ isOpen, onClose }: AddFoodModalProps) => {
             })}
           </div>
           
-          <div className="text-center">
+          <div className="text-center pt-2">
             <Button 
               variant="ghost" 
               onClick={onClose}
