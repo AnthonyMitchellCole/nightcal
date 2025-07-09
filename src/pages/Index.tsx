@@ -36,7 +36,7 @@ const Index = () => {
       {/* Main Content */}
       <div className="pb-20">
         {/* Top Carousel */}
-        <div className="w-full">
+        <div className="w-full my-6">
           <div className="flex overflow-x-auto scrollbar-hide snap-x-mandatory px-4 gap-4 md:justify-center md:px-4">
             <MacroProgressCard macros={mockData.macros} />
             <CalorieSummaryCard calories={mockData.calories} />
