@@ -40,9 +40,9 @@ export const BottomNavigation = ({ activeTab, onTabChange, onAddFood }: BottomNa
               <div key={item.id} className="flex-1 flex justify-center">
                 <Button
                   onClick={onAddFood}
-                  className="w-14 h-14 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-layered transform transition-all duration-200 hover:scale-105 active:scale-95"
+                  className="w-16 h-16 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-layered transform transition-all duration-200 hover:scale-105 active:scale-95 mt-1"
                 >
-                  <Icon className="w-6 h-6" />
+                  <Icon className="w-7 h-7" />
                 </Button>
               </div>
             );
@@ -52,7 +52,7 @@ export const BottomNavigation = ({ activeTab, onTabChange, onAddFood }: BottomNa
             <div key={item.id} className="flex-1 flex justify-center">
               <button
                 onClick={() => handleNavigation(item)}
-                className={`flex flex-col items-center justify-center p-3 rounded-lg transition-all duration-200 min-h-[60px] min-w-[60px] ${
+                className={`flex flex-col items-center justify-center p-4 rounded-lg transition-all duration-200 min-h-[64px] min-w-[64px] ${
                   isActive 
                     ? 'text-primary bg-primary/10' 
                     : 'text-text-muted hover:text-text hover:bg-bg-light/50'

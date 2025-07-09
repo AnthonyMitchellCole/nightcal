@@ -41,6 +41,11 @@ export const useSwipeNavigation = () => {
   const handleTouchStart = useCallback((e: TouchEvent) => {
     if (!isMobile) return;
     
+    // Check if touch started on a scrollable carousel container
+    const target = e.target as Element;
+    const scrollableParent = target.closest('.overflow-x-auto, .snap-x-mandatory, [data-embla-carousel]');
+    if (scrollableParent) return; // Don't interfere with carousel scrolling
+    
     const touch = e.touches[0];
     touchStart.current = {
       x: touch.clientX,
@@ -52,6 +57,11 @@ export const useSwipeNavigation = () => {
 
   const handleTouchMove = useCallback((e: TouchEvent) => {
     if (!isMobile || !touchStart.current) return;
+    
+    // Check if we're interacting with a carousel
+    const target = e.target as Element;
+    const scrollableParent = target.closest('.overflow-x-auto, .snap-x-mandatory, [data-embla-carousel]');
+    if (scrollableParent) return;
     
     const touch = e.touches[0];
     touchEnd.current = {

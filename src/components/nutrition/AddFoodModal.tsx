@@ -57,21 +57,18 @@ export const AddFoodModal = ({ isOpen, onClose }: AddFoodModalProps) => {
       id: 'search',
       icon: Search,
       title: 'Search Food',
-      description: 'Find foods in our database',
       color: 'text-info bg-info/10 border-info/20'
     },
     {
       id: 'scan',
       icon: Camera,
       title: 'Scan Barcode',
-      description: 'Use camera to scan product',
       color: 'text-success bg-success/10 border-success/20'
     },
     {
       id: 'quick',
       icon: Zap,
       title: 'Quick Add',
-      description: 'Manually enter macros',
       color: 'text-warning bg-warning/10 border-warning/20'
     }
   ];
@@ -110,16 +107,15 @@ export const AddFoodModal = ({ isOpen, onClose }: AddFoodModalProps) => {
                   key={option.id}
                   variant="ghost"
                   onClick={() => handleOptionSelect(option.id)}
-                  className={`flex-1 h-auto p-2 flex flex-col items-center gap-1.5 hover:bg-bg-light border-2 border-transparent transition-all duration-200 min-h-[100px] ${
+                  className={`flex-1 h-auto p-4 flex flex-col items-center gap-3 hover:bg-bg-light border-2 border-transparent transition-all duration-200 min-h-[120px] ${
                     isSelected ? option.color : 'hover:border-border'
                   }`}
                 >
-                  <div className={`p-1.5 rounded-full ${option.color}`}>
-                    <Icon className="w-4 h-4" />
+                  <div className={`p-3 rounded-full ${option.color}`}>
+                    <Icon className="w-8 h-8" />
                   </div>
-                  <div className="text-center px-0.5">
-                    <h3 className="font-medium text-text text-[11px] leading-tight">{option.title}</h3>
-                    <p className="text-[9px] text-text-muted mt-0.5 leading-tight">{option.description}</p>
+                  <div className="text-center">
+                    <h3 className="font-medium text-text text-sm leading-tight">{option.title}</h3>
                   </div>
                 </Button>
               );
