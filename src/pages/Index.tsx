@@ -5,7 +5,8 @@ import { FoodPreviewList } from "@/components/nutrition/FoodPreviewList";
 import { useDailySummary, useFoodLogs } from "@/hooks/useFoodLogs";
 import { useProfile } from "@/hooks/useProfile";
 import { LoadingEmblem } from "@/components/ui/loading-emblem";
-import nutritrackLogo from "@/assets/nutritrack-logo.png";
+const SUPABASE_URL = "https://ebdtrwkrelzbtjdwuxbk.supabase.co";
+const logoUrl = `${SUPABASE_URL}/storage/v1/object/public/branding/nightcal-logo.png`;
 
 const Index = () => {
   const { summary, loading: summaryLoading } = useDailySummary();
@@ -70,8 +71,8 @@ const Index = () => {
       {/* Header with Logo */}
       <div className="flex justify-center py-6 px-4">
         <img 
-          src={nutritrackLogo} 
-          alt="NutriTrack" 
+          src={logoUrl} 
+          alt="NightCal" 
           className="h-12 w-auto object-contain"
         />
       </div>

@@ -21,8 +21,8 @@ export const CalorieSummaryCard = ({ calories }: CalorieSummaryCardProps) => {
           <p className="text-sm text-text-muted">Daily energy intake</p>
         </div>
         <div className="flex flex-col items-center">
-          <div className="relative w-40 h-40 mb-4">
-            <svg className="w-40 h-40 transform -rotate-90" viewBox="0 0 140 140">
+          <div className="relative w-32 h-32 mb-4">
+            <svg className="w-32 h-32 transform -rotate-90" viewBox="0 0 140 140">
               {/* Background ring */}
               <circle
                 cx="70"
@@ -47,15 +47,15 @@ export const CalorieSummaryCard = ({ calories }: CalorieSummaryCardProps) => {
               />
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-3xl font-bold text-text">{calories.current}</span>
-              <span className="text-lg text-text-muted">Cal</span>
+              <span className="text-2xl font-bold text-text">{calories.current}</span>
+              <span className="text-base text-text-muted">Cal</span>
             </div>
           </div>
           <div className="text-center">
-            <p className="text-lg font-semibold text-text">
+            <p className="text-base font-semibold text-text">
               {calories.current} / {calories.goal} Cal
             </p>
-            <p className="text-base text-text-muted">
+            <p className="text-sm text-text-muted">
               ({Math.round(percentage)}% of goal)
             </p>
           </div>

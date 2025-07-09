@@ -32,8 +32,8 @@ export const MacroProgressCard = ({ macros }: MacroProgressCardProps) => {
 
     return (
       <div className="flex flex-col items-center">
-        <div className="relative w-28 h-28 mb-3">
-          <svg className="w-28 h-28 transform -rotate-90" viewBox="0 0 100 100">
+        <div className="relative w-24 h-24 mb-3">
+          <svg className="w-24 h-24 transform -rotate-90" viewBox="0 0 100 100">
             {/* Background ring */}
             <circle
               cx="50"
@@ -58,12 +58,12 @@ export const MacroProgressCard = ({ macros }: MacroProgressCardProps) => {
             />
           </svg>
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-xl font-bold text-text">{Math.round(percentage)}%</span>
+            <span className="text-lg font-bold text-text">{Math.round(percentage)}%</span>
           </div>
         </div>
         <div className="text-center">
-          <p className="text-lg font-semibold text-text">{label}</p>
-          <p className="text-base text-text-muted">{current}g / {goal}g</p>
+          <p className="text-base font-semibold text-text">{label}</p>
+          <p className="text-sm text-text-muted">{current}g / {goal}g</p>
         </div>
       </div>
     );
