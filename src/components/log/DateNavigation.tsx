@@ -62,7 +62,7 @@ export const DateNavigation = ({ selectedDate, onDateChange }: DateNavigationPro
               className="font-medium text-base px-3 py-1 h-auto"
             >
               <CalendarIcon className="w-4 h-4 mr-2" />
-              {format(selectedDate, 'EEEE, MMM d, yyyy')}
+              {isToday ? 'Today' : format(selectedDate, 'EEEE, MMM d, yyyy')}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="center">
