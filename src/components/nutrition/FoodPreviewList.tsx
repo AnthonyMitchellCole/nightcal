@@ -6,6 +6,7 @@ interface FoodItem {
   name: string;
   calories: number;
   meal: string;
+  isQuickAdd?: boolean;
   macros: {
     carbs: number;
     protein: number;
@@ -50,6 +51,14 @@ export const FoodPreviewList = ({ foods }: FoodPreviewListProps) => {
                   >
                     {food.meal}
                   </Badge>
+                  {food.isQuickAdd && (
+                    <Badge 
+                      variant="outline" 
+                      className="text-xs bg-warning/20 text-warning border-warning/30"
+                    >
+                      Quick Add
+                    </Badge>
+                  )}
                 </div>
                 <div className="flex items-center gap-4 text-sm text-text-muted">
                   <span className="font-medium text-primary">{food.calories} kcal</span>

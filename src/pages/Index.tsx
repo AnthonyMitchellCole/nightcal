@@ -42,9 +42,10 @@ const Index = () => {
   // Transform food logs for FoodPreviewList
   const todaysFoods = foodLogs.map(log => ({
     id: log.id,
-    name: log.foods.name,
+    name: log.log_type === 'quick_add' ? log.quick_add_name || 'Quick Add Entry' : log.foods?.name || 'Unknown Food',
     calories: log.calories,
     meal: log.meals.name,
+    isQuickAdd: log.log_type === 'quick_add',
     macros: {
       carbs: Math.round(log.carbs),
       protein: Math.round(log.protein),

@@ -21,14 +21,16 @@ export type Database = {
           created_at: string
           fat: number
           fiber: number | null
-          food_id: string
+          food_id: string | null
           grams: number
           id: string
           log_date: string
           log_time: string
+          log_type: string | null
           meal_id: string
           protein: number
           quantity: number
+          quick_add_name: string | null
           serving_size_id: string | null
           sodium: number | null
           sugar: number | null
@@ -41,14 +43,16 @@ export type Database = {
           created_at?: string
           fat: number
           fiber?: number | null
-          food_id: string
+          food_id?: string | null
           grams: number
           id?: string
           log_date?: string
           log_time?: string
+          log_type?: string | null
           meal_id: string
           protein: number
           quantity?: number
+          quick_add_name?: string | null
           serving_size_id?: string | null
           sodium?: number | null
           sugar?: number | null
@@ -61,14 +65,16 @@ export type Database = {
           created_at?: string
           fat?: number
           fiber?: number | null
-          food_id?: string
+          food_id?: string | null
           grams?: number
           id?: string
           log_date?: string
           log_time?: string
+          log_type?: string | null
           meal_id?: string
           protein?: number
           quantity?: number
+          quick_add_name?: string | null
           serving_size_id?: string | null
           sodium?: number | null
           sugar?: number | null

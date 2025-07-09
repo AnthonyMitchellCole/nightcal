@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowLeft, Save } from 'lucide-react';
+import { ArrowLeft, Save, Plus, Trash2 } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useCreateFood } from '@/hooks/useFoods';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 const AddFood = () => {
   const navigate = useNavigate();
@@ -28,8 +29,34 @@ const AddFood = () => {
     category: ''
   });
 
+  const [servingSizes, setServingSizes] = useState([
+    { name: '100g', grams: 100, is_default: true }
+  ]);
+
   const handleChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const addServingSize = () => {
+    setServingSizes(prev => [...prev, { name: '', grams: 0, is_default: false }]);
+  };
+
+  const removeServingSize = (index: number) => {
+    if (servingSizes.length > 1) {
+      setServingSizes(prev => prev.filter((_, i) => i !== index));
+    }
+  };
+
+  const updateServingSize = (index: number, field: string, value: string | number | boolean) => {
+    setServingSizes(prev => prev.map((serving, i) => 
+      i === index ? { ...serving, [field]: value } : serving
+    ));
+  };
+
+  const setDefaultServing = (index: number) => {
+    setServingSizes(prev => prev.map((serving, i) => 
+      ({ ...serving, is_default: i === index })
+    ));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -61,6 +88,26 @@ const AddFood = () => {
       };
 
       const newFood = await createFood(foodData);
+      
+      // Create serving sizes for the new food
+      const validServingSizes = servingSizes.filter(s => s.name.trim() && s.grams > 0);
+      if (validServingSizes.length > 0) {
+        const { error: servingError } = await supabase
+          .from('serving_sizes')
+          .insert(
+            validServingSizes.map(serving => ({
+              food_id: newFood.id,
+              name: serving.name,
+              grams: serving.grams,
+              is_default: serving.is_default
+            }))
+          );
+
+        if (servingError) {
+          console.warn('Error creating serving sizes:', servingError);
+          // Don't fail the whole operation if serving sizes fail
+        }
+      }
       
       toast({
         title: "Success",
@@ -243,6 +290,67 @@ const AddFood = () => {
                 placeholder="Optional"
               />
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Serving Sizes */}
+        <Card className="bg-glass border-glass">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle className="text-lg">Serving Sizes</CardTitle>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={addServingSize}
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Add Serving
+            </Button>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {servingSizes.map((serving, index) => (
+              <div key={index} className="flex items-center space-x-3 p-3 border border-border rounded-lg">
+                <div className="flex-1">
+                  <Label>Serving Name</Label>
+                  <Input
+                    value={serving.name}
+                    onChange={(e) => updateServingSize(index, 'name', e.target.value)}
+                    placeholder="e.g., 1 cup, 1 slice"
+                  />
+                </div>
+                <div className="w-24">
+                  <Label>Grams</Label>
+                  <Input
+                    type="number"
+                    step="0.1"
+                    min="0"
+                    value={serving.grams}
+                    onChange={(e) => updateServingSize(index, 'grams', Number(e.target.value))}
+                    placeholder="0"
+                  />
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Button
+                    type="button"
+                    variant={serving.is_default ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setDefaultServing(index)}
+                  >
+                    Default
+                  </Button>
+                  {servingSizes.length > 1 && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => removeServingSize(index)}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  )}
+                </div>
+              </div>
+            ))}
           </CardContent>
         </Card>
 

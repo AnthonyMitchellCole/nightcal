@@ -74,36 +74,21 @@ export const QuickAddModal = ({ isOpen, onClose }: QuickAddModalProps) => {
 
     setLoading(true);
     try {
-      // Create a quick food entry
-      const { data: food, error: foodError } = await supabase
-        .from('foods')
-        .insert({
-          name: formData.foodName || 'Quick Add Entry',
-          calories_per_100g: Number(formData.calories) || 0,
-          carbs_per_100g: Number(formData.carbs) || 0,
-          protein_per_100g: Number(formData.protein) || 0,
-          fat_per_100g: Number(formData.fat) || 0,
-          created_by: user.id,
-          is_custom: true
-        })
-        .select()
-        .single();
-
-      if (foodError) throw foodError;
-
-      // Log the food entry
+      // Create a quick add food log entry directly (no food record needed)
       const { error: logError } = await supabase
         .from('food_logs')
         .insert({
           user_id: user.id,
-          food_id: food.id,
+          food_id: null, // No associated food for quick add
           meal_id: formData.mealId,
           quantity: 1,
-          grams: 100, // Quick add uses 100g as base
+          grams: 100, // Quick add uses 100g as base unit
           calories: Number(formData.calories) || 0,
           carbs: Number(formData.carbs) || 0,
           protein: Number(formData.protein) || 0,
-          fat: Number(formData.fat) || 0
+          fat: Number(formData.fat) || 0,
+          log_type: 'quick_add',
+          quick_add_name: formData.foodName || 'Quick Add Entry'
         });
 
       if (logError) throw logError;
