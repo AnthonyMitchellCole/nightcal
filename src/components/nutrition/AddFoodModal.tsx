@@ -79,12 +79,12 @@ export const AddFoodModal = ({ isOpen, onClose }: AddFoodModalProps) => {
   return (
     <>
       <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="bg-bg border-border max-w-sm mx-auto">
+        <DialogContent className="bg-bg border-border max-w-lg mx-auto">
           <DialogHeader>
             <DialogTitle className="text-text text-center text-xl">Add Food</DialogTitle>
           </DialogHeader>
           
-          <div className="flex gap-3 py-4">
+          <div className="flex gap-2 py-4 px-2">
             {options.map((option) => {
               const Icon = option.icon;
               const isSelected = selectedOption === option.id;
@@ -94,16 +94,16 @@ export const AddFoodModal = ({ isOpen, onClose }: AddFoodModalProps) => {
                   key={option.id}
                   variant="ghost"
                   onClick={() => handleOptionSelect(option.id)}
-                  className={`flex-1 h-auto p-4 flex flex-col items-center gap-2 hover:bg-bg-light border-2 border-transparent transition-all duration-200 ${
+                  className={`flex-1 h-auto p-3 flex flex-col items-center gap-2 hover:bg-bg-light border-2 border-transparent transition-all duration-200 min-h-[120px] ${
                     isSelected ? option.color : 'hover:border-border'
                   }`}
                 >
                   <div className={`p-2 rounded-full ${option.color}`}>
-                    <Icon className="w-5 h-5" />
+                    <Icon className="w-4 h-4" />
                   </div>
                   <div className="text-center">
-                    <h3 className="font-medium text-text text-sm">{option.title}</h3>
-                    <p className="text-xs text-text-muted mt-0.5">{option.description}</p>
+                    <h3 className="font-medium text-text text-xs leading-tight">{option.title}</h3>
+                    <p className="text-[10px] text-text-muted mt-1 leading-tight">{option.description}</p>
                   </div>
                 </Button>
               );
