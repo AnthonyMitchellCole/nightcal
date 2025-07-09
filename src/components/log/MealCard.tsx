@@ -1,4 +1,7 @@
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { ChevronDown } from 'lucide-react';
 import { FoodItem } from './FoodItem';
 
 interface Meal {
@@ -21,6 +24,7 @@ interface Meal {
     fat: number;
     quantity: number;
     servingSizeId?: string;
+    servingSizeName?: string;
     isQuickAdd?: boolean;
   }>;
 }
@@ -38,67 +42,84 @@ interface MealCardProps {
 }
 
 export const MealCard = ({ meal, dailyGoals }: MealCardProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+  
   const mealCalPercentage = Math.round((meal.totals.calories / dailyGoals.calories) * 100);
   const mealCarbPercentage = Math.round((meal.totals.carbs / dailyGoals.carbs) * 100);
   const mealProteinPercentage = Math.round((meal.totals.protein / dailyGoals.protein) * 100);
   const mealFatPercentage = Math.round((meal.totals.fat / dailyGoals.fat) * 100);
 
   return (
-    <Card className="surface-elevated border border-border rounded-lg shadow-soft hover:shadow-layered transition-all duration-200">
-      <CardHeader className="pb-3 pt-4">
-        <CardTitle>
-          {/* Top row: Meal Name and Calories */}
-          <div className="flex justify-between items-start mb-2">
-            <span className="text-lg font-semibold text-primary">{meal.name}</span>
-            <span className="text-xl font-bold text-primary">
-              {meal.totals.calories} Cal <span className="text-sm opacity-75">({mealCalPercentage}%)</span>
-            </span>
-          </div>
-          
-          {/* Bottom row: Macro badges */}
-          <div className="flex items-center gap-2 text-xs">
-            <span className="font-semibold text-warning bg-warning/15 px-1.5 py-0.5 rounded">
-              F: {meal.totals.fat}g <span className="opacity-75">({mealFatPercentage}%)</span>
-            </span>
-            <span className="font-semibold text-info bg-info/15 px-1.5 py-0.5 rounded">
-              C: {meal.totals.carbs}g <span className="opacity-75">({mealCarbPercentage}%)</span>
-            </span>
-            <span className="font-semibold text-success bg-success/15 px-1.5 py-0.5 rounded">
-              P: {meal.totals.protein}g <span className="opacity-75">({mealProteinPercentage}%)</span>
-            </span>
-          </div>
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="pt-0">
-        {meal.foods.length === 0 ? (
-          <p className="text-text-muted text-center py-4">
-            No foods logged yet
-          </p>
-        ) : (
-          <div className="space-y-3">
-            {meal.foods.map((food) => (
-              <FoodItem 
-                key={food.logId} 
-                food={{
-                  id: food.id,
-                  name: food.name,
-                  brand: food.brand,
-                  calories: food.calories,
-                  carbs: food.carbs,
-                  protein: food.protein,
-                  fat: food.fat
-                }}
-                foodLogId={food.logId}
-                quantity={food.quantity}
-                servingSizeId={food.servingSizeId}
-                mealId={meal.id}
-                isQuickAdd={food.isQuickAdd}
-                dailyGoals={dailyGoals} 
-              />
-            ))}
-          </div>
-        )}
-      </CardContent>
-    </Card>
+    <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+      <Card className="surface-elevated border border-border rounded-lg shadow-soft hover:shadow-layered transition-all duration-200">
+        <CollapsibleTrigger asChild>
+          <CardHeader className="pb-3 pt-4 cursor-pointer hover:bg-surface-hover transition-colors duration-200">
+            <CardTitle>
+              {/* Top row: Meal Name, Chevron, and Calories */}
+              <div className="flex justify-between items-start mb-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg font-semibold text-primary">{meal.name}</span>
+                  <ChevronDown 
+                    className={`h-4 w-4 text-primary transition-transform duration-200 ${
+                      isOpen ? 'rotate-180' : ''
+                    }`} 
+                  />
+                </div>
+                <span className="text-xl font-bold text-primary">
+                  {meal.totals.calories} Cal <span className="text-sm opacity-75">({mealCalPercentage}%)</span>
+                </span>
+              </div>
+              
+              {/* Bottom row: Macro badges */}
+              <div className="flex items-center gap-2 text-xs">
+                <span className="font-semibold text-warning bg-warning/15 px-1.5 py-0.5 rounded">
+                  F: {meal.totals.fat}g <span className="opacity-75">({mealFatPercentage}%)</span>
+                </span>
+                <span className="font-semibold text-info bg-info/15 px-1.5 py-0.5 rounded">
+                  C: {meal.totals.carbs}g <span className="opacity-75">({mealCarbPercentage}%)</span>
+                </span>
+                <span className="font-semibold text-success bg-success/15 px-1.5 py-0.5 rounded">
+                  P: {meal.totals.protein}g <span className="opacity-75">({mealProteinPercentage}%)</span>
+                </span>
+              </div>
+            </CardTitle>
+          </CardHeader>
+        </CollapsibleTrigger>
+        
+        <CollapsibleContent>
+          <CardContent className="pt-0">
+            {meal.foods.length === 0 ? (
+              <p className="text-text-muted text-center py-4">
+                No foods logged yet
+              </p>
+            ) : (
+              <div className="space-y-3">
+                {meal.foods.map((food) => (
+                  <FoodItem 
+                    key={food.logId} 
+                    food={{
+                      id: food.id,
+                      name: food.name,
+                      brand: food.brand,
+                      calories: food.calories,
+                      carbs: food.carbs,
+                      protein: food.protein,
+                      fat: food.fat
+                    }}
+                    foodLogId={food.logId}
+                    quantity={food.quantity}
+                    servingSizeId={food.servingSizeId}
+                    servingSizeName={food.servingSizeName}
+                    mealId={meal.id}
+                    isQuickAdd={food.isQuickAdd}
+                    dailyGoals={dailyGoals} 
+                  />
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </CollapsibleContent>
+      </Card>
+    </Collapsible>
   );
 };

@@ -15,6 +15,7 @@ interface FoodItemProps {
   foodLogId: string;
   quantity: number;
   servingSizeId?: string;
+  servingSizeName?: string;
   mealId: string;
   isQuickAdd?: boolean;
   dailyGoals: {
@@ -25,7 +26,7 @@ interface FoodItemProps {
   };
 }
 
-export const FoodItem = ({ food, foodLogId, quantity, servingSizeId, mealId, isQuickAdd, dailyGoals }: FoodItemProps) => {
+export const FoodItem = ({ food, foodLogId, quantity, servingSizeId, servingSizeName, mealId, isQuickAdd, dailyGoals }: FoodItemProps) => {
   const navigate = useNavigate();
   const [showQuickAddModal, setShowQuickAddModal] = useState(false);
   const [quickAddData, setQuickAddData] = useState<any>(null);
@@ -34,6 +35,17 @@ export const FoodItem = ({ food, foodLogId, quantity, servingSizeId, mealId, isQ
   const foodCarbPercentage = Math.round((food.carbs / dailyGoals.carbs) * 100);
   const foodProteinPercentage = Math.round((food.protein / dailyGoals.protein) * 100);
   const foodFatPercentage = Math.round((food.fat / dailyGoals.fat) * 100);
+
+  // Extract unit from serving size name (format: "1 unit")
+  const getServingInfo = () => {
+    if (isQuickAdd || !servingSizeName) return null;
+    
+    // Extract unit from "1 unit" format
+    const unit = servingSizeName.replace(/^1\s*/, ''); // Remove "1 " from the beginning
+    return `${quantity} ${unit}`;
+  };
+
+  const servingInfo = getServingInfo();
 
   const handleClick = () => {
     if (isQuickAdd) {
@@ -68,8 +80,12 @@ export const FoodItem = ({ food, foodLogId, quantity, servingSizeId, mealId, isQ
         <div className="flex justify-between items-start w-full">
         <div className="flex-1">
         <h4 className="font-medium text-text mb-1">{food.name}</h4>
-        {food.brand && (
-          <p className="text-sm text-text-muted mb-2">{food.brand}</p>
+        {(food.brand || servingInfo) && (
+          <p className="text-sm text-text-muted mb-2">
+            {food.brand}
+            {food.brand && servingInfo && ' • '}
+            {servingInfo}
+          </p>
         )}
         <div className="flex items-center gap-2 mb-1">
           <span className="text-xs font-semibold text-warning bg-warning/15 px-1.5 py-0.5 rounded">

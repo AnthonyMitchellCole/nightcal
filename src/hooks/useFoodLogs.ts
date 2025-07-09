@@ -6,10 +6,12 @@ import type { Tables } from '@/integrations/supabase/types';
 type FoodLog = Tables<'food_logs'>;
 type Food = Tables<'foods'>;
 type Meal = Tables<'meals'>;
+type ServingSize = Tables<'serving_sizes'>;
 
 export interface FoodLogWithDetails extends FoodLog {
   foods: Food;
   meals: Meal;
+  serving_sizes: ServingSize | null;
 }
 
 export const useFoodLogs = (date?: string) => {
@@ -34,7 +36,8 @@ export const useFoodLogs = (date?: string) => {
           .select(`
             *,
             foods (*),
-            meals (*)
+            meals (*),
+            serving_sizes (*)
           `)
           .eq('user_id', user.id)
           .eq('log_date', logDate)
@@ -70,7 +73,8 @@ export const useFoodLogs = (date?: string) => {
         .select(`
           *,
           foods (*),
-          meals (*)
+          meals (*),
+          serving_sizes (*)
         `)
         .eq('user_id', user.id)
         .eq('log_date', logDate)
@@ -166,6 +170,7 @@ export const useMealSummary = (date?: string) => {
       quantity: log.quantity,
       grams: log.grams,
       servingSizeId: log.serving_size_id,
+      servingSizeName: log.serving_sizes?.name || null,
       isQuickAdd: log.log_type === 'quick_add' // Add this field to the meal summary
     });
 
