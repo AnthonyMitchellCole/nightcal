@@ -313,31 +313,41 @@ const LogFood = () => {
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4 text-center">
               <div>
-                <div className="text-2xl font-bold text-primary">
-                  {Math.round(summary.calories)} + {calculatedNutrition.calories}
+                <div className="text-sm text-text-muted/70">
+                  {Math.round(summary.calories)} + 
                 </div>
-                <div className="text-sm text-text-muted">
+                <div className="text-xl font-semibold text-primary">
+                  {calculatedNutrition.calories}
+                </div>
+                <div className="text-lg font-bold text-text">
                   = {Math.round(summary.calories + calculatedNutrition.calories)} / {dailyGoals.calories} Cal
                 </div>
               </div>
-              <div>
-                <div className="text-xl font-semibold text-text">
-                  {Math.round(((summary.calories + calculatedNutrition.calories) / dailyGoals.calories) * 100)}%
+              <div className="space-y-1">
+                <div className="text-lg font-semibold text-text">
+                  {Math.round((calculatedNutrition.calories / dailyGoals.calories) * 100)}% of goal
                 </div>
-                <div className="text-sm text-text-muted">of goal</div>
+                <div className="text-sm font-medium text-text-muted">
+                  {remaining.calories > 0 ? Math.round((calculatedNutrition.calories / remaining.calories) * 100) : '100+'}% of remaining
+                </div>
               </div>
             </div>
             
             <div className="space-y-3">
               <div>
-                <div className="flex justify-between text-sm mb-1">
+                <div className="flex justify-between items-center text-sm mb-1">
                   <span>Fat</span>
-                  <span>{Math.round(summary.fat)}g + {calculatedNutrition.fat}g = {Math.round(summary.fat + calculatedNutrition.fat)}g / {dailyGoals.fat}g</span>
+                  <div className="text-right">
+                    <span className="text-text-muted/70">{Math.round(summary.fat)}g + </span>
+                    <span className="font-semibold text-warning">{calculatedNutrition.fat}g</span>
+                    <span className="font-bold"> = {Math.round(summary.fat + calculatedNutrition.fat)}g</span>
+                    <span className="text-text-muted"> / {dailyGoals.fat}g</span>
+                  </div>
                 </div>
                 <div className="relative h-3 bg-border-muted rounded-full overflow-hidden">
                   {/* Already logged amount */}
                   <div 
-                    className="absolute top-0 left-0 h-full bg-muted rounded-full"
+                    className="absolute top-0 left-0 h-full bg-text-muted/30 rounded-full"
                     style={{ width: `${Math.min((summary.fat / dailyGoals.fat) * 100, 100)}%` }}
                   />
                   {/* Current food amount stacked on top */}
@@ -350,19 +360,24 @@ const LogFood = () => {
                   />
                 </div>
                 <div className="flex justify-between text-xs text-text-muted mt-1">
-                  <span>Total: {Math.round(((summary.fat + calculatedNutrition.fat) / dailyGoals.fat) * 100)}%</span>
-                  <span>vs Remaining: {remaining.fat > 0 ? Math.round((calculatedNutrition.fat / remaining.fat) * 100) : '100+'}%</span>
+                  <span>{Math.round((calculatedNutrition.fat / dailyGoals.fat) * 100)}% of goal</span>
+                  <span>{remaining.fat > 0 ? Math.round((calculatedNutrition.fat / remaining.fat) * 100) : '100+'}% of remaining</span>
                 </div>
               </div>
               <div>
-                <div className="flex justify-between text-sm mb-1">
+                <div className="flex justify-between items-center text-sm mb-1">
                   <span>Carbs</span>
-                  <span>{Math.round(summary.carbs)}g + {calculatedNutrition.carbs}g = {Math.round(summary.carbs + calculatedNutrition.carbs)}g / {dailyGoals.carbs}g</span>
+                  <div className="text-right">
+                    <span className="text-text-muted/70">{Math.round(summary.carbs)}g + </span>
+                    <span className="font-semibold text-info">{calculatedNutrition.carbs}g</span>
+                    <span className="font-bold"> = {Math.round(summary.carbs + calculatedNutrition.carbs)}g</span>
+                    <span className="text-text-muted"> / {dailyGoals.carbs}g</span>
+                  </div>
                 </div>
                 <div className="relative h-3 bg-border-muted rounded-full overflow-hidden">
                   {/* Already logged amount */}
                   <div 
-                    className="absolute top-0 left-0 h-full bg-muted rounded-full"
+                    className="absolute top-0 left-0 h-full bg-text-muted/30 rounded-full"
                     style={{ width: `${Math.min((summary.carbs / dailyGoals.carbs) * 100, 100)}%` }}
                   />
                   {/* Current food amount stacked on top */}
@@ -375,19 +390,24 @@ const LogFood = () => {
                   />
                 </div>
                 <div className="flex justify-between text-xs text-text-muted mt-1">
-                  <span>Total: {Math.round(((summary.carbs + calculatedNutrition.carbs) / dailyGoals.carbs) * 100)}%</span>
-                  <span>vs Remaining: {remaining.carbs > 0 ? Math.round((calculatedNutrition.carbs / remaining.carbs) * 100) : '100+'}%</span>
+                  <span>{Math.round((calculatedNutrition.carbs / dailyGoals.carbs) * 100)}% of goal</span>
+                  <span>{remaining.carbs > 0 ? Math.round((calculatedNutrition.carbs / remaining.carbs) * 100) : '100+'}% of remaining</span>
                 </div>
               </div>
               <div>
-                <div className="flex justify-between text-sm mb-1">
+                <div className="flex justify-between items-center text-sm mb-1">
                   <span>Protein</span>
-                  <span>{Math.round(summary.protein)}g + {calculatedNutrition.protein}g = {Math.round(summary.protein + calculatedNutrition.protein)}g / {dailyGoals.protein}g</span>
+                  <div className="text-right">
+                    <span className="text-text-muted/70">{Math.round(summary.protein)}g + </span>
+                    <span className="font-semibold text-success">{calculatedNutrition.protein}g</span>
+                    <span className="font-bold"> = {Math.round(summary.protein + calculatedNutrition.protein)}g</span>
+                    <span className="text-text-muted"> / {dailyGoals.protein}g</span>
+                  </div>
                 </div>
                 <div className="relative h-3 bg-border-muted rounded-full overflow-hidden">
                   {/* Already logged amount */}
                   <div 
-                    className="absolute top-0 left-0 h-full bg-muted rounded-full"
+                    className="absolute top-0 left-0 h-full bg-text-muted/30 rounded-full"
                     style={{ width: `${Math.min((summary.protein / dailyGoals.protein) * 100, 100)}%` }}
                   />
                   {/* Current food amount stacked on top */}
@@ -400,8 +420,8 @@ const LogFood = () => {
                   />
                 </div>
                 <div className="flex justify-between text-xs text-text-muted mt-1">
-                  <span>Total: {Math.round(((summary.protein + calculatedNutrition.protein) / dailyGoals.protein) * 100)}%</span>
-                  <span>vs Remaining: {remaining.protein > 0 ? Math.round((calculatedNutrition.protein / remaining.protein) * 100) : '100+'}%</span>
+                  <span>{Math.round((calculatedNutrition.protein / dailyGoals.protein) * 100)}% of goal</span>
+                  <span>{remaining.protein > 0 ? Math.round((calculatedNutrition.protein / remaining.protein) * 100) : '100+'}% of remaining</span>
                 </div>
               </div>
             </div>
