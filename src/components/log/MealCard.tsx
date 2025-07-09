@@ -45,7 +45,7 @@ export const MealCard = ({ meal, dailyGoals }: MealCardProps) => {
         <CardTitle className="flex justify-between items-center">
           {/* Meal Name Section */}
           <div className="flex-shrink-0">
-            <span className="text-lg font-semibold text-text">{meal.name}</span>
+            <span className="text-lg font-semibold text-primary">{meal.name}</span>
           </div>
           
           {/* Macros Section */}
