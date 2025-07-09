@@ -61,18 +61,24 @@ export const CustomNutrientSettingsDialog = ({ children }: CustomNutrientSetting
   }, [open, profile]);
 
   const handleNutrient1Change = (value: string) => {
-    setNutrient1(value);
-    const nutrient = AVAILABLE_NUTRIENTS.find(n => n.id === value);
+    const selectedValue = value === 'none' ? '' : value;
+    setNutrient1(selectedValue);
+    const nutrient = AVAILABLE_NUTRIENTS.find(n => n.id === selectedValue);
     if (nutrient) {
       setNutrient1Goal(nutrient.defaultGoal.toString());
+    } else {
+      setNutrient1Goal('');
     }
   };
 
   const handleNutrient2Change = (value: string) => {
-    setNutrient2(value);
-    const nutrient = AVAILABLE_NUTRIENTS.find(n => n.id === value);
+    const selectedValue = value === 'none' ? '' : value;
+    setNutrient2(selectedValue);
+    const nutrient = AVAILABLE_NUTRIENTS.find(n => n.id === selectedValue);
     if (nutrient) {
       setNutrient2Goal(nutrient.defaultGoal.toString());
+    } else {
+      setNutrient2Goal('');
     }
   };
 
@@ -149,12 +155,12 @@ export const CustomNutrientSettingsDialog = ({ children }: CustomNutrientSetting
           {/* First Custom Nutrient */}
           <div className="space-y-3">
             <Label className="text-sm font-medium">First Custom Nutrient</Label>
-            <Select value={nutrient1} onValueChange={handleNutrient1Change}>
+            <Select value={nutrient1 || 'none'} onValueChange={handleNutrient1Change}>
               <SelectTrigger className="bg-bg-light border-border">
                 <SelectValue placeholder="Select a nutrient" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">None</SelectItem>
+                <SelectItem value="none">None</SelectItem>
                 {availableNutrients1.map((nutrient) => (
                   <SelectItem key={nutrient.id} value={nutrient.id}>
                     {nutrient.name} ({nutrient.unit})
@@ -185,12 +191,12 @@ export const CustomNutrientSettingsDialog = ({ children }: CustomNutrientSetting
           {/* Second Custom Nutrient */}
           <div className="space-y-3">
             <Label className="text-sm font-medium">Second Custom Nutrient</Label>
-            <Select value={nutrient2} onValueChange={handleNutrient2Change}>
+            <Select value={nutrient2 || 'none'} onValueChange={handleNutrient2Change}>
               <SelectTrigger className="bg-bg-light border-border">
                 <SelectValue placeholder="Select a nutrient" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">None</SelectItem>
+                <SelectItem value="none">None</SelectItem>
                 {availableNutrients2.map((nutrient) => (
                   <SelectItem key={nutrient.id} value={nutrient.id}>
                     {nutrient.name} ({nutrient.unit})

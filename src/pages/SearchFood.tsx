@@ -93,14 +93,22 @@ const SearchFood = () => {
                 onClick={() => navigate(`/log-food/${food.id}`)}
               >
                 <CardContent className="p-4">
-                  <div className="flex justify-between items-center">
-                    <div>
+                  <div className="flex justify-between items-start">
+                    <div className="flex-1">
                       <h3 className="font-medium text-text">{food.name}</h3>
                       <p className="text-sm text-text-muted">{food.brand || 'No brand'}</p>
+                      <div className="flex space-x-4 mt-2 text-xs text-text-muted">
+                        <span>C: {food.carbs_per_100g}g</span>
+                        <span>P: {food.protein_per_100g}g</span>
+                        <span>F: {food.fat_per_100g}g</span>
+                      </div>
                     </div>
-                    <span className="text-sm font-medium text-text">
-                      {food.calories_per_100g} Cal
-                    </span>
+                    <div className="text-right">
+                      <span className="text-lg font-semibold text-text">
+                        {food.calories_per_100g}
+                      </span>
+                      <p className="text-xs text-text-muted">Cal/100g</p>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
