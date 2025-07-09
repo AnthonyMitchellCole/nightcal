@@ -9,8 +9,8 @@ import { useFullLog } from '@/hooks/useFullLog';
 const FullLog = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   
-  // Convert date to string format for the hook
-  const dateString = selectedDate.toISOString().split('T')[0];
+  // Convert date to string format for the hook using local timezone
+  const dateString = selectedDate.toLocaleDateString('en-CA'); // YYYY-MM-DD format in local timezone
   const { loading, dailyGoals, dailyTotals, meals } = useFullLog(dateString);
 
   if (loading) {

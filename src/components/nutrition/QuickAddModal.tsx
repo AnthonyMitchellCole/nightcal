@@ -127,6 +127,10 @@ export const QuickAddModal = ({ isOpen, onClose, prePopulatedData }: QuickAddMod
       }
 
       // Create a quick add food log entry directly (no food record needed)
+      const now = new Date();
+      const localDate = now.toLocaleDateString('en-CA'); // YYYY-MM-DD format
+      const localTime = now.toISOString(); // Keep as ISO string for timestamp with timezone
+      
       const { error: logError } = await supabase
         .from('food_logs')
         .insert({
@@ -140,7 +144,9 @@ export const QuickAddModal = ({ isOpen, onClose, prePopulatedData }: QuickAddMod
           protein: protein,
           fat: fat,
           log_type: 'quick_add',
-          quick_add_name: formData.foodName || 'Quick Add'
+          quick_add_name: formData.foodName || 'Quick Add',
+          log_date: localDate,
+          log_time: localTime
         });
 
       if (logError) throw logError;

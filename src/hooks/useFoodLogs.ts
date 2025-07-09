@@ -26,7 +26,8 @@ export const useFoodLogs = (date?: string) => {
       setError(null);
 
       try {
-        const logDate = date || new Date().toISOString().split('T')[0];
+        // Use local timezone for date - format as YYYY-MM-DD in local timezone
+        const logDate = date || new Date().toLocaleDateString('en-CA'); // en-CA gives YYYY-MM-DD format
         
         const { data, error } = await supabase
           .from('food_logs')
@@ -61,7 +62,8 @@ export const useFoodLogs = (date?: string) => {
     setError(null);
 
     try {
-      const logDate = date || new Date().toISOString().split('T')[0];
+      // Use local timezone for date - format as YYYY-MM-DD in local timezone
+      const logDate = date || new Date().toLocaleDateString('en-CA'); // en-CA gives YYYY-MM-DD format
       
       const { data, error } = await supabase
         .from('food_logs')
@@ -229,11 +231,18 @@ export const useLogFood = () => {
 
     setLoading(true);
     try {
+      // Get current date and time in local timezone
+      const now = new Date();
+      const localDate = now.toLocaleDateString('en-CA'); // YYYY-MM-DD format
+      const localTime = now.toISOString(); // Keep as ISO string for timestamp with timezone
+      
       const { data, error } = await supabase
         .from('food_logs')
         .insert({
           ...foodLog,
-          user_id: user.id
+          user_id: user.id,
+          log_date: localDate,
+          log_time: localTime
         })
         .select()
         .single();

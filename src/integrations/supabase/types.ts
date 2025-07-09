@@ -58,8 +58,8 @@ export type Database = {
           grams: number
           id?: string
           iron?: number | null
-          log_date?: string
-          log_time?: string
+          log_date: string
+          log_time: string
           log_type?: string | null
           magnesium?: number | null
           meal_id: string
@@ -400,6 +400,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_local_date_string: {
+        Args: { input_timestamp?: string }
+        Returns: string
+      }
       validate_positive_numeric: {
         Args: { value: number; field_name: string }
         Returns: boolean
