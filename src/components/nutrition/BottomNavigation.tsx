@@ -30,44 +30,46 @@ export const BottomNavigation = ({ activeTab, onTabChange, onAddFood }: BottomNa
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-glass border-t border-glass backdrop-blur-glass shadow-layered">
-      <div className="flex items-center justify-around py-2 px-4 max-w-md mx-auto">
-        {navItems.map((item) => {
+      <div className="flex items-center py-2 px-4 w-full">
+        {navItems.map((item, index) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
           
           if (item.isSpecial) {
             return (
-              <Button
-                key={item.id}
-                onClick={onAddFood}
-                className="w-14 h-14 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-layered transform transition-all duration-200 hover:scale-105 active:scale-95"
-              >
-                <Icon className="w-6 h-6" />
-              </Button>
+              <div key={item.id} className="flex-1 flex justify-center">
+                <Button
+                  onClick={onAddFood}
+                  className="w-14 h-14 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-layered transform transition-all duration-200 hover:scale-105 active:scale-95"
+                >
+                  <Icon className="w-6 h-6" />
+                </Button>
+              </div>
             );
           }
 
           return (
-            <button
-              key={item.id}
-              onClick={() => handleNavigation(item)}
-              className={`flex flex-col items-center justify-center p-2 rounded-lg transition-all duration-200 ${
-                isActive 
-                  ? 'text-primary bg-primary/10' 
-                  : 'text-text-muted hover:text-text hover:bg-bg-light/50'
-              }`}
-            >
-              {item.useEmblem && isActive ? (
-                <img 
-                  src="https://ebdtrwkrelzbtjdwuxbk.supabase.co/storage/v1/object/public/branding/nightcal-emblem.png" 
-                  alt="NightCal" 
-                  className="w-5 h-5 mb-1" 
-                />
-              ) : (
-                <Icon className={`w-5 h-5 mb-1 ${isActive ? 'text-primary' : ''}`} />
-              )}
-              <span className="text-xs font-medium">{item.label}</span>
-            </button>
+            <div key={item.id} className="flex-1 flex justify-center">
+              <button
+                onClick={() => handleNavigation(item)}
+                className={`flex flex-col items-center justify-center p-2 rounded-lg transition-all duration-200 ${
+                  isActive 
+                    ? 'text-primary bg-primary/10' 
+                    : 'text-text-muted hover:text-text hover:bg-bg-light/50'
+                }`}
+              >
+                {item.useEmblem && isActive ? (
+                  <img 
+                    src="https://ebdtrwkrelzbtjdwuxbk.supabase.co/storage/v1/object/public/branding/nightcal-emblem.png" 
+                    alt="NightCal" 
+                    className="w-5 h-5 mb-1" 
+                  />
+                ) : (
+                  <Icon className={`w-5 h-5 mb-1 ${isActive ? 'text-primary' : ''}`} />
+                )}
+                <span className="text-xs font-medium">{item.label}</span>
+              </button>
+            </div>
           );
         })}
       </div>
