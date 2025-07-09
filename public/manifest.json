@@ -1,0 +1,39 @@
+{
+  "name": "NightCal - Smart Nutrition Tracking",
+  "short_name": "NightCal",
+  "description": "Fast, modern, and customizable nutrition tracker for power users",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f0721",
+  "theme_color": "#bcc7ff",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://ebdtrwkrelzbtjdwuxbk.supabase.co/storage/v1/object/public/branding/nightcal-emblem.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://ebdtrwkrelzbtjdwuxbk.supabase.co/storage/v1/object/public/branding/nightcal-emblem.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["health", "fitness", "nutrition", "lifestyle"],
+  "shortcuts": [
+    {
+      "name": "Add Food",
+      "short_name": "Add Food",
+      "description": "Quickly add food to your log",
+      "url": "/?action=add-food",
+      "icons": [
+        {
+          "src": "https://ebdtrwkrelzbtjdwuxbk.supabase.co/storage/v1/object/public/branding/nightcal-emblem.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}

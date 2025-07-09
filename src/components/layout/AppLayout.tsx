@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { BottomNavigation } from "@/components/nutrition/BottomNavigation";
 import { AddFoodModal } from "@/components/nutrition/AddFoodModal";
+import { InstallPrompt } from "@/components/pwa/InstallPrompt";
 
 export const AppLayout = () => {
   const [isAddFoodModalOpen, setIsAddFoodModalOpen] = useState(false);
@@ -41,6 +42,9 @@ export const AppLayout = () => {
         isOpen={isAddFoodModalOpen}
         onClose={() => setIsAddFoodModalOpen(false)}
       />
+
+      {/* PWA Install Prompt */}
+      <InstallPrompt />
     </div>
   );
 };
