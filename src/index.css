@@ -113,6 +113,17 @@ All colors MUST be HSL.
     display: none;
   }
 
+  /* Enhanced scroll snap behavior */
+  .snap-x-mandatory {
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .snap-center-force {
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+  }
+
   /* Glassmorphic utilities */
   .glass-effect {
     background: hsl(var(--glass-bg));
