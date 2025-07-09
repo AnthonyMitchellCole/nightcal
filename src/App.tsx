@@ -14,6 +14,7 @@ import LogFood from "./pages/LogFood";
 import AddFood from "./pages/AddFood";
 import FullLog from "./pages/FullLog";
 import AllFoods from "./pages/AllFoods";
+import EditFood from "./pages/EditFood";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
@@ -39,6 +40,7 @@ const App = () => (
               <Route path="search-food" element={<SearchFood />} />
               <Route path="log-food/:foodId" element={<LogFood />} />
               <Route path="add-food" element={<AddFood />} />
+              <Route path="edit-food/:id" element={<EditFood />} />
               <Route path="full-log" element={<FullLog />} />
               <Route path="all-foods" element={<AllFoods />} />
               <Route path="settings" element={<Settings />} />

@@ -72,7 +72,7 @@ const AllFoods = () => {
             <Card 
               key={food.id} 
               className="bg-glass border-glass cursor-pointer hover:bg-bg-light transition-colors"
-              onClick={() => navigate(`/log-food/${food.id}`)}
+              onClick={() => navigate(`/edit-food/${food.id}`)}
             >
               <CardContent className="p-4">
                 <div className="flex justify-between items-start">
