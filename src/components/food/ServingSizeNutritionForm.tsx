@@ -159,6 +159,17 @@ export const ServingSizeNutritionForm = ({ onSubmit, onCancel, loading }: Servin
             
             <div className="grid grid-cols-3 gap-4">
               <div>
+                <Label htmlFor="serving-fat">Fat (g)</Label>
+                <Input
+                  id="serving-fat"
+                  type="number"
+                  step="0.1"
+                  placeholder="0"
+                  value={formData.fat}
+                  onChange={(e) => handleChange('fat', e.target.value)}
+                />
+              </div>
+              <div>
                 <Label htmlFor="serving-carbs">Carbs (g)</Label>
                 <Input
                   id="serving-carbs"
@@ -178,17 +189,6 @@ export const ServingSizeNutritionForm = ({ onSubmit, onCancel, loading }: Servin
                   placeholder="0"
                   value={formData.protein}
                   onChange={(e) => handleChange('protein', e.target.value)}
-                />
-              </div>
-              <div>
-                <Label htmlFor="serving-fat">Fat (g)</Label>
-                <Input
-                  id="serving-fat"
-                  type="number"
-                  step="0.1"
-                  placeholder="0"
-                  value={formData.fat}
-                  onChange={(e) => handleChange('fat', e.target.value)}
                 />
               </div>
             </div>

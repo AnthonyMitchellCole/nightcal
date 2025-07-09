@@ -236,6 +236,18 @@ export const QuickAddModal = ({ isOpen, onClose, prePopulatedData }: QuickAddMod
             <div className="space-y-4">
               <div className="grid grid-cols-3 gap-3">
                 <div>
+                  <Label htmlFor="fat">Fat (g)</Label>
+                  <Input
+                    id="fat"
+                    type="number"
+                    step="0.1"
+                    min="0"
+                    value={formData.fat}
+                    onChange={(e) => handleChange('fat', e.target.value)}
+                    placeholder="0"
+                  />
+                </div>
+                <div>
                   <Label htmlFor="carbs">Carbs (g)</Label>
                   <Input
                     id="carbs"
@@ -256,18 +268,6 @@ export const QuickAddModal = ({ isOpen, onClose, prePopulatedData }: QuickAddMod
                     min="0"
                     value={formData.protein}
                     onChange={(e) => handleChange('protein', e.target.value)}
-                    placeholder="0"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="fat">Fat (g)</Label>
-                  <Input
-                    id="fat"
-                    type="number"
-                    step="0.1"
-                    min="0"
-                    value={formData.fat}
-                    onChange={(e) => handleChange('fat', e.target.value)}
                     placeholder="0"
                   />
                 </div>

@@ -153,6 +153,19 @@ export const GoalSettingsDialog = ({ children }: GoalSettingsDialogProps) => {
               <h4 className="font-medium text-text">Macro Targets (grams)</h4>
               
               <div className="space-y-2">
+                <Label htmlFor="fat">Fat</Label>
+                <Input
+                  id="fat"
+                  type="number"
+                  value={fatGrams}
+                  onChange={(e) => setFatGrams(e.target.value)}
+                  className="bg-bg-light border-border"
+                  min="0"
+                  max="300"
+                />
+              </div>
+              
+              <div className="space-y-2">
                 <Label htmlFor="carbs">Carbohydrates</Label>
                 <Input
                   id="carbs"
@@ -177,19 +190,6 @@ export const GoalSettingsDialog = ({ children }: GoalSettingsDialogProps) => {
                   max="500"
                 />
               </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="fat">Fat</Label>
-                <Input
-                  id="fat"
-                  type="number"
-                  value={fatGrams}
-                  onChange={(e) => setFatGrams(e.target.value)}
-                  className="bg-bg-light border-border"
-                  min="0"
-                  max="300"
-                />
-              </div>
             </div>
           ) : (
             // Percentage Mode
@@ -202,6 +202,22 @@ export const GoalSettingsDialog = ({ children }: GoalSettingsDialogProps) => {
               </div>
 
               <div className="space-y-4">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <Label>Fat</Label>
+                    <span className="text-sm text-text-muted">
+                      {fatPercent}% = {calculateGramsFromPercentage(fatPercent, parseInt(calories), 9)}g
+                    </span>
+                  </div>
+                  <Slider
+                    value={[fatPercent]}
+                    onValueChange={(value) => setFatPercent(value[0])}
+                    max={100}
+                    step={2.5}
+                    className="w-full"
+                  />
+                </div>
+                
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <Label>Carbohydrates</Label>
@@ -228,22 +244,6 @@ export const GoalSettingsDialog = ({ children }: GoalSettingsDialogProps) => {
                   <Slider
                     value={[proteinPercent]}
                     onValueChange={(value) => setProteinPercent(value[0])}
-                    max={100}
-                    step={2.5}
-                    className="w-full"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <Label>Fat</Label>
-                    <span className="text-sm text-text-muted">
-                      {fatPercent}% = {calculateGramsFromPercentage(fatPercent, parseInt(calories), 9)}g
-                    </span>
-                  </div>
-                  <Slider
-                    value={[fatPercent]}
-                    onValueChange={(value) => setFatPercent(value[0])}
                     max={100}
                     step={2.5}
                     className="w-full"

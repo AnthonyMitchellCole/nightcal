@@ -24,9 +24,9 @@ const Index = () => {
   };
 
   const macros = {
+    fat: { current: Math.round(summary.fat), goal: goals.fat },
     carbs: { current: Math.round(summary.carbs), goal: goals.carbs },
-    protein: { current: Math.round(summary.protein), goal: goals.protein },
-    fat: { current: Math.round(summary.fat), goal: goals.fat }
+    protein: { current: Math.round(summary.protein), goal: goals.protein }
   };
 
   const calories = { 

@@ -111,14 +111,14 @@ export const FoodPreviewList = ({ foods, dailyGoals }: FoodPreviewListProps) => 
                   </div>
                   
                   <div className="flex items-center gap-2 mb-1">
+                    <span className="text-xs font-semibold text-warning bg-warning/15 px-1.5 py-0.5 rounded">
+                      F: {food.macros.fat}g <span className="opacity-75">({fatPercentage}%)</span>
+                    </span>
                     <span className="text-xs font-semibold text-info bg-info/15 px-1.5 py-0.5 rounded">
                       C: {food.macros.carbs}g <span className="opacity-75">({carbPercentage}%)</span>
                     </span>
                     <span className="text-xs font-semibold text-success bg-success/15 px-1.5 py-0.5 rounded">
                       P: {food.macros.protein}g <span className="opacity-75">({proteinPercentage}%)</span>
-                    </span>
-                    <span className="text-xs font-semibold text-warning bg-warning/15 px-1.5 py-0.5 rounded">
-                      F: {food.macros.fat}g <span className="opacity-75">({fatPercentage}%)</span>
                     </span>
                   </div>
                 </div>

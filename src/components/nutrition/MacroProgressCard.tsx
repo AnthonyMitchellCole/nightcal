@@ -93,6 +93,12 @@ export const MacroProgressCard = ({ macros }: MacroProgressCardProps) => {
         </div>
         <div className="flex justify-between items-center">
           <MacroRing
+            label="Fat"
+            current={macros.fat.current}
+            goal={macros.fat.goal}
+            color="hsl(var(--warning))"
+          />
+          <MacroRing
             label="Carbs"
             current={macros.carbs.current}
             goal={macros.carbs.goal}
@@ -103,12 +109,6 @@ export const MacroProgressCard = ({ macros }: MacroProgressCardProps) => {
             current={macros.protein.current}
             goal={macros.protein.goal}
             color="hsl(var(--success))"
-          />
-          <MacroRing
-            label="Fat"
-            current={macros.fat.current}
-            goal={macros.fat.goal}
-            color="hsl(var(--warning))"
           />
         </div>
       </CardContent>

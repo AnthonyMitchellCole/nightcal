@@ -141,6 +141,18 @@ export const FoodNutritionForm = ({ defaultServing, onServingNutritionChange, ca
             </div>
 
             <div>
+              <Label htmlFor="fat">Fat (g)</Label>
+              <Input
+                id="fat"
+                type="number"
+                step="0.1"
+                value={servingNutrition.fat}
+                onChange={(e) => handleInputChange('fat', e.target.value)}
+                disabled={!canEdit}
+              />
+            </div>
+
+            <div>
               <Label htmlFor="carbs">Carbohydrates (g)</Label>
               <Input
                 id="carbs"
@@ -160,18 +172,6 @@ export const FoodNutritionForm = ({ defaultServing, onServingNutritionChange, ca
                 step="0.1"
                 value={servingNutrition.protein}
                 onChange={(e) => handleInputChange('protein', e.target.value)}
-                disabled={!canEdit}
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="fat">Fat (g)</Label>
-              <Input
-                id="fat"
-                type="number"
-                step="0.1"
-                value={servingNutrition.fat}
-                onChange={(e) => handleInputChange('fat', e.target.value)}
                 disabled={!canEdit}
               />
             </div>
@@ -335,16 +335,16 @@ export const FoodNutritionForm = ({ defaultServing, onServingNutritionChange, ca
                 <div className="font-medium">{per100gValues.calories_per_100g}</div>
               </div>
               <div>
+                <span className="text-text-muted">Fat:</span>
+                <div className="font-medium">{per100gValues.fat_per_100g}g</div>
+              </div>
+              <div>
                 <span className="text-text-muted">Carbs:</span>
                 <div className="font-medium">{per100gValues.carbs_per_100g}g</div>
               </div>
               <div>
                 <span className="text-text-muted">Protein:</span>
                 <div className="font-medium">{per100gValues.protein_per_100g}g</div>
-              </div>
-              <div>
-                <span className="text-text-muted">Fat:</span>
-                <div className="font-medium">{per100gValues.fat_per_100g}g</div>
               </div>
             </div>
           </div>

@@ -59,9 +59,9 @@ export const AddFoodReview = ({
             <h4 className="font-medium mb-2">Default Serving: {servingData.name} ({servingData.grams}g)</h4>
             <div className="grid grid-cols-4 gap-4 text-sm">
               <div><span className="text-text-muted">Calories:</span> {servingData.calories}</div>
+              <div><span className="text-text-muted">Fat:</span> {servingData.fat}g</div>
               <div><span className="text-text-muted">Carbs:</span> {servingData.carbs}g</div>
               <div><span className="text-text-muted">Protein:</span> {servingData.protein}g</div>
-              <div><span className="text-text-muted">Fat:</span> {servingData.fat}g</div>
             </div>
           </div>
           
@@ -69,9 +69,9 @@ export const AddFoodReview = ({
             <h4 className="font-medium mb-2">Calculated per 100g</h4>
             <div className="grid grid-cols-4 gap-4 text-sm">
               <div><span className="text-text-muted">Calories:</span> {per100gValues.calories_per_100g}</div>
+              <div><span className="text-text-muted">Fat:</span> {per100gValues.fat_per_100g}g</div>
               <div><span className="text-text-muted">Carbs:</span> {per100gValues.carbs_per_100g}g</div>
               <div><span className="text-text-muted">Protein:</span> {per100gValues.protein_per_100g}g</div>
-              <div><span className="text-text-muted">Fat:</span> {per100gValues.fat_per_100g}g</div>
             </div>
           </div>
         </CardContent>

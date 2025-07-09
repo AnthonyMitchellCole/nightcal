@@ -47,6 +47,16 @@ export const DailyTotalsCard = ({ dailyTotals, dailyGoals }: DailyTotalsCardProp
         <div className="space-y-3">
           <div>
             <div className="flex justify-between text-sm mb-1">
+              <span>Fat</span>
+              <span>{dailyTotals.fat}g / {dailyGoals.fat}g ({Math.round((dailyTotals.fat / dailyGoals.fat) * 100)}%)</span>
+            </div>
+            <Progress 
+              value={(dailyTotals.fat / dailyGoals.fat) * 100} 
+              className="h-3" 
+            />
+          </div>
+          <div>
+            <div className="flex justify-between text-sm mb-1">
               <span>Carbs</span>
               <span>{dailyTotals.carbs}g / {dailyGoals.carbs}g ({Math.round((dailyTotals.carbs / dailyGoals.carbs) * 100)}%)</span>
             </div>
@@ -62,16 +72,6 @@ export const DailyTotalsCard = ({ dailyTotals, dailyGoals }: DailyTotalsCardProp
             </div>
             <Progress 
               value={(dailyTotals.protein / dailyGoals.protein) * 100} 
-              className="h-3" 
-            />
-          </div>
-          <div>
-            <div className="flex justify-between text-sm mb-1">
-              <span>Fat</span>
-              <span>{dailyTotals.fat}g / {dailyGoals.fat}g ({Math.round((dailyTotals.fat / dailyGoals.fat) * 100)}%)</span>
-            </div>
-            <Progress 
-              value={(dailyTotals.fat / dailyGoals.fat) * 100} 
               className="h-3" 
             />
           </div>
