@@ -1,22 +1,29 @@
-import { useState } from 'react';
-import { ArrowLeft, Plus } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { ArrowLeft, Plus, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
+import { useFoods, useRecentFoods } from '@/hooks/useFoods';
 
 const SearchFood = () => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedQuery, setDebouncedQuery] = useState('');
   const navigate = useNavigate();
 
-  // Mock recently used foods for now
-  const recentFoods = [
-    { id: 1, name: "Greek Yogurt", brand: "Fage", calories: 150 },
-    { id: 2, name: "Banana", brand: "Fresh", calories: 105 },
-    { id: 3, name: "Chicken Breast", brand: "Generic", calories: 231 },
-    { id: 4, name: "Brown Rice", brand: "Uncle Ben's", calories: 220 },
-    { id: 5, name: "Almonds", brand: "Blue Diamond", calories: 160 },
-  ];
+  // Debounce search query
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedQuery(searchQuery);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  const { foods, loading: searchLoading } = useFoods(debouncedQuery);
+  const { recentFoods, loading: recentLoading } = useRecentFoods();
+
+  const showSearchResults = debouncedQuery.trim().length > 0;
+  const displayFoods = showSearchResults ? foods : recentFoods;
 
   return (
     <div className="min-h-screen bg-bg text-text">
@@ -47,35 +54,57 @@ const SearchFood = () => {
           <Button 
             variant="outline" 
             className="w-full"
-            onClick={() => navigate('/add-food')}
+            onClick={() => navigate(`/add-food?name=${encodeURIComponent(searchQuery)}`)}
           >
             <Plus className="w-4 h-4 mr-2" />
             Add "{searchQuery}" as new food
           </Button>
         )}
 
-        {/* Recently Used Foods */}
+        {/* Foods List */}
         <div className="space-y-3">
-          <h2 className="text-lg font-medium text-text">Recently Used</h2>
-          {recentFoods.map((food) => (
-            <Card 
-              key={food.id} 
-              className="bg-glass border-glass cursor-pointer hover:bg-bg-light transition-colors"
-              onClick={() => navigate(`/log-food/${food.id}`)}
-            >
-              <CardContent className="p-4">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <h3 className="font-medium text-text">{food.name}</h3>
-                    <p className="text-sm text-text-muted">{food.brand}</p>
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-medium text-text">
+              {showSearchResults ? 'Search Results' : 'Recently Used'}
+            </h2>
+            {(searchLoading || recentLoading) && (
+              <Loader2 className="w-4 h-4 animate-spin text-text-muted" />
+            )}
+          </div>
+
+          {displayFoods.length === 0 && !searchLoading && !recentLoading ? (
+            <div className="text-center py-8">
+              <p className="text-text-muted mb-4">
+                {showSearchResults ? `No foods found for "${searchQuery}"` : 'No recently used foods'}
+              </p>
+              {showSearchResults && (
+                <Button onClick={() => navigate(`/add-food?name=${encodeURIComponent(searchQuery)}`)}>
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add "{searchQuery}" as new food
+                </Button>
+              )}
+            </div>
+          ) : (
+            displayFoods.map((food) => (
+              <Card 
+                key={food.id} 
+                className="bg-glass border-glass cursor-pointer hover:bg-bg-light transition-colors"
+                onClick={() => navigate(`/log-food/${food.id}`)}
+              >
+                <CardContent className="p-4">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <h3 className="font-medium text-text">{food.name}</h3>
+                      <p className="text-sm text-text-muted">{food.brand || 'No brand'}</p>
+                    </div>
+                    <span className="text-sm font-medium text-text">
+                      {food.calories_per_100g} kcal
+                    </span>
                   </div>
-                  <span className="text-sm font-medium text-text">
-                    {food.calories} kcal
-                  </span>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                </CardContent>
+              </Card>
+            ))
+          )}
         </div>
       </div>
     </div>

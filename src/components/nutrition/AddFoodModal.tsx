@@ -8,6 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Search, Camera, Zap } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { QuickAddModal } from "./QuickAddModal";
 
 interface AddFoodModalProps {
   isOpen: boolean;
@@ -16,6 +17,8 @@ interface AddFoodModalProps {
 
 export const AddFoodModal = ({ isOpen, onClose }: AddFoodModalProps) => {
   const navigate = useNavigate();
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [showQuickAdd, setShowQuickAdd] = useState(false);
 
   const handleSearchFood = () => {
     onClose();
@@ -24,14 +27,14 @@ export const AddFoodModal = ({ isOpen, onClose }: AddFoodModalProps) => {
 
   const handleQuickAdd = () => {
     onClose();
-    // TODO: Implement quick add modal
+    setShowQuickAdd(true);
   };
 
   const handleBarcodeScan = () => {
     onClose();
     // TODO: Implement barcode scanning
+    console.log('Barcode scanning not yet implemented');
   };
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
   const options = [
     {
@@ -74,48 +77,55 @@ export const AddFoodModal = ({ isOpen, onClose }: AddFoodModalProps) => {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-bg border-border max-w-sm mx-auto">
-        <DialogHeader>
-          <DialogTitle className="text-text text-center text-xl">Add Food</DialogTitle>
-        </DialogHeader>
-        
-        <div className="space-y-4 py-4">
-          {options.map((option) => {
-            const Icon = option.icon;
-            const isSelected = selectedOption === option.id;
-            
-            return (
-              <Button
-                key={option.id}
-                variant="ghost"
-                onClick={() => handleOptionSelect(option.id)}
-                className={`w-full h-auto p-6 flex flex-col items-center gap-3 hover:bg-bg-light border-2 border-transparent transition-all duration-200 ${
-                  isSelected ? option.color : 'hover:border-border'
-                }`}
-              >
-                <div className={`p-3 rounded-full ${option.color}`}>
-                  <Icon className="w-6 h-6" />
-                </div>
-                <div className="text-center">
-                  <h3 className="font-semibold text-text">{option.title}</h3>
-                  <p className="text-sm text-text-muted mt-1">{option.description}</p>
-                </div>
-              </Button>
-            );
-          })}
-        </div>
-        
-        <div className="text-center">
-          <Button 
-            variant="ghost" 
-            onClick={onClose}
-            className="text-text-muted hover:text-text"
-          >
-            Cancel
-          </Button>
-        </div>
-      </DialogContent>
-    </Dialog>
+    <>
+      <Dialog open={isOpen} onOpenChange={onClose}>
+        <DialogContent className="bg-bg border-border max-w-sm mx-auto">
+          <DialogHeader>
+            <DialogTitle className="text-text text-center text-xl">Add Food</DialogTitle>
+          </DialogHeader>
+          
+          <div className="space-y-4 py-4">
+            {options.map((option) => {
+              const Icon = option.icon;
+              const isSelected = selectedOption === option.id;
+              
+              return (
+                <Button
+                  key={option.id}
+                  variant="ghost"
+                  onClick={() => handleOptionSelect(option.id)}
+                  className={`w-full h-auto p-6 flex flex-col items-center gap-3 hover:bg-bg-light border-2 border-transparent transition-all duration-200 ${
+                    isSelected ? option.color : 'hover:border-border'
+                  }`}
+                >
+                  <div className={`p-3 rounded-full ${option.color}`}>
+                    <Icon className="w-6 h-6" />
+                  </div>
+                  <div className="text-center">
+                    <h3 className="font-semibold text-text">{option.title}</h3>
+                    <p className="text-sm text-text-muted mt-1">{option.description}</p>
+                  </div>
+                </Button>
+              );
+            })}
+          </div>
+          
+          <div className="text-center">
+            <Button 
+              variant="ghost" 
+              onClick={onClose}
+              className="text-text-muted hover:text-text"
+            >
+              Cancel
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <QuickAddModal 
+        isOpen={showQuickAdd} 
+        onClose={() => setShowQuickAdd(false)} 
+      />
+    </>
   );
 };

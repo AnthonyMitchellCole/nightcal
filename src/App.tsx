@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import SearchFood from "./pages/SearchFood";
 import LogFood from "./pages/LogFood";
+import AddFood from "./pages/AddFood";
 import FullLog from "./pages/FullLog";
 import AllFoods from "./pages/AllFoods";
 import Settings from "./pages/Settings";
@@ -38,6 +39,11 @@ const App = () => (
             <Route path="/log-food/:foodId" element={
               <ProtectedRoute>
                 <LogFood />
+              </ProtectedRoute>
+            } />
+            <Route path="/add-food" element={
+              <ProtectedRoute>
+                <AddFood />
               </ProtectedRoute>
             } />
             <Route path="/full-log" element={
