@@ -63,7 +63,6 @@ export const BarcodeScanner = ({ onResult, onError, onClose }: BarcodeScannerPro
       <video
         ref={ref}
         className="w-full h-full object-cover"
-        style={{ transform: 'scaleX(-1)' }} // Mirror the video for better UX
       />
       
       {/* Overlay */}
