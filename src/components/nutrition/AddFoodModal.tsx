@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Search, Camera, Zap } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface AddFoodModalProps {
   isOpen: boolean;
@@ -14,6 +15,22 @@ interface AddFoodModalProps {
 }
 
 export const AddFoodModal = ({ isOpen, onClose }: AddFoodModalProps) => {
+  const navigate = useNavigate();
+
+  const handleSearchFood = () => {
+    onClose();
+    navigate('/search-food');
+  };
+
+  const handleQuickAdd = () => {
+    onClose();
+    // TODO: Implement quick add modal
+  };
+
+  const handleBarcodeScan = () => {
+    onClose();
+    // TODO: Implement barcode scanning
+  };
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
   const options = [
@@ -42,13 +59,18 @@ export const AddFoodModal = ({ isOpen, onClose }: AddFoodModalProps) => {
 
   const handleOptionSelect = (optionId: string) => {
     setSelectedOption(optionId);
-    // Here you would navigate to the appropriate flow
-    console.log(`Selected option: ${optionId}`);
-    // For now, just close the modal
-    setTimeout(() => {
-      onClose();
-      setSelectedOption(null);
-    }, 150);
+    
+    switch (optionId) {
+      case 'search':
+        handleSearchFood();
+        break;
+      case 'scan':
+        handleBarcodeScan();
+        break;
+      case 'quick':
+        handleQuickAdd();
+        break;
+    }
   };
 
   return (

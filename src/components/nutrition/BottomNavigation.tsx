@@ -1,4 +1,5 @@
 import { Home, FileText, Plus, Package, Settings } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 interface BottomNavigationProps {
@@ -8,13 +9,24 @@ interface BottomNavigationProps {
 }
 
 export const BottomNavigation = ({ activeTab, onTabChange, onAddFood }: BottomNavigationProps) => {
+  const navigate = useNavigate();
+  
   const navItems = [
-    { id: 'home', icon: Home, label: 'Home' },
-    { id: 'log', icon: FileText, label: 'Full Log' },
+    { id: 'home', icon: Home, label: 'Home', route: '/' },
+    { id: 'log', icon: FileText, label: 'Full Log', route: '/full-log' },
     { id: 'add', icon: Plus, label: 'Add', isSpecial: true },
-    { id: 'foods', icon: Package, label: 'All Foods' },
-    { id: 'settings', icon: Settings, label: 'Settings' }
+    { id: 'foods', icon: Package, label: 'All Foods', route: '/all-foods' },
+    { id: 'settings', icon: Settings, label: 'Settings', route: '/settings' }
   ];
+
+  const handleNavigation = (item: typeof navItems[0]) => {
+    if (item.isSpecial) {
+      onAddFood();
+    } else {
+      onTabChange(item.id);
+      navigate(item.route);
+    }
+  };
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-glass border-t border-glass backdrop-blur-glass shadow-layered">
@@ -38,7 +50,7 @@ export const BottomNavigation = ({ activeTab, onTabChange, onAddFood }: BottomNa
           return (
             <button
               key={item.id}
-              onClick={() => onTabChange(item.id)}
+              onClick={() => handleNavigation(item)}
               className={`flex flex-col items-center justify-center p-2 rounded-lg transition-all duration-200 ${
                 isActive 
                   ? 'text-primary bg-primary/10' 
