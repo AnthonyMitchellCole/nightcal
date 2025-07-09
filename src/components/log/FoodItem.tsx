@@ -1,4 +1,6 @@
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { QuickAddModal } from '../nutrition/QuickAddModal';
 
 interface FoodItemProps {
   food: {
@@ -14,6 +16,7 @@ interface FoodItemProps {
   quantity: number;
   servingSizeId?: string;
   mealId: string;
+  isQuickAdd?: boolean;
   dailyGoals: {
     calories: number;
     carbs: number;
@@ -22,8 +25,10 @@ interface FoodItemProps {
   };
 }
 
-export const FoodItem = ({ food, foodLogId, quantity, servingSizeId, mealId, dailyGoals }: FoodItemProps) => {
+export const FoodItem = ({ food, foodLogId, quantity, servingSizeId, mealId, isQuickAdd, dailyGoals }: FoodItemProps) => {
   const navigate = useNavigate();
+  const [showQuickAddModal, setShowQuickAddModal] = useState(false);
+  const [quickAddData, setQuickAddData] = useState<any>(null);
   
   const foodCalPercentage = Math.round((food.calories / dailyGoals.calories) * 100);
   const foodCarbPercentage = Math.round((food.carbs / dailyGoals.carbs) * 100);
@@ -31,6 +36,20 @@ export const FoodItem = ({ food, foodLogId, quantity, servingSizeId, mealId, dai
   const foodFatPercentage = Math.round((food.fat / dailyGoals.fat) * 100);
 
   const handleClick = () => {
+    if (isQuickAdd) {
+      // Open Quick Add modal with pre-populated data
+      setQuickAddData({
+        foodName: food.name,
+        mealId: mealId,
+        calories: food.calories.toString(),
+        carbs: food.carbs.toString(),
+        protein: food.protein.toString(),
+        fat: food.fat.toString()
+      });
+      setShowQuickAddModal(true);
+      return;
+    }
+
     const params = new URLSearchParams({
       quantity: quantity.toString(),
       mealId: mealId,
@@ -41,10 +60,11 @@ export const FoodItem = ({ food, foodLogId, quantity, servingSizeId, mealId, dai
   };
 
   return (
-    <div 
-      className="flex justify-between items-start p-3 bg-bg-light rounded-lg border border-border hover:bg-bg-dark/50 transition-colors cursor-pointer" 
-      onClick={handleClick}
-    >
+    <>
+      <div 
+        className="flex justify-between items-start p-3 bg-bg-light rounded-lg border border-border hover:bg-bg-dark/50 transition-colors cursor-pointer" 
+        onClick={handleClick}
+      >
       <div className="flex-1">
         <h4 className="font-medium text-text mb-1">{food.name}</h4>
         {food.brand && (
@@ -67,6 +87,16 @@ export const FoodItem = ({ food, foodLogId, quantity, servingSizeId, mealId, dai
           {food.calories} Cal <span className="text-xs opacity-75">({foodCalPercentage}%)</span>
         </span>
       </div>
-    </div>
+      </div>
+
+      <QuickAddModal 
+        isOpen={showQuickAddModal} 
+        onClose={() => {
+          setShowQuickAddModal(false);
+          setQuickAddData(null);
+        }}
+        prePopulatedData={quickAddData}
+      />
+    </>
   );
 };

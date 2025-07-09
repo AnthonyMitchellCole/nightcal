@@ -18,26 +18,34 @@ import { useToast } from '@/hooks/use-toast';
 interface QuickAddModalProps {
   isOpen: boolean;
   onClose: () => void;
+  prePopulatedData?: {
+    foodName?: string;
+    mealId?: string;
+    calories?: string;
+    carbs?: string;
+    protein?: string;
+    fat?: string;
+  };
 }
 
-export const QuickAddModal = ({ isOpen, onClose }: QuickAddModalProps) => {
+export const QuickAddModal = ({ isOpen, onClose, prePopulatedData }: QuickAddModalProps) => {
   const [mode, setMode] = useState<'calories' | 'macros'>('calories');
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
   const { toast } = useToast();
 
   const [formData, setFormData] = useState({
-    foodName: '',
-    mealId: '',
-    calories: '',
-    carbs: '',
-    protein: '',
-    fat: ''
+    foodName: prePopulatedData?.foodName || '',
+    mealId: prePopulatedData?.mealId || '',
+    calories: prePopulatedData?.calories || '',
+    carbs: prePopulatedData?.carbs || '',
+    protein: prePopulatedData?.protein || '',
+    fat: prePopulatedData?.fat || ''
   });
 
   const [meals, setMeals] = useState<any[]>([]);
 
-  // Fetch user meals when modal opens
+  // Fetch user meals when modal opens and reset form data when prePopulatedData changes
   useEffect(() => {
     if (isOpen && user) {
       const fetchMeals = async () => {
@@ -53,6 +61,20 @@ export const QuickAddModal = ({ isOpen, onClose }: QuickAddModalProps) => {
       fetchMeals();
     }
   }, [isOpen, user]);
+
+  // Reset form data when prePopulatedData changes
+  useEffect(() => {
+    if (prePopulatedData) {
+      setFormData({
+        foodName: prePopulatedData.foodName || '',
+        mealId: prePopulatedData.mealId || '',
+        calories: prePopulatedData.calories || '',
+        carbs: prePopulatedData.carbs || '',
+        protein: prePopulatedData.protein || '',
+        fat: prePopulatedData.fat || ''
+      });
+    }
+  }, [prePopulatedData]);
 
   const handleChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));

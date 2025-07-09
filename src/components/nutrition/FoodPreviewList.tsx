@@ -1,6 +1,8 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { QuickAddModal } from './QuickAddModal';
 
 interface FoodItem {
   id: string;
@@ -31,6 +33,8 @@ interface FoodPreviewListProps {
 
 export const FoodPreviewList = ({ foods, dailyGoals }: FoodPreviewListProps) => {
   const navigate = useNavigate();
+  const [showQuickAddModal, setShowQuickAddModal] = useState(false);
+  const [quickAddData, setQuickAddData] = useState<any>(null);
   
   // Default goals if not provided
   const goals = dailyGoals || {
@@ -54,7 +58,19 @@ export const FoodPreviewList = ({ foods, dailyGoals }: FoodPreviewListProps) => 
         const fatPercentage = Math.round((food.macros.fat / goals.fat) * 100);
 
         const handleFoodClick = () => {
-          if (food.isQuickAdd) return; // Don't navigate for quick add items
+          if (food.isQuickAdd) {
+            // Open Quick Add modal with pre-populated data
+            setQuickAddData({
+              foodName: food.name,
+              mealId: food.mealId,
+              calories: food.calories.toString(),
+              carbs: food.macros.carbs.toString(),
+              protein: food.macros.protein.toString(),
+              fat: food.macros.fat.toString()
+            });
+            setShowQuickAddModal(true);
+            return;
+          }
           
           const params = new URLSearchParams({
             quantity: food.quantity.toString(),
@@ -68,7 +84,7 @@ export const FoodPreviewList = ({ foods, dailyGoals }: FoodPreviewListProps) => 
         return (
           <Card 
             key={food.logId} 
-            className={`bg-glass border-glass backdrop-blur-glass shadow-soft hover:shadow-layered transition-all duration-300 group ${!food.isQuickAdd ? 'cursor-pointer' : ''}`}
+            className="bg-glass border-glass backdrop-blur-glass shadow-soft hover:shadow-layered transition-all duration-300 group cursor-pointer"
             onClick={handleFoodClick}
           >
             <CardContent className="p-4">
@@ -118,6 +134,15 @@ export const FoodPreviewList = ({ foods, dailyGoals }: FoodPreviewListProps) => 
           </Card>
         );
       })}
+
+      <QuickAddModal 
+        isOpen={showQuickAddModal} 
+        onClose={() => {
+          setShowQuickAddModal(false);
+          setQuickAddData(null);
+        }}
+        prePopulatedData={quickAddData}
+      />
       
       {foods.length === 0 && (
         <Card className="bg-glass border-glass backdrop-blur-glass shadow-soft">
