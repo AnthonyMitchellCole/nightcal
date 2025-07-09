@@ -1,9 +1,9 @@
 import { useDailySummary, useMealSummary } from '@/hooks/useFoodLogs';
 import { useProfile } from '@/hooks/useProfile';
 
-export const useFullLog = () => {
-  const { summary, loading: summaryLoading } = useDailySummary();
-  const { meals, loading: mealsLoading } = useMealSummary();
+export const useFullLog = (date?: string) => {
+  const { summary, loading: summaryLoading } = useDailySummary(date);
+  const { meals, loading: mealsLoading } = useMealSummary(date);
   const { profile, loading: profileLoading } = useProfile();
 
   const loading = summaryLoading || mealsLoading || profileLoading;
