@@ -50,7 +50,7 @@ export const CustomNutrientCard = ({ nutrients, isPlaceholder = false }: CustomN
                     <div className="space-y-2">
                       <Progress 
                         value={percentage} 
-                        className="h-4 bg-border-muted shadow-inner"
+                        className="h-3 bg-border-muted shadow-inner"
                       />
                       <div className="flex justify-between text-xs text-text-muted">
                         <span>0{nutrient.unit}</span>
