@@ -30,7 +30,11 @@ export const DateNavigation = ({ selectedDate, onDateChange }: DateNavigationPro
     onDateChange(new Date());
   };
 
-  const isToday = format(selectedDate, 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd');
+  // Check if the selected date is today (compare just the date part)
+  const today = new Date();
+  const isToday = selectedDate.getFullYear() === today.getFullYear() &&
+                  selectedDate.getMonth() === today.getMonth() &&
+                  selectedDate.getDate() === today.getDate();
   
   // Check if next day would be in the future
   const nextDay = new Date(selectedDate);
