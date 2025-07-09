@@ -15,7 +15,7 @@ export const CustomNutrientCard = ({ nutrient }: CustomNutrientCardProps) => {
   const percentage = Math.min((nutrient.current / nutrient.goal) * 100, 100);
 
   return (
-    <Card className="w-[calc(100vw-2rem)] md:w-full md:flex-1 md:max-w-sm bg-glass border-glass backdrop-blur-glass shadow-layered snap-start flex-shrink-0">
+    <Card className="w-[calc(100vw-2rem)] md:w-full md:flex-1 md:max-w-sm bg-glass border-glass backdrop-blur-glass shadow-layered snap-center flex-shrink-0">
       <CardContent className="p-6">
         <div className="mb-4 flex items-center justify-between">
           <div>
