@@ -52,16 +52,36 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
-				sidebar: {
-					DEFAULT: 'hsl(var(--sidebar-background))',
-					foreground: 'hsl(var(--sidebar-foreground))',
-					primary: 'hsl(var(--sidebar-primary))',
-					'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
-					accent: 'hsl(var(--sidebar-accent))',
-					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
-					border: 'hsl(var(--sidebar-border))',
-					ring: 'hsl(var(--sidebar-ring))'
-				}
+				// Nutrition tracker semantic colors
+				'bg-dark': 'hsl(var(--bg-dark))',
+				'bg': 'hsl(var(--bg))',
+				'bg-light': 'hsl(var(--bg-light))',
+				'text': 'hsl(var(--text))',
+				'text-muted': 'hsl(var(--text-muted))',
+				'highlight': 'hsl(var(--highlight))',
+				'border-custom': 'hsl(var(--border))',
+				'border-muted': 'hsl(var(--border-muted))',
+				'danger': 'hsl(var(--danger))',
+				'warning': 'hsl(var(--warning))',
+				'success': 'hsl(var(--success))',
+				'info': 'hsl(var(--info))'
+			},
+			boxShadow: {
+				'soft': 'var(--shadow-soft)',
+				'layered': 'var(--shadow-layered)',
+				'glass': '0 8px 32px 0 hsl(224 84% 6% / 0.37)'
+			},
+			backdropBlur: {
+				'glass': '10px'
+			},
+			backgroundColor: {
+				'glass': 'hsl(var(--glass-bg))'
+			},
+			borderColor: {
+				'glass': 'hsl(var(--glass-border))'
+			},
+			fontFamily: {
+				'rubik': ['Rubik', 'sans-serif'],
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

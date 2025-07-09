@@ -1,0 +1,56 @@
+import { Home, FileText, Plus, Package, Settings } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+interface BottomNavigationProps {
+  activeTab: string;
+  onTabChange: (tab: string) => void;
+  onAddFood: () => void;
+}
+
+export const BottomNavigation = ({ activeTab, onTabChange, onAddFood }: BottomNavigationProps) => {
+  const navItems = [
+    { id: 'home', icon: Home, label: 'Home' },
+    { id: 'log', icon: FileText, label: 'Full Log' },
+    { id: 'add', icon: Plus, label: 'Add', isSpecial: true },
+    { id: 'foods', icon: Package, label: 'All Foods' },
+    { id: 'settings', icon: Settings, label: 'Settings' }
+  ];
+
+  return (
+    <div className="fixed bottom-0 left-0 right-0 bg-glass border-t border-glass backdrop-blur-glass shadow-layered">
+      <div className="flex items-center justify-around py-2 px-4 max-w-md mx-auto">
+        {navItems.map((item) => {
+          const Icon = item.icon;
+          const isActive = activeTab === item.id;
+          
+          if (item.isSpecial) {
+            return (
+              <Button
+                key={item.id}
+                onClick={onAddFood}
+                className="w-14 h-14 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-layered transform transition-all duration-200 hover:scale-105 active:scale-95"
+              >
+                <Icon className="w-6 h-6" />
+              </Button>
+            );
+          }
+
+          return (
+            <button
+              key={item.id}
+              onClick={() => onTabChange(item.id)}
+              className={`flex flex-col items-center justify-center p-2 rounded-lg transition-all duration-200 ${
+                isActive 
+                  ? 'text-primary bg-primary/10' 
+                  : 'text-text-muted hover:text-text hover:bg-bg-light/50'
+              }`}
+            >
+              <Icon className={`w-5 h-5 mb-1 ${isActive ? 'text-primary' : ''}`} />
+              <span className="text-xs font-medium">{item.label}</span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+};

@@ -1,0 +1,99 @@
+import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Search, Camera, Zap } from "lucide-react";
+
+interface AddFoodModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export const AddFoodModal = ({ isOpen, onClose }: AddFoodModalProps) => {
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+
+  const options = [
+    {
+      id: 'search',
+      icon: Search,
+      title: 'Search Food',
+      description: 'Find foods in our database',
+      color: 'text-info bg-info/10 border-info/20'
+    },
+    {
+      id: 'scan',
+      icon: Camera,
+      title: 'Scan Barcode',
+      description: 'Use camera to scan product',
+      color: 'text-success bg-success/10 border-success/20'
+    },
+    {
+      id: 'quick',
+      icon: Zap,
+      title: 'Quick Add',
+      description: 'Manually enter macros',
+      color: 'text-warning bg-warning/10 border-warning/20'
+    }
+  ];
+
+  const handleOptionSelect = (optionId: string) => {
+    setSelectedOption(optionId);
+    // Here you would navigate to the appropriate flow
+    console.log(`Selected option: ${optionId}`);
+    // For now, just close the modal
+    setTimeout(() => {
+      onClose();
+      setSelectedOption(null);
+    }, 150);
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="bg-bg border-border max-w-sm mx-auto">
+        <DialogHeader>
+          <DialogTitle className="text-text text-center text-xl">Add Food</DialogTitle>
+        </DialogHeader>
+        
+        <div className="space-y-4 py-4">
+          {options.map((option) => {
+            const Icon = option.icon;
+            const isSelected = selectedOption === option.id;
+            
+            return (
+              <Button
+                key={option.id}
+                variant="ghost"
+                onClick={() => handleOptionSelect(option.id)}
+                className={`w-full h-auto p-6 flex flex-col items-center gap-3 hover:bg-bg-light border-2 border-transparent transition-all duration-200 ${
+                  isSelected ? option.color : 'hover:border-border'
+                }`}
+              >
+                <div className={`p-3 rounded-full ${option.color}`}>
+                  <Icon className="w-6 h-6" />
+                </div>
+                <div className="text-center">
+                  <h3 className="font-semibold text-text">{option.title}</h3>
+                  <p className="text-sm text-text-muted mt-1">{option.description}</p>
+                </div>
+              </Button>
+            );
+          })}
+        </div>
+        
+        <div className="text-center">
+          <Button 
+            variant="ghost" 
+            onClick={onClose}
+            className="text-text-muted hover:text-text"
+          >
+            Cancel
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
