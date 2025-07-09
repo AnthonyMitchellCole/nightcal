@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ArrowLeft } from 'lucide-react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -16,13 +16,19 @@ import { useToast } from '@/hooks/use-toast';
 const LogFood = () => {
   const { foodId } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { user } = useAuth();
   const { logFood, loading: logLoading } = useLogFood();
   const { toast } = useToast();
 
-  const [quantity, setQuantity] = useState('1');
-  const [selectedMeal, setSelectedMeal] = useState('');
-  const [selectedServing, setSelectedServing] = useState('');
+  // Get URL parameters for pre-population
+  const presetQuantity = searchParams.get('quantity');
+  const presetMealId = searchParams.get('mealId');
+  const presetServingSizeId = searchParams.get('servingSizeId');
+
+  const [quantity, setQuantity] = useState(presetQuantity || '1');
+  const [selectedMeal, setSelectedMeal] = useState(presetMealId || '');
+  const [selectedServing, setSelectedServing] = useState(presetServingSizeId || '');
   
   const [food, setFood] = useState<any>(null);
   const [meals, setMeals] = useState<any[]>([]);
@@ -64,10 +70,20 @@ const LogFood = () => {
           return currentTime >= meal.time_slot_start && currentTime <= meal.time_slot_end;
         });
 
-        if (appropriateMeal) {
-          setSelectedMeal(appropriateMeal.id);
-        } else if (mealsData && mealsData.length > 0) {
-          setSelectedMeal(mealsData[0].id);
+        // Auto-select meal based on preset or current time
+        if (presetMealId && mealsData?.find(m => m.id === presetMealId)) {
+          setSelectedMeal(presetMealId);
+        } else {
+          const appropriateMeal = mealsData?.find(meal => {
+            if (!meal.time_slot_start || !meal.time_slot_end) return false;
+            return currentTime >= meal.time_slot_start && currentTime <= meal.time_slot_end;
+          });
+
+          if (appropriateMeal) {
+            setSelectedMeal(appropriateMeal.id);
+          } else if (mealsData && mealsData.length > 0) {
+            setSelectedMeal(mealsData[0].id);
+          }
         }
 
         // Fetch serving sizes
@@ -92,7 +108,13 @@ const LogFood = () => {
         ];
         
         setServingSizes(servings);
-        setSelectedServing(servings[0]?.id || 'default-100');
+        
+        // Set serving size based on preset or default
+        if (presetServingSizeId && servings.find(s => s.id === presetServingSizeId)) {
+          setSelectedServing(presetServingSizeId);
+        } else {
+          setSelectedServing(servings[0]?.id || 'default-100');
+        }
 
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -108,7 +130,7 @@ const LogFood = () => {
     };
 
     fetchData();
-  }, [foodId, user, navigate, toast]);
+  }, [foodId, user, navigate, toast, presetMealId, presetServingSizeId]);
 
   if (loading || !food) {
     return (

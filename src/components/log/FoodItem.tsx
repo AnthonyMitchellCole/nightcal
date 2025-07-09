@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom';
+
 interface FoodItemProps {
   food: {
     id: string;
@@ -8,6 +10,10 @@ interface FoodItemProps {
     protein: number;
     fat: number;
   };
+  foodLogId: string;
+  quantity: number;
+  servingSizeId?: string;
+  mealId: string;
   dailyGoals: {
     calories: number;
     carbs: number;
@@ -16,14 +22,29 @@ interface FoodItemProps {
   };
 }
 
-export const FoodItem = ({ food, dailyGoals }: FoodItemProps) => {
+export const FoodItem = ({ food, foodLogId, quantity, servingSizeId, mealId, dailyGoals }: FoodItemProps) => {
+  const navigate = useNavigate();
+  
   const foodCalPercentage = Math.round((food.calories / dailyGoals.calories) * 100);
   const foodCarbPercentage = Math.round((food.carbs / dailyGoals.carbs) * 100);
   const foodProteinPercentage = Math.round((food.protein / dailyGoals.protein) * 100);
   const foodFatPercentage = Math.round((food.fat / dailyGoals.fat) * 100);
 
+  const handleClick = () => {
+    const params = new URLSearchParams({
+      quantity: quantity.toString(),
+      mealId: mealId,
+      ...(servingSizeId && { servingSizeId })
+    });
+    
+    navigate(`/log-food/${food.id}?${params.toString()}`);
+  };
+
   return (
-    <div className="flex justify-between items-start p-3 bg-bg-light rounded-lg border border-border hover:bg-bg-dark/50 transition-colors">
+    <div 
+      className="flex justify-between items-start p-3 bg-bg-light rounded-lg border border-border hover:bg-bg-dark/50 transition-colors cursor-pointer" 
+      onClick={handleClick}
+    >
       <div className="flex-1">
         <h4 className="font-medium text-text mb-1">{food.name}</h4>
         {food.brand && (

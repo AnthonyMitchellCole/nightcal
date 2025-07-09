@@ -1,11 +1,16 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useNavigate } from 'react-router-dom';
 
 interface FoodItem {
   id: string;
+  logId: string;
   name: string;
   calories: number;
   meal: string;
+  mealId: string;
+  quantity: number;
+  servingSizeId?: string;
   isQuickAdd?: boolean;
   macros: {
     carbs: number;
@@ -25,6 +30,8 @@ interface FoodPreviewListProps {
 }
 
 export const FoodPreviewList = ({ foods, dailyGoals }: FoodPreviewListProps) => {
+  const navigate = useNavigate();
+  
   // Default goals if not provided
   const goals = dailyGoals || {
     calories: 2100,
@@ -46,8 +53,24 @@ export const FoodPreviewList = ({ foods, dailyGoals }: FoodPreviewListProps) => 
         const proteinPercentage = Math.round((food.macros.protein / goals.protein) * 100);
         const fatPercentage = Math.round((food.macros.fat / goals.fat) * 100);
 
+        const handleFoodClick = () => {
+          if (food.isQuickAdd) return; // Don't navigate for quick add items
+          
+          const params = new URLSearchParams({
+            quantity: food.quantity.toString(),
+            mealId: food.mealId,
+            ...(food.servingSizeId && { servingSizeId: food.servingSizeId })
+          });
+          
+          navigate(`/log-food/${food.id}?${params.toString()}`);
+        };
+
         return (
-          <Card key={food.id} className="bg-glass border-glass backdrop-blur-glass shadow-soft hover:shadow-layered transition-all duration-300 cursor-pointer group">
+          <Card 
+            key={food.logId} 
+            className={`bg-glass border-glass backdrop-blur-glass shadow-soft hover:shadow-layered transition-all duration-300 group ${!food.isQuickAdd ? 'cursor-pointer' : ''}`}
+            onClick={handleFoodClick}
+          >
             <CardContent className="p-4">
               <div className="flex items-start justify-between">
                 <div className="flex-1">

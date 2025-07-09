@@ -12,12 +12,15 @@ interface Meal {
   };
   foods: Array<{
     id: string;
+    logId: string;
     name: string;
     brand?: string;
     calories: number;
     carbs: number;
     protein: number;
     fat: number;
+    quantity: number;
+    servingSizeId?: string;
   }>;
 }
 
@@ -80,8 +83,20 @@ export const MealCard = ({ meal, dailyGoals }: MealCardProps) => {
           <div className="space-y-3">
             {meal.foods.map((food) => (
               <FoodItem 
-                key={food.id} 
-                food={food} 
+                key={food.logId} 
+                food={{
+                  id: food.id,
+                  name: food.name,
+                  brand: food.brand,
+                  calories: food.calories,
+                  carbs: food.carbs,
+                  protein: food.protein,
+                  fat: food.fat
+                }}
+                foodLogId={food.logId}
+                quantity={food.quantity}
+                servingSizeId={food.servingSizeId}
+                mealId={meal.id}
                 dailyGoals={dailyGoals} 
               />
             ))}
