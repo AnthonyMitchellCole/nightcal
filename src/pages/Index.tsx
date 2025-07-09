@@ -37,19 +37,25 @@ const Index = () => {
   // Get custom nutrients from profile preferences
   const customNutrients = (profile?.preferences as any)?.custom_nutrients || {};
   
-  const customNutrient1 = customNutrients.nutrient_1 ? {
-    name: customNutrients.nutrient_1.name.charAt(0).toUpperCase() + customNutrients.nutrient_1.name.slice(1).replace('_', ' '),
-    current: Math.round((summary as any)[customNutrients.nutrient_1.name] || 0),
-    goal: customNutrients.nutrient_1.goal,
-    unit: customNutrients.nutrient_1.unit
-  } : null;
+  const configuredNutrients = [];
+  
+  if (customNutrients.nutrient_1) {
+    configuredNutrients.push({
+      name: customNutrients.nutrient_1.name.charAt(0).toUpperCase() + customNutrients.nutrient_1.name.slice(1).replace('_', ' '),
+      current: Math.round((summary as any)[customNutrients.nutrient_1.name] || 0),
+      goal: customNutrients.nutrient_1.goal,
+      unit: customNutrients.nutrient_1.unit
+    });
+  }
 
-  const customNutrient2 = customNutrients.nutrient_2 ? {
-    name: customNutrients.nutrient_2.name.charAt(0).toUpperCase() + customNutrients.nutrient_2.name.slice(1).replace('_', ' '),
-    current: Math.round((summary as any)[customNutrients.nutrient_2.name] || 0),
-    goal: customNutrients.nutrient_2.goal,
-    unit: customNutrients.nutrient_2.unit
-  } : null;
+  if (customNutrients.nutrient_2) {
+    configuredNutrients.push({
+      name: customNutrients.nutrient_2.name.charAt(0).toUpperCase() + customNutrients.nutrient_2.name.slice(1).replace('_', ' '),
+      current: Math.round((summary as any)[customNutrients.nutrient_2.name] || 0),
+      goal: customNutrients.nutrient_2.goal,
+      unit: customNutrients.nutrient_2.unit
+    });
+  }
 
   // Transform food logs for FoodPreviewList
   const todaysFoods = foodLogs.map(log => ({
@@ -96,16 +102,13 @@ const Index = () => {
         <div className="flex overflow-x-auto scrollbar-hide snap-x-mandatory px-4 gap-4 md:justify-center md:px-4">
           <MacroProgressCard macros={macros} />
           <CalorieSummaryCard calories={calories} />
-          {customNutrient1 ? (
-            <CustomNutrientCard nutrient={customNutrient1} />
+          {configuredNutrients.length > 0 ? (
+            <CustomNutrientCard nutrients={configuredNutrients} />
           ) : (
             <CustomNutrientCard 
-              nutrient={{ name: "Custom Nutrient", current: 0, goal: 0, unit: "" }} 
+              nutrients={[]} 
               isPlaceholder={true} 
             />
-          )}
-          {customNutrient2 && (
-            <CustomNutrientCard nutrient={customNutrient2} />
           )}
         </div>
       </div>
