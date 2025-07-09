@@ -45,32 +45,26 @@ export const MealCard = ({ meal, dailyGoals }: MealCardProps) => {
 
   return (
     <Card className="surface-elevated border border-border rounded-lg shadow-soft hover:shadow-layered transition-all duration-200">
-      <CardHeader className="pb-3">
-        <CardTitle className="flex justify-between items-center">
-          {/* Meal Name Section */}
-          <div className="flex-shrink-0">
+      <CardHeader className="pb-3 pt-4">
+        <CardTitle>
+          {/* Top row: Meal Name and Calories */}
+          <div className="flex justify-between items-start mb-2">
             <span className="text-lg font-semibold text-primary">{meal.name}</span>
-          </div>
-          
-          {/* Macros Section */}
-          <div className="flex flex-col items-center gap-1 flex-1 mx-4">
-            <div className="flex items-center gap-2 text-xs">
-              <span className="font-semibold text-info bg-info/15 px-1.5 py-0.5 rounded">
-                C: {meal.totals.carbs}g <span className="opacity-75">({mealCarbPercentage}%)</span>
-              </span>
-              <span className="font-semibold text-success bg-success/15 px-1.5 py-0.5 rounded">
-                P: {meal.totals.protein}g <span className="opacity-75">({mealProteinPercentage}%)</span>
-              </span>
-              <span className="font-semibold text-warning bg-warning/15 px-1.5 py-0.5 rounded">
-                F: {meal.totals.fat}g <span className="opacity-75">({mealFatPercentage}%)</span>
-              </span>
-            </div>
-          </div>
-          
-          {/* Calories Section */}
-          <div className="text-right flex-shrink-0">
             <span className="text-xl font-bold text-primary">
               {meal.totals.calories} Cal <span className="text-sm opacity-75">({mealCalPercentage}%)</span>
+            </span>
+          </div>
+          
+          {/* Bottom row: Macro badges */}
+          <div className="flex items-center gap-2 text-xs">
+            <span className="font-semibold text-info bg-info/15 px-1.5 py-0.5 rounded">
+              C: {meal.totals.carbs}g <span className="opacity-75">({mealCarbPercentage}%)</span>
+            </span>
+            <span className="font-semibold text-success bg-success/15 px-1.5 py-0.5 rounded">
+              P: {meal.totals.protein}g <span className="opacity-75">({mealProteinPercentage}%)</span>
+            </span>
+            <span className="font-semibold text-warning bg-warning/15 px-1.5 py-0.5 rounded">
+              F: {meal.totals.fat}g <span className="opacity-75">({mealFatPercentage}%)</span>
             </span>
           </div>
         </CardTitle>
