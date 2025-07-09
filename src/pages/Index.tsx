@@ -4,7 +4,7 @@ import { CustomNutrientCard } from "@/components/nutrition/CustomNutrientCard";
 import { FoodPreviewList } from "@/components/nutrition/FoodPreviewList";
 import { useDailySummary, useFoodLogs } from "@/hooks/useFoodLogs";
 import { useProfile } from "@/hooks/useProfile";
-import { Loader2 } from "lucide-react";
+import { LoadingEmblem } from "@/components/ui/loading-emblem";
 
 const Index = () => {
   const { summary, loading: summaryLoading } = useDailySummary();
@@ -57,7 +57,7 @@ const Index = () => {
     return (
       <div className="min-h-screen bg-bg text-text flex items-center justify-center">
         <div className="flex items-center space-x-2">
-          <Loader2 className="w-6 h-6 animate-spin" />
+          <LoadingEmblem />
           <span>Loading your nutrition data...</span>
         </div>
       </div>

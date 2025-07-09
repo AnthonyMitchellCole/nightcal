@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from '@/hooks/use-toast';
-import { Loader2 } from 'lucide-react';
+import { LoadingEmblem } from '@/components/ui/loading-emblem';
 
 const Auth = () => {
   const [email, setEmail] = useState('');
@@ -112,7 +112,7 @@ const Auth = () => {
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? (
                     <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      <LoadingEmblem size="sm" className="mr-2" />
                       Signing in...
                     </>
                   ) : (
@@ -149,7 +149,7 @@ const Auth = () => {
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? (
                     <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      <LoadingEmblem size="sm" className="mr-2" />
                       Creating account...
                     </>
                   ) : (

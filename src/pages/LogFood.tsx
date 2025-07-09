@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ArrowLeft, Loader2 } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { supabase } from '@/integrations/supabase/client';
+import { LoadingEmblem } from '@/components/ui/loading-emblem';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLogFood } from '@/hooks/useFoodLogs';
 import { useToast } from '@/hooks/use-toast';
@@ -116,7 +117,7 @@ const LogFood = () => {
         </div>
         <div className="flex items-center justify-center p-8">
           <div className="flex items-center space-x-2">
-            <Loader2 className="w-6 h-6 animate-spin" />
+            <LoadingEmblem />
             <span>Loading food details...</span>
           </div>
         </div>

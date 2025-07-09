@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { ArrowLeft, Plus, Search, Loader2 } from 'lucide-react';
+import { ArrowLeft, Plus, Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
+import { LoadingEmblem } from '@/components/ui/loading-emblem';
 import { useFoods } from '@/hooks/useFoods';
 
 const AllFoods = () => {
@@ -63,7 +64,7 @@ const AllFoods = () => {
           <p className="text-sm text-text-muted">
             {loading ? 'Loading...' : `${foods.length} food${foods.length !== 1 ? 's' : ''} found`}
           </p>
-          {loading && <Loader2 className="w-4 h-4 animate-spin text-text-muted" />}
+          {loading && <LoadingEmblem size="sm" className="text-text-muted" />}
         </div>
 
         {/* Foods list */}

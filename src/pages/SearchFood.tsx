@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { ArrowLeft, Plus, Loader2 } from 'lucide-react';
+import { ArrowLeft, Plus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
+import { LoadingEmblem } from '@/components/ui/loading-emblem';
 import { useFoods, useRecentFoods } from '@/hooks/useFoods';
 
 const SearchFood = () => {
@@ -68,7 +69,7 @@ const SearchFood = () => {
               {showSearchResults ? 'Search Results' : 'Recently Used'}
             </h2>
             {(searchLoading || recentLoading) && (
-              <Loader2 className="w-4 h-4 animate-spin text-text-muted" />
+              <LoadingEmblem size="sm" className="text-text-muted" />
             )}
           </div>
 

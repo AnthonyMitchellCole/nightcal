@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { ArrowLeft, Save, Loader2, Trash2 } from 'lucide-react';
+import { ArrowLeft, Save, Trash2 } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { LoadingEmblem } from '@/components/ui/loading-emblem';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
@@ -162,7 +163,7 @@ const EditFood = () => {
   if (fetchLoading) {
     return (
       <div className="min-h-screen bg-bg text-text flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin" />
+        <LoadingEmblem size="lg" />
       </div>
     );
   }
@@ -345,7 +346,7 @@ const EditFood = () => {
               >
                 {loading ? (
                   <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    <LoadingEmblem size="sm" className="mr-2" />
                     Saving...
                   </>
                 ) : (
@@ -363,7 +364,7 @@ const EditFood = () => {
                 disabled={deleting}
               >
                 {deleting ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <LoadingEmblem size="sm" />
                 ) : (
                   <Trash2 className="w-4 h-4" />
                 )}

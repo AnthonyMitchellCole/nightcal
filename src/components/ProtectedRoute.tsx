@@ -1,6 +1,6 @@
 import { useAuth } from '@/contexts/AuthContext';
 import { Navigate } from 'react-router-dom';
-import { Loader2 } from 'lucide-react';
+import { LoadingEmblem } from '@/components/ui/loading-emblem';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -13,7 +13,7 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     return (
       <div className="min-h-screen bg-bg flex items-center justify-center">
         <div className="flex items-center space-x-2 text-text">
-          <Loader2 className="w-6 h-6 animate-spin" />
+          <LoadingEmblem />
           <span>Loading...</span>
         </div>
       </div>
