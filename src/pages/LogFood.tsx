@@ -10,7 +10,8 @@ import { Progress } from '@/components/ui/progress';
 import { supabase } from '@/integrations/supabase/client';
 import { LoadingEmblem } from '@/components/ui/loading-emblem';
 import { useAuth } from '@/contexts/AuthContext';
-import { useLogFood } from '@/hooks/useFoodLogs';
+import { useLogFood, useDailySummary } from '@/hooks/useFoodLogs';
+import { useProfile } from '@/hooks/useProfile';
 import { useToast } from '@/hooks/use-toast';
 
 const LogFood = () => {
@@ -19,6 +20,8 @@ const LogFood = () => {
   const [searchParams] = useSearchParams();
   const { user } = useAuth();
   const { logFood, loading: logLoading } = useLogFood();
+  const { summary, loading: summaryLoading } = useDailySummary();
+  const { profile, loading: profileLoading } = useProfile();
   const { toast } = useToast();
 
   // Get URL parameters for pre-population
@@ -133,7 +136,23 @@ const LogFood = () => {
     fetchData();
   }, [foodId, user, navigate, toast, presetMealId, presetServingSizeId]);
 
-  if (loading || !food) {
+  // Get goals from profile or use defaults
+  const dailyGoals = {
+    calories: profile?.calorie_goal || 2100,
+    carbs: profile?.carb_goal_grams || 250,
+    protein: profile?.protein_goal_grams || 150,
+    fat: profile?.fat_goal_grams || 80
+  };
+
+  // Calculate remaining amounts (goals - current intake)
+  const remaining = {
+    calories: Math.max(0, dailyGoals.calories - summary.calories),
+    carbs: Math.max(0, dailyGoals.carbs - summary.carbs),
+    protein: Math.max(0, dailyGoals.protein - summary.protein),
+    fat: Math.max(0, dailyGoals.fat - summary.fat)
+  };
+
+  if (loading || !food || summaryLoading || profileLoading) {
     return (
       <div className="min-h-screen bg-bg text-text">
         <div className="sticky-header bg-gradient-glass border-b border-glass backdrop-blur-glass shadow-deep p-4 flex items-center space-x-3">
@@ -287,48 +306,75 @@ const LogFood = () => {
         </div>
 
         {/* Nutrition Summary */}
-        <Card className="bg-glass border-glass">
+        <Card className="glass-elevated shadow-deep backdrop-blur-glass">
           <CardHeader>
-            <CardTitle className="text-lg">Nutrition Summary</CardTitle>
+            <CardTitle>Nutrition Summary</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="text-center">
+            <div className="grid grid-cols-2 gap-4 text-center">
+              <div>
                 <div className="text-2xl font-bold text-primary">
                   {calculatedNutrition.calories}
                 </div>
-                <div className="text-sm text-text-muted">Calories</div>
-              </div>
-              <div className="text-center">
-                <div className="text-xl font-semibold text-text">
-                  {totalGrams.toFixed(0)}g
+                <div className="text-sm text-text-muted">
+                  / {dailyGoals.calories} Cal
                 </div>
-                <div className="text-sm text-text-muted">Weight</div>
+              </div>
+              <div>
+                <div className="text-xl font-semibold text-text">
+                  {Math.round((calculatedNutrition.calories / dailyGoals.calories) * 100)}%
+                </div>
+                <div className="text-sm text-text-muted">of goal</div>
               </div>
             </div>
             
             <div className="space-y-3">
               <div>
                 <div className="flex justify-between text-sm mb-1">
-                  <span>Carbs</span>
-                  <span>{calculatedNutrition.carbs}g</span>
+                  <span>Fat</span>
+                  <span>{calculatedNutrition.fat}g / {dailyGoals.fat}g ({Math.round((calculatedNutrition.fat / dailyGoals.fat) * 100)}%)</span>
                 </div>
-                <Progress value={65} className="h-2" />
+                <Progress 
+                  value={(calculatedNutrition.fat / dailyGoals.fat) * 100} 
+                  className="h-3 bg-border-muted [&>div]:bg-warning" 
+                />
+                <div className="flex justify-between text-xs text-text-muted mt-1">
+                  <span>vs Total Goal: {Math.round((calculatedNutrition.fat / dailyGoals.fat) * 100)}%</span>
+                  <span>vs Remaining: {remaining.fat > 0 ? Math.round((calculatedNutrition.fat / remaining.fat) * 100) : '100+'}%</span>
+                </div>
+              </div>
+              <div>
+                <div className="flex justify-between text-sm mb-1">
+                  <span>Carbs</span>
+                  <span>{calculatedNutrition.carbs}g / {dailyGoals.carbs}g ({Math.round((calculatedNutrition.carbs / dailyGoals.carbs) * 100)}%)</span>
+                </div>
+                <Progress 
+                  value={(calculatedNutrition.carbs / dailyGoals.carbs) * 100} 
+                  className="h-3 bg-border-muted [&>div]:bg-info" 
+                />
+                <div className="flex justify-between text-xs text-text-muted mt-1">
+                  <span>vs Total Goal: {Math.round((calculatedNutrition.carbs / dailyGoals.carbs) * 100)}%</span>
+                  <span>vs Remaining: {remaining.carbs > 0 ? Math.round((calculatedNutrition.carbs / remaining.carbs) * 100) : '100+'}%</span>
+                </div>
               </div>
               <div>
                 <div className="flex justify-between text-sm mb-1">
                   <span>Protein</span>
-                  <span>{calculatedNutrition.protein}g</span>
+                  <span>{calculatedNutrition.protein}g / {dailyGoals.protein}g ({Math.round((calculatedNutrition.protein / dailyGoals.protein) * 100)}%)</span>
                 </div>
-                <Progress value={40} className="h-2" />
-              </div>
-              <div>
-                <div className="flex justify-between text-sm mb-1">
-                  <span>Fat</span>
-                  <span>{calculatedNutrition.fat}g</span>
+                <Progress 
+                  value={(calculatedNutrition.protein / dailyGoals.protein) * 100} 
+                  className="h-3 bg-border-muted [&>div]:bg-success" 
+                />
+                <div className="flex justify-between text-xs text-text-muted mt-1">
+                  <span>vs Total Goal: {Math.round((calculatedNutrition.protein / dailyGoals.protein) * 100)}%</span>
+                  <span>vs Remaining: {remaining.protein > 0 ? Math.round((calculatedNutrition.protein / remaining.protein) * 100) : '100+'}%</span>
                 </div>
-                <Progress value={25} className="h-2" />
               </div>
+            </div>
+            
+            <div className="text-xs text-text-muted pt-2 border-t border-border">
+              Weight: {totalGrams.toFixed(0)}g
             </div>
           </CardContent>
         </Card>
