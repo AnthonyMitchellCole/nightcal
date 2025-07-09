@@ -132,8 +132,8 @@ export const useMealSummary = (date?: string) => {
     const meal = mealSummary.get(mealId);
     meal.foods.push({
       id: log.id,
-      name: log.foods.name,
-      brand: log.foods.brand,
+      name: log.log_type === 'quick_add' ? log.quick_add_name || 'Quick Add' : log.foods?.name || 'Unknown Food',
+      brand: log.foods?.brand || null,
       calories: log.calories,
       carbs: log.carbs,
       protein: log.protein,
