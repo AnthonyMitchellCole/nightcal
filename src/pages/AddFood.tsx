@@ -1,13 +1,15 @@
 import { useState } from 'react';
-import { ArrowLeft, Save, Plus, Trash2 } from 'lucide-react';
+import { ArrowLeft, Save } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ServingSizeNutritionForm } from '@/components/food/ServingSizeNutritionForm';
 import { useCreateFood } from '@/hooks/useFoods';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { calculatePer100g } from '@/lib/nutritionCalculations';
 
 const AddFood = () => {
   const navigate = useNavigate();
@@ -15,98 +17,88 @@ const AddFood = () => {
   const { createFood, loading } = useCreateFood();
   const { toast } = useToast();
 
-  const [formData, setFormData] = useState({
+  const [step, setStep] = useState<'basic' | 'serving' | 'review'>('basic');
+  const [basicData, setBasicData] = useState({
     name: searchParams.get('name') || '',
     brand: '',
-    calories_per_100g: '',
-    carbs_per_100g: '',
-    protein_per_100g: '',
-    fat_per_100g: '',
-    sugar_per_100g: '',
-    sodium_per_100g: '',
-    fiber_per_100g: '',
     barcode: searchParams.get('barcode') || '',
     category: ''
   });
 
-  const [servingSizes, setServingSizes] = useState([
-    { name: '100g', grams: 100, is_default: true }
-  ]);
+  const [servingData, setServingData] = useState<{
+    name: string;
+    grams: number;
+    calories: number;
+    carbs: number;
+    protein: number;
+    fat: number;
+    sugar?: number;
+    sodium?: number;
+    fiber?: number;
+  } | null>(null);
 
-  const handleChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+  const handleBasicChange = (field: string, value: string) => {
+    setBasicData(prev => ({ ...prev, [field]: value }));
   };
 
-  const addServingSize = () => {
-    setServingSizes(prev => [...prev, { name: '', grams: 0, is_default: false }]);
+  const handleServingSubmit = (data: {
+    name: string;
+    grams: number;
+    calories: number;
+    carbs: number;
+    protein: number;
+    fat: number;
+    sugar?: number;
+    sodium?: number;
+    fiber?: number;
+  }) => {
+    setServingData(data);
+    setStep('review');
   };
 
-  const removeServingSize = (index: number) => {
-    if (servingSizes.length > 1) {
-      setServingSizes(prev => prev.filter((_, i) => i !== index));
-    }
-  };
-
-  const updateServingSize = (index: number, field: string, value: string | number | boolean) => {
-    setServingSizes(prev => prev.map((serving, i) => 
-      i === index ? { ...serving, [field]: value } : serving
-    ));
-  };
-
-  const setDefaultServing = (index: number) => {
-    setServingSizes(prev => prev.map((serving, i) => 
-      ({ ...serving, is_default: i === index })
-    ));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // Validate required fields
-    if (!formData.name || !formData.calories_per_100g) {
+  const handleFinalSubmit = async () => {
+    if (!basicData.name || !servingData) {
       toast({
         title: "Validation Error",
-        description: "Name and calories are required",
+        description: "Please complete all steps",
         variant: "destructive"
       });
       return;
     }
 
     try {
+      // Calculate 100g nutrition values
+      const per100gNutrition = calculatePer100g(servingData, servingData.grams);
+
       const foodData = {
-        name: formData.name,
-        brand: formData.brand || undefined,
-        calories_per_100g: Number(formData.calories_per_100g),
-        carbs_per_100g: Number(formData.carbs_per_100g) || 0,
-        protein_per_100g: Number(formData.protein_per_100g) || 0,
-        fat_per_100g: Number(formData.fat_per_100g) || 0,
-        sugar_per_100g: formData.sugar_per_100g ? Number(formData.sugar_per_100g) : undefined,
-        sodium_per_100g: formData.sodium_per_100g ? Number(formData.sodium_per_100g) : undefined,
-        fiber_per_100g: formData.fiber_per_100g ? Number(formData.fiber_per_100g) : undefined,
-        barcode: formData.barcode || undefined,
-        category: formData.category || undefined
+        name: basicData.name,
+        brand: basicData.brand || undefined,
+        barcode: basicData.barcode || undefined,
+        category: basicData.category || undefined,
+        ...per100gNutrition
       };
 
       const newFood = await createFood(foodData);
       
-      // Create serving sizes for the new food
-      const validServingSizes = servingSizes.filter(s => s.name.trim() && s.grams > 0);
-      if (validServingSizes.length > 0) {
-        const { error: servingError } = await supabase
-          .from('serving_sizes')
-          .insert(
-            validServingSizes.map(serving => ({
-              food_id: newFood.id,
-              name: serving.name,
-              grams: serving.grams,
-              is_default: serving.is_default
-            }))
-          );
+      // Create the default serving size with nutrition
+      const { error: servingError } = await supabase
+        .from('serving_sizes')
+        .insert({
+          food_id: newFood.id,
+          name: servingData.name,
+          grams: servingData.grams,
+          is_default: true,
+          calories_per_serving: servingData.calories,
+          carbs_per_serving: servingData.carbs,
+          protein_per_serving: servingData.protein,
+          fat_per_serving: servingData.fat,
+          sugar_per_serving: servingData.sugar,
+          sodium_per_serving: servingData.sodium,
+          fiber_per_serving: servingData.fiber
+        });
 
-        if (servingError) {
-          console.warn('Error creating serving sizes:', servingError);
-          // Don't fail the whole operation if serving sizes fail
-        }
+      if (servingError) {
+        console.warn('Error creating serving size:', servingError);
       }
       
       toast({
@@ -125,6 +117,124 @@ const AddFood = () => {
     }
   };
 
+  const renderBasicInfo = () => (
+    <Card className="bg-glass border-glass">
+      <CardHeader>
+        <CardTitle>Basic Information</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div>
+          <Label htmlFor="name">Food Name *</Label>
+          <Input
+            id="name"
+            value={basicData.name}
+            onChange={(e) => handleBasicChange('name', e.target.value)}
+            placeholder="e.g., Greek Yogurt"
+            required
+          />
+        </div>
+        <div>
+          <Label htmlFor="brand">Brand</Label>
+          <Input
+            id="brand"
+            value={basicData.brand}
+            onChange={(e) => handleBasicChange('brand', e.target.value)}
+            placeholder="e.g., Fage"
+          />
+        </div>
+        <div>
+          <Label htmlFor="barcode">Barcode</Label>
+          <Input
+            id="barcode"
+            value={basicData.barcode}
+            onChange={(e) => handleBasicChange('barcode', e.target.value)}
+            placeholder="Product barcode"
+          />
+        </div>
+        <div>
+          <Label htmlFor="category">Category</Label>
+          <Input
+            id="category"
+            value={basicData.category}
+            onChange={(e) => handleBasicChange('category', e.target.value)}
+            placeholder="e.g., Dairy, Protein"
+          />
+        </div>
+        <Button 
+          onClick={() => setStep('serving')}
+          className="w-full mt-6"
+          disabled={!basicData.name}
+        >
+          Continue to Nutrition
+        </Button>
+      </CardContent>
+    </Card>
+  );
+
+  const renderReview = () => {
+    if (!servingData) return null;
+    
+    const per100gValues = calculatePer100g(servingData, servingData.grams);
+    
+    return (
+      <div className="space-y-6">
+        <Card className="bg-glass border-glass">
+          <CardHeader>
+            <CardTitle>Review Food Information</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <h4 className="font-medium mb-2">Basic Info</h4>
+              <div className="space-y-1 text-sm">
+                <div><span className="text-text-muted">Name:</span> {basicData.name}</div>
+                {basicData.brand && <div><span className="text-text-muted">Brand:</span> {basicData.brand}</div>}
+                {basicData.category && <div><span className="text-text-muted">Category:</span> {basicData.category}</div>}
+              </div>
+            </div>
+            
+            <div>
+              <h4 className="font-medium mb-2">Default Serving: {servingData.name} ({servingData.grams}g)</h4>
+              <div className="grid grid-cols-4 gap-4 text-sm">
+                <div><span className="text-text-muted">Calories:</span> {servingData.calories}</div>
+                <div><span className="text-text-muted">Carbs:</span> {servingData.carbs}g</div>
+                <div><span className="text-text-muted">Protein:</span> {servingData.protein}g</div>
+                <div><span className="text-text-muted">Fat:</span> {servingData.fat}g</div>
+              </div>
+            </div>
+            
+            <div>
+              <h4 className="font-medium mb-2">Calculated per 100g</h4>
+              <div className="grid grid-cols-4 gap-4 text-sm">
+                <div><span className="text-text-muted">Calories:</span> {per100gValues.calories_per_100g}</div>
+                <div><span className="text-text-muted">Carbs:</span> {per100gValues.carbs_per_100g}g</div>
+                <div><span className="text-text-muted">Protein:</span> {per100gValues.protein_per_100g}g</div>
+                <div><span className="text-text-muted">Fat:</span> {per100gValues.fat_per_100g}g</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <div className="flex space-x-3">
+          <Button 
+            variant="outline" 
+            onClick={() => setStep('serving')}
+            className="flex-1"
+          >
+            Back to Edit
+          </Button>
+          <Button 
+            onClick={handleFinalSubmit}
+            disabled={loading}
+            className="flex-1"
+          >
+            <Save className="w-4 h-4 mr-2" />
+            {loading ? 'Adding Food...' : 'Add Food'}
+          </Button>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-bg text-text">
       {/* Header */}
@@ -139,231 +249,17 @@ const AddFood = () => {
         <h1 className="text-lg font-semibold">Add New Food</h1>
       </div>
 
-      <form onSubmit={handleSubmit} className="p-4 space-y-6">
-        {/* Basic Information */}
-        <Card className="bg-glass border-glass">
-          <CardHeader>
-            <CardTitle className="text-lg">Basic Information</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <Label htmlFor="name">Food Name *</Label>
-              <Input
-                id="name"
-                value={formData.name}
-                onChange={(e) => handleChange('name', e.target.value)}
-                placeholder="e.g., Greek Yogurt"
-                required
-              />
-            </div>
-            <div>
-              <Label htmlFor="brand">Brand</Label>
-              <Input
-                id="brand"
-                value={formData.brand}
-                onChange={(e) => handleChange('brand', e.target.value)}
-                placeholder="e.g., Fage"
-              />
-            </div>
-            <div>
-              <Label htmlFor="barcode">Barcode</Label>
-              <Input
-                id="barcode"
-                value={formData.barcode}
-                onChange={(e) => handleChange('barcode', e.target.value)}
-                placeholder="Product barcode"
-              />
-            </div>
-            <div>
-              <Label htmlFor="category">Category</Label>
-              <Input
-                id="category"
-                value={formData.category}
-                onChange={(e) => handleChange('category', e.target.value)}
-                placeholder="e.g., Dairy, Protein"
-              />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Macronutrients */}
-        <Card className="bg-glass border-glass">
-          <CardHeader>
-            <CardTitle className="text-lg">Nutrition (per 100g)</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <Label htmlFor="calories">Calories *</Label>
-              <Input
-                id="calories"
-                type="number"
-                step="0.1"
-                min="0"
-                value={formData.calories_per_100g}
-                onChange={(e) => handleChange('calories_per_100g', e.target.value)}
-                placeholder="e.g., 150"
-                required
-              />
-            </div>
-            <div className="grid grid-cols-3 gap-4">
-              <div>
-                <Label htmlFor="carbs">Carbs (g)</Label>
-                <Input
-                  id="carbs"
-                  type="number"
-                  step="0.1"
-                  min="0"
-                  value={formData.carbs_per_100g}
-                  onChange={(e) => handleChange('carbs_per_100g', e.target.value)}
-                  placeholder="0"
-                />
-              </div>
-              <div>
-                <Label htmlFor="protein">Protein (g)</Label>
-                <Input
-                  id="protein"
-                  type="number"
-                  step="0.1"
-                  min="0"
-                  value={formData.protein_per_100g}
-                  onChange={(e) => handleChange('protein_per_100g', e.target.value)}
-                  placeholder="0"
-                />
-              </div>
-              <div>
-                <Label htmlFor="fat">Fat (g)</Label>
-                <Input
-                  id="fat"
-                  type="number"
-                  step="0.1"
-                  min="0"
-                  value={formData.fat_per_100g}
-                  onChange={(e) => handleChange('fat_per_100g', e.target.value)}
-                  placeholder="0"
-                />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Additional Nutrients */}
-        <Card className="bg-glass border-glass">
-          <CardHeader>
-            <CardTitle className="text-lg">Additional Nutrients (per 100g)</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="sugar">Sugar (g)</Label>
-                <Input
-                  id="sugar"
-                  type="number"
-                  step="0.1"
-                  min="0"
-                  value={formData.sugar_per_100g}
-                  onChange={(e) => handleChange('sugar_per_100g', e.target.value)}
-                  placeholder="Optional"
-                />
-              </div>
-              <div>
-                <Label htmlFor="fiber">Fiber (g)</Label>
-                <Input
-                  id="fiber"
-                  type="number"
-                  step="0.1"
-                  min="0"
-                  value={formData.fiber_per_100g}
-                  onChange={(e) => handleChange('fiber_per_100g', e.target.value)}
-                  placeholder="Optional"
-                />
-              </div>
-            </div>
-            <div>
-              <Label htmlFor="sodium">Sodium (mg)</Label>
-              <Input
-                id="sodium"
-                type="number"
-                step="0.1"
-                min="0"
-                value={formData.sodium_per_100g}
-                onChange={(e) => handleChange('sodium_per_100g', e.target.value)}
-                placeholder="Optional"
-              />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Serving Sizes */}
-        <Card className="bg-glass border-glass">
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="text-lg">Serving Sizes</CardTitle>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={addServingSize}
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Add Serving
-            </Button>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {servingSizes.map((serving, index) => (
-              <div key={index} className="flex items-center space-x-3 p-3 border border-border rounded-lg">
-                <div className="flex-1">
-                  <Label>Serving Name</Label>
-                  <Input
-                    value={serving.name}
-                    onChange={(e) => updateServingSize(index, 'name', e.target.value)}
-                    placeholder="e.g., 1 cup, 1 slice"
-                  />
-                </div>
-                <div className="w-24">
-                  <Label>Grams</Label>
-                  <Input
-                    type="number"
-                    step="0.1"
-                    min="0"
-                    value={serving.grams}
-                    onChange={(e) => updateServingSize(index, 'grams', Number(e.target.value))}
-                    placeholder="0"
-                  />
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Button
-                    type="button"
-                    variant={serving.is_default ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setDefaultServing(index)}
-                  >
-                    Default
-                  </Button>
-                  {servingSizes.length > 1 && (
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => removeServingSize(index)}
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  )}
-                </div>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-
-        {/* Save Button */}
-        <Button 
-          type="submit" 
-          className="w-full" 
-          disabled={loading}
-        >
-          <Save className="w-4 h-4 mr-2" />
-          {loading ? 'Adding Food...' : 'Add Food'}
-        </Button>
-      </form>
+      <div className="p-4">
+        {step === 'basic' && renderBasicInfo()}
+        {step === 'serving' && (
+          <ServingSizeNutritionForm
+            onSubmit={handleServingSubmit}
+            onCancel={() => setStep('basic')}
+            loading={loading}
+          />
+        )}
+        {step === 'review' && renderReview()}
+      </div>
     </div>
   );
 };

@@ -260,28 +260,49 @@ export type Database = {
       }
       serving_sizes: {
         Row: {
+          calories_per_serving: number | null
+          carbs_per_serving: number | null
           created_at: string
+          fat_per_serving: number | null
+          fiber_per_serving: number | null
           food_id: string
           grams: number
           id: string
           is_default: boolean | null
           name: string
+          protein_per_serving: number | null
+          sodium_per_serving: number | null
+          sugar_per_serving: number | null
         }
         Insert: {
+          calories_per_serving?: number | null
+          carbs_per_serving?: number | null
           created_at?: string
+          fat_per_serving?: number | null
+          fiber_per_serving?: number | null
           food_id: string
           grams: number
           id?: string
           is_default?: boolean | null
           name: string
+          protein_per_serving?: number | null
+          sodium_per_serving?: number | null
+          sugar_per_serving?: number | null
         }
         Update: {
+          calories_per_serving?: number | null
+          carbs_per_serving?: number | null
           created_at?: string
+          fat_per_serving?: number | null
+          fiber_per_serving?: number | null
           food_id?: string
           grams?: number
           id?: string
           is_default?: boolean | null
           name?: string
+          protein_per_serving?: number | null
+          sodium_per_serving?: number | null
+          sugar_per_serving?: number | null
         }
         Relationships: [
           {

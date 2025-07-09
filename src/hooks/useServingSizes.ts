@@ -45,6 +45,13 @@ export const useServingSizes = (foodId?: string) => {
     name: string;
     grams: number;
     is_default?: boolean;
+    calories_per_serving?: number;
+    carbs_per_serving?: number;
+    protein_per_serving?: number;
+    fat_per_serving?: number;
+    sugar_per_serving?: number;
+    sodium_per_serving?: number;
+    fiber_per_serving?: number;
   }) => {
     if (!foodId || !user) throw new Error('Food ID and user required');
 
@@ -63,7 +70,14 @@ export const useServingSizes = (foodId?: string) => {
           food_id: foodId,
           name: servingData.name,
           grams: servingData.grams,
-          is_default: servingData.is_default || false
+          is_default: servingData.is_default || false,
+          calories_per_serving: servingData.calories_per_serving,
+          carbs_per_serving: servingData.carbs_per_serving || 0,
+          protein_per_serving: servingData.protein_per_serving || 0,
+          fat_per_serving: servingData.fat_per_serving || 0,
+          sugar_per_serving: servingData.sugar_per_serving,
+          sodium_per_serving: servingData.sodium_per_serving,
+          fiber_per_serving: servingData.fiber_per_serving
         })
         .select()
         .single();
@@ -82,6 +96,13 @@ export const useServingSizes = (foodId?: string) => {
     name?: string;
     grams?: number;
     is_default?: boolean;
+    calories_per_serving?: number;
+    carbs_per_serving?: number;
+    protein_per_serving?: number;
+    fat_per_serving?: number;
+    sugar_per_serving?: number;
+    sodium_per_serving?: number;
+    fiber_per_serving?: number;
   }) => {
     if (!user) throw new Error('User required');
 

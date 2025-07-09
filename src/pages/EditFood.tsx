@@ -6,6 +6,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { LoadingEmblem } from '@/components/ui/loading-emblem';
 import { FoodBasicInfoForm } from '@/components/food/FoodBasicInfoForm';
 import { FoodNutritionForm } from '@/components/food/FoodNutritionForm';
+import { calculatePer100g } from '@/lib/nutritionCalculations';
 import { ServingSizesManager } from '@/components/food/ServingSizesManager';
 import { FoodActionButtons } from '@/components/food/FoodActionButtons';
 import { supabase } from '@/integrations/supabase/client';
@@ -20,6 +21,7 @@ const EditFood = () => {
   const [deleting, setDeleting] = useState(false);
   const [fetchLoading, setFetchLoading] = useState(true);
   const [canEdit, setCanEdit] = useState(false);
+  const [defaultServing, setDefaultServing] = useState<any>(null);
   
   const [formData, setFormData] = useState({
     name: '',
@@ -43,13 +45,13 @@ const EditFood = () => {
 
   const fetchFood = async () => {
     try {
-      const { data: food, error } = await supabase
-        .from('foods')
-        .select('*')
-        .eq('id', id)
-        .single();
+      // Fetch food and default serving size in parallel
+      const [{ data: food, error: foodError }, { data: servings, error: servingError }] = await Promise.all([
+        supabase.from('foods').select('*').eq('id', id).single(),
+        supabase.from('serving_sizes').select('*').eq('food_id', id).eq('is_default', true).single()
+      ]);
 
-      if (error) throw error;
+      if (foodError) throw foodError;
 
       if (food) {
         setFormData({
@@ -65,6 +67,11 @@ const EditFood = () => {
           sodium_per_100g: food.sodium_per_100g?.toString() || '',
           fiber_per_100g: food.fiber_per_100g?.toString() || '',
         });
+
+        // Set default serving if found
+        if (servings && !servingError) {
+          setDefaultServing(servings);
+        }
 
         // Check if user can edit this food (custom food created by them)
         setCanEdit(food.is_custom && food.created_by === user?.id);
@@ -84,6 +91,71 @@ const EditFood = () => {
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleServingNutritionChange = async (nutrition: {
+    calories: number;
+    carbs: number;
+    protein: number;
+    fat: number;
+    sugar?: number;
+    sodium?: number;
+    fiber?: number;
+  }) => {
+    if (!defaultServing || !canEdit) return;
+
+    try {
+      // Update serving nutrition
+      const { error: servingError } = await supabase
+        .from('serving_sizes')
+        .update({
+          calories_per_serving: nutrition.calories,
+          carbs_per_serving: nutrition.carbs,
+          protein_per_serving: nutrition.protein,
+          fat_per_serving: nutrition.fat,
+          sugar_per_serving: nutrition.sugar,
+          sodium_per_serving: nutrition.sodium,
+          fiber_per_serving: nutrition.fiber,
+        })
+        .eq('id', defaultServing.id);
+
+      if (servingError) throw servingError;
+
+      // Calculate and update 100g values
+      const per100gValues = calculatePer100g(nutrition, defaultServing.grams);
+      
+      const { error: foodError } = await supabase
+        .from('foods')
+        .update(per100gValues)
+        .eq('id', id);
+
+      if (foodError) throw foodError;
+
+      // Update local state
+      setDefaultServing(prev => ({ ...prev, ...nutrition }));
+      setFormData(prev => ({
+        ...prev,
+        calories_per_100g: per100gValues.calories_per_100g.toString(),
+        carbs_per_100g: per100gValues.carbs_per_100g.toString(),
+        protein_per_100g: per100gValues.protein_per_100g.toString(),
+        fat_per_100g: per100gValues.fat_per_100g.toString(),
+        sugar_per_100g: per100gValues.sugar_per_100g?.toString() || '',
+        sodium_per_100g: per100gValues.sodium_per_100g?.toString() || '',
+        fiber_per_100g: per100gValues.fiber_per_100g?.toString() || '',
+      }));
+
+      toast({
+        title: "Success",
+        description: "Nutrition updated successfully",
+      });
+    } catch (error) {
+      console.error('Error updating nutrition:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update nutrition",
+        variant: "destructive"
+      });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -204,8 +276,8 @@ const EditFood = () => {
           />
 
           <FoodNutritionForm 
-            formData={formData}
-            onInputChange={handleInputChange}
+            defaultServing={defaultServing}
+            onServingNutritionChange={handleServingNutritionChange}
             canEdit={canEdit}
           />
 
