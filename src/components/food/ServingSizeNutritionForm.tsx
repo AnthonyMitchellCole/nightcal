@@ -37,6 +37,17 @@ export const ServingSizeNutritionForm = ({ onSubmit, onCancel, loading }: Servin
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
+  const autoCalculateCalories = () => {
+    const carbs = parseFloat(formData.carbs) || 0;
+    const protein = parseFloat(formData.protein) || 0;
+    const fat = parseFloat(formData.fat) || 0;
+    
+    // Standard calorie calculation: carbs * 4 + protein * 4 + fat * 9
+    const calculatedCalories = Math.round((carbs * 4) + (protein * 4) + (fat * 9));
+    
+    setFormData(prev => ({ ...prev, calories: calculatedCalories.toString() }));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -97,7 +108,18 @@ export const ServingSizeNutritionForm = ({ onSubmit, onCancel, loading }: Servin
           <div className="space-y-4">
             <h4 className="font-medium">Nutrition per serving</h4>
             <div>
-              <Label htmlFor="serving-calories">Calories *</Label>
+              <div className="flex items-center justify-between mb-2">
+                <Label htmlFor="serving-calories">Calories *</Label>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={autoCalculateCalories}
+                  className="text-xs"
+                >
+                  Auto Calculate
+                </Button>
+              </div>
               <Input
                 id="serving-calories"
                 type="number"

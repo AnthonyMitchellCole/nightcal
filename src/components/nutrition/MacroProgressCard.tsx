@@ -32,25 +32,25 @@ export const MacroProgressCard = ({ macros }: MacroProgressCardProps) => {
 
     return (
       <div className="flex flex-col items-center">
-        <div className="relative w-24 h-24 mb-2">
-          <svg className="w-24 h-24 transform -rotate-90" viewBox="0 0 100 100">
+        <div className="relative w-32 h-32 mb-3">
+          <svg className="w-32 h-32 transform -rotate-90" viewBox="0 0 100 100">
             {/* Background ring */}
             <circle
               cx="50"
               cy="50"
-              r="45"
+              r="40"
               fill="none"
               stroke="hsl(var(--border-muted))"
-              strokeWidth="10"
+              strokeWidth="20"
             />
             {/* Progress ring */}
             <circle
               cx="50"
               cy="50"
-              r="45"
+              r="40"
               fill="none"
               stroke={color}
-              strokeWidth="10"
+              strokeWidth="20"
               strokeLinecap="round"
               strokeDasharray={strokeDasharray}
               strokeDashoffset={strokeDashoffset}
@@ -58,12 +58,12 @@ export const MacroProgressCard = ({ macros }: MacroProgressCardProps) => {
             />
           </svg>
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-xs font-semibold text-text">{Math.round(percentage)}%</span>
+            <span className="text-xl font-bold text-text">{Math.round(percentage)}%</span>
           </div>
         </div>
         <div className="text-center">
-          <p className="text-xs font-medium text-text">{label}</p>
-          <p className="text-xs text-text-muted">{current}g / {goal}g</p>
+          <p className="text-lg font-semibold text-text">{label}</p>
+          <p className="text-base text-text-muted">{current}g / {goal}g</p>
         </div>
       </div>
     );

@@ -96,7 +96,7 @@ const FullLog = () => {
               <div>
                 <div className="flex justify-between text-sm mb-1">
                   <span>Carbs</span>
-                  <span>{dailyTotals.carbs}g / {dailyGoals.carbs}g</span>
+                  <span>{dailyTotals.carbs}g / {dailyGoals.carbs}g ({Math.round((dailyTotals.carbs / dailyGoals.carbs) * 100)}%)</span>
                 </div>
                 <Progress 
                   value={(dailyTotals.carbs / dailyGoals.carbs) * 100} 
@@ -106,7 +106,7 @@ const FullLog = () => {
               <div>
                 <div className="flex justify-between text-sm mb-1">
                   <span>Protein</span>
-                  <span>{dailyTotals.protein}g / {dailyGoals.protein}g</span>
+                  <span>{dailyTotals.protein}g / {dailyGoals.protein}g ({Math.round((dailyTotals.protein / dailyGoals.protein) * 100)}%)</span>
                 </div>
                 <Progress 
                   value={(dailyTotals.protein / dailyGoals.protein) * 100} 
@@ -116,7 +116,7 @@ const FullLog = () => {
               <div>
                 <div className="flex justify-between text-sm mb-1">
                   <span>Fat</span>
-                  <span>{dailyTotals.fat}g / {dailyGoals.fat}g</span>
+                  <span>{dailyTotals.fat}g / {dailyGoals.fat}g ({Math.round((dailyTotals.fat / dailyGoals.fat) * 100)}%)</span>
                 </div>
                 <Progress 
                   value={(dailyTotals.fat / dailyGoals.fat) * 100} 

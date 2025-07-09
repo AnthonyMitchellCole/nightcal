@@ -1,5 +1,6 @@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { calculatePer100g } from '@/lib/nutritionCalculations';
 
@@ -44,6 +45,18 @@ export const FoodNutritionForm = ({ defaultServing, onServingNutritionChange, ca
     onServingNutritionChange(updated);
   };
 
+  const autoCalculateCalories = () => {
+    const carbs = servingNutrition.carbs || 0;
+    const protein = servingNutrition.protein || 0;
+    const fat = servingNutrition.fat || 0;
+    
+    // Standard calorie calculation: carbs * 4 + protein * 4 + fat * 9
+    const calculatedCalories = Math.round((carbs * 4) + (protein * 4) + (fat * 9));
+    
+    const updated = { ...servingNutrition, calories: calculatedCalories };
+    onServingNutritionChange(updated);
+  };
+
   // Calculate 100g values for display
   const per100gValues = defaultServing?.grams 
     ? calculatePer100g(servingNutrition, defaultServing.grams)
@@ -76,7 +89,20 @@ export const FoodNutritionForm = ({ defaultServing, onServingNutritionChange, ca
           <h4 className="font-medium text-sm">Per {defaultServing.name}</h4>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="calories">Calories *</Label>
+              <div className="flex items-center justify-between mb-2">
+                <Label htmlFor="calories">Calories *</Label>
+                {canEdit && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={autoCalculateCalories}
+                    className="text-xs"
+                  >
+                    Auto Calculate
+                  </Button>
+                )}
+              </div>
               <Input
                 id="calories"
                 type="number"
