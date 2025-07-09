@@ -48,12 +48,12 @@ export const CalorieSummaryCard = ({ calories }: CalorieSummaryCardProps) => {
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
               <span className="text-xl font-bold text-text">{calories.current}</span>
-              <span className="text-xs text-text-muted">kcal</span>
+              <span className="text-xs text-text-muted">Cal</span>
             </div>
           </div>
           <div className="text-center">
             <p className="text-sm font-medium text-text">
-              {calories.current} / {calories.goal} kcal
+              {calories.current} / {calories.goal} Cal
             </p>
             <p className="text-xs text-text-muted">
               ({Math.round(percentage)}% of goal)

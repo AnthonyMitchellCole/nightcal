@@ -37,6 +37,8 @@ export const useFoodLogs = (date?: string) => {
           `)
           .eq('user_id', user.id)
           .eq('log_date', logDate)
+          .order('meals.time_slot_start', { ascending: true, nullsFirst: false })
+          .order('meals.name', { ascending: true })
           .order('log_time', { ascending: true });
 
         if (error) throw error;
@@ -70,6 +72,8 @@ export const useFoodLogs = (date?: string) => {
         `)
         .eq('user_id', user.id)
         .eq('log_date', logDate)
+        .order('meals.time_slot_start', { ascending: true, nullsFirst: false })
+        .order('meals.name', { ascending: true })
         .order('log_time', { ascending: true });
 
       if (error) throw error;
@@ -148,8 +152,26 @@ export const useMealSummary = (date?: string) => {
     meal.totals.fat += log.fat;
   });
 
+  // Sort meals by time slot, then alphabetically
+  const sortedMeals = Array.from(mealSummary.values()).sort((a, b) => {
+    const mealA = foodLogs.find(log => log.meal_id === a.id)?.meals;
+    const mealB = foodLogs.find(log => log.meal_id === b.id)?.meals;
+    
+    // If both have time slots, sort by time
+    if (mealA?.time_slot_start && mealB?.time_slot_start) {
+      return mealA.time_slot_start.localeCompare(mealB.time_slot_start);
+    }
+    
+    // If only one has time slot, put it first
+    if (mealA?.time_slot_start && !mealB?.time_slot_start) return -1;
+    if (!mealA?.time_slot_start && mealB?.time_slot_start) return 1;
+    
+    // If neither has time slot, sort alphabetically
+    return a.name.localeCompare(b.name);
+  });
+
   return { 
-    meals: Array.from(mealSummary.values()), 
+    meals: sortedMeals, 
     loading, 
     error 
   };

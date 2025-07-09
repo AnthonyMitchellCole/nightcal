@@ -80,7 +80,7 @@ const FullLog = () => {
                   {dailyTotals.calories}
                 </div>
                 <div className="text-sm text-text-muted">
-                  / {dailyGoals.calories} kcal
+                  / {dailyGoals.calories} Cal
                 </div>
               </div>
               <div>
@@ -131,9 +131,14 @@ const FullLog = () => {
           <Card key={meal.id} className="bg-glass border-glass">
             <CardHeader>
               <CardTitle className="flex justify-between items-center">
-                <span>{meal.name}</span>
-                <span className="text-sm font-normal text-text-muted">
-                  {meal.totals.calories} kcal
+                <div className="flex items-center gap-3">
+                  <span>{meal.name}</span>
+                  <span className="text-sm font-normal text-text-muted">
+                    C: {meal.totals.carbs}g • P: {meal.totals.protein}g • F: {meal.totals.fat}g
+                  </span>
+                </div>
+                <span className="text-lg font-semibold text-primary">
+                  {meal.totals.calories} Cal
                 </span>
               </CardTitle>
             </CardHeader>
@@ -148,33 +153,18 @@ const FullLog = () => {
                     <div key={food.id} className="flex justify-between items-center p-3 bg-bg-light rounded-lg">
                       <div>
                         <h4 className="font-medium text-text">{food.name}</h4>
-                        <p className="text-sm text-text-muted">
-                          {food.brand && `${food.brand} • `}
-                          {food.quantity}x ({food.grams}g)
-                        </p>
+                        {food.brand && (
+                          <p className="text-sm text-text-muted">{food.brand}</p>
+                        )}
                         <p className="text-sm text-text-muted">
                           C: {food.carbs}g • P: {food.protein}g • F: {food.fat}g
                         </p>
                       </div>
                       <span className="font-medium text-text">
-                        {food.calories} kcal
+                        {food.calories} Cal
                       </span>
                     </div>
                   ))}
-                  
-                  {meal.foods.length > 0 && (
-                    <div className="border-t border-border pt-3 mt-3">
-                      <div className="flex justify-between text-sm font-medium">
-                        <span>Meal Total</span>
-                        <span>
-                          {meal.totals.calories} kcal • 
-                          C: {meal.totals.carbs}g • 
-                          P: {meal.totals.protein}g • 
-                          F: {meal.totals.fat}g
-                        </span>
-                      </div>
-                    </div>
-                  )}
                 </div>
               )}
             </CardContent>

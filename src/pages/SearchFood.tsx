@@ -98,7 +98,7 @@ const SearchFood = () => {
                       <p className="text-sm text-text-muted">{food.brand || 'No brand'}</p>
                     </div>
                     <span className="text-sm font-medium text-text">
-                      {food.calories_per_100g} kcal
+                      {food.calories_per_100g} Cal
                     </span>
                   </div>
                 </CardContent>

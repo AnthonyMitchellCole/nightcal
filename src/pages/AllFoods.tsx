@@ -89,7 +89,7 @@ const AllFoods = () => {
                     <span className="text-lg font-semibold text-text">
                       {food.calories_per_100g}
                     </span>
-                    <p className="text-xs text-text-muted">kcal/100g</p>
+                    <p className="text-xs text-text-muted">Cal/100g</p>
                   </div>
                 </div>
               </CardContent>

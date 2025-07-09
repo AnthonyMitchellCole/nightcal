@@ -61,7 +61,7 @@ export const FoodPreviewList = ({ foods }: FoodPreviewListProps) => {
                   )}
                 </div>
                 <div className="flex items-center gap-4 text-sm text-text-muted">
-                  <span className="font-medium text-primary">{food.calories} kcal</span>
+                  <span className="font-medium text-primary">{food.calories} Cal</span>
                   <span>C: {food.macros.carbs}g</span>
                   <span>P: {food.macros.protein}g</span>
                   <span>F: {food.macros.fat}g</span>
