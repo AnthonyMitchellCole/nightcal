@@ -314,15 +314,15 @@ const LogFood = () => {
             <div className="grid grid-cols-2 gap-4 text-center">
               <div>
                 <div className="text-2xl font-bold text-primary">
-                  {calculatedNutrition.calories}
+                  {Math.round(summary.calories)} + {calculatedNutrition.calories}
                 </div>
                 <div className="text-sm text-text-muted">
-                  / {dailyGoals.calories} Cal
+                  = {Math.round(summary.calories + calculatedNutrition.calories)} / {dailyGoals.calories} Cal
                 </div>
               </div>
               <div>
                 <div className="text-xl font-semibold text-text">
-                  {Math.round((calculatedNutrition.calories / dailyGoals.calories) * 100)}%
+                  {Math.round(((summary.calories + calculatedNutrition.calories) / dailyGoals.calories) * 100)}%
                 </div>
                 <div className="text-sm text-text-muted">of goal</div>
               </div>
@@ -332,42 +332,75 @@ const LogFood = () => {
               <div>
                 <div className="flex justify-between text-sm mb-1">
                   <span>Fat</span>
-                  <span>{calculatedNutrition.fat}g / {dailyGoals.fat}g ({Math.round((calculatedNutrition.fat / dailyGoals.fat) * 100)}%)</span>
+                  <span>{Math.round(summary.fat)}g + {calculatedNutrition.fat}g = {Math.round(summary.fat + calculatedNutrition.fat)}g / {dailyGoals.fat}g</span>
                 </div>
-                <Progress 
-                  value={(calculatedNutrition.fat / dailyGoals.fat) * 100} 
-                  className="h-3 bg-border-muted [&>div]:bg-warning" 
-                />
+                <div className="relative h-3 bg-border-muted rounded-full overflow-hidden">
+                  {/* Already logged amount */}
+                  <div 
+                    className="absolute top-0 left-0 h-full bg-muted rounded-full"
+                    style={{ width: `${Math.min((summary.fat / dailyGoals.fat) * 100, 100)}%` }}
+                  />
+                  {/* Current food amount stacked on top */}
+                  <div 
+                    className="absolute top-0 h-full bg-warning rounded-full"
+                    style={{ 
+                      left: `${Math.min((summary.fat / dailyGoals.fat) * 100, 100)}%`,
+                      width: `${Math.min((calculatedNutrition.fat / dailyGoals.fat) * 100, 100 - Math.min((summary.fat / dailyGoals.fat) * 100, 100))}%`
+                    }}
+                  />
+                </div>
                 <div className="flex justify-between text-xs text-text-muted mt-1">
-                  <span>vs Total Goal: {Math.round((calculatedNutrition.fat / dailyGoals.fat) * 100)}%</span>
+                  <span>Total: {Math.round(((summary.fat + calculatedNutrition.fat) / dailyGoals.fat) * 100)}%</span>
                   <span>vs Remaining: {remaining.fat > 0 ? Math.round((calculatedNutrition.fat / remaining.fat) * 100) : '100+'}%</span>
                 </div>
               </div>
               <div>
                 <div className="flex justify-between text-sm mb-1">
                   <span>Carbs</span>
-                  <span>{calculatedNutrition.carbs}g / {dailyGoals.carbs}g ({Math.round((calculatedNutrition.carbs / dailyGoals.carbs) * 100)}%)</span>
+                  <span>{Math.round(summary.carbs)}g + {calculatedNutrition.carbs}g = {Math.round(summary.carbs + calculatedNutrition.carbs)}g / {dailyGoals.carbs}g</span>
                 </div>
-                <Progress 
-                  value={(calculatedNutrition.carbs / dailyGoals.carbs) * 100} 
-                  className="h-3 bg-border-muted [&>div]:bg-info" 
-                />
+                <div className="relative h-3 bg-border-muted rounded-full overflow-hidden">
+                  {/* Already logged amount */}
+                  <div 
+                    className="absolute top-0 left-0 h-full bg-muted rounded-full"
+                    style={{ width: `${Math.min((summary.carbs / dailyGoals.carbs) * 100, 100)}%` }}
+                  />
+                  {/* Current food amount stacked on top */}
+                  <div 
+                    className="absolute top-0 h-full bg-info rounded-full"
+                    style={{ 
+                      left: `${Math.min((summary.carbs / dailyGoals.carbs) * 100, 100)}%`,
+                      width: `${Math.min((calculatedNutrition.carbs / dailyGoals.carbs) * 100, 100 - Math.min((summary.carbs / dailyGoals.carbs) * 100, 100))}%`
+                    }}
+                  />
+                </div>
                 <div className="flex justify-between text-xs text-text-muted mt-1">
-                  <span>vs Total Goal: {Math.round((calculatedNutrition.carbs / dailyGoals.carbs) * 100)}%</span>
+                  <span>Total: {Math.round(((summary.carbs + calculatedNutrition.carbs) / dailyGoals.carbs) * 100)}%</span>
                   <span>vs Remaining: {remaining.carbs > 0 ? Math.round((calculatedNutrition.carbs / remaining.carbs) * 100) : '100+'}%</span>
                 </div>
               </div>
               <div>
                 <div className="flex justify-between text-sm mb-1">
                   <span>Protein</span>
-                  <span>{calculatedNutrition.protein}g / {dailyGoals.protein}g ({Math.round((calculatedNutrition.protein / dailyGoals.protein) * 100)}%)</span>
+                  <span>{Math.round(summary.protein)}g + {calculatedNutrition.protein}g = {Math.round(summary.protein + calculatedNutrition.protein)}g / {dailyGoals.protein}g</span>
                 </div>
-                <Progress 
-                  value={(calculatedNutrition.protein / dailyGoals.protein) * 100} 
-                  className="h-3 bg-border-muted [&>div]:bg-success" 
-                />
+                <div className="relative h-3 bg-border-muted rounded-full overflow-hidden">
+                  {/* Already logged amount */}
+                  <div 
+                    className="absolute top-0 left-0 h-full bg-muted rounded-full"
+                    style={{ width: `${Math.min((summary.protein / dailyGoals.protein) * 100, 100)}%` }}
+                  />
+                  {/* Current food amount stacked on top */}
+                  <div 
+                    className="absolute top-0 h-full bg-success rounded-full"
+                    style={{ 
+                      left: `${Math.min((summary.protein / dailyGoals.protein) * 100, 100)}%`,
+                      width: `${Math.min((calculatedNutrition.protein / dailyGoals.protein) * 100, 100 - Math.min((summary.protein / dailyGoals.protein) * 100, 100))}%`
+                    }}
+                  />
+                </div>
                 <div className="flex justify-between text-xs text-text-muted mt-1">
-                  <span>vs Total Goal: {Math.round((calculatedNutrition.protein / dailyGoals.protein) * 100)}%</span>
+                  <span>Total: {Math.round(((summary.protein + calculatedNutrition.protein) / dailyGoals.protein) * 100)}%</span>
                   <span>vs Remaining: {remaining.protein > 0 ? Math.round((calculatedNutrition.protein / remaining.protein) * 100) : '100+'}%</span>
                 </div>
               </div>
