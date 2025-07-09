@@ -115,6 +115,17 @@ export const QuickAddModal = ({ isOpen, onClose, prePopulatedData }: QuickAddMod
 
     setLoading(true);
     try {
+      // Auto-calculate calories if macros are entered but calories is 0 or empty
+      let finalCalories = Number(formData.calories) || 0;
+      const carbs = Number(formData.carbs) || 0;
+      const protein = Number(formData.protein) || 0;
+      const fat = Number(formData.fat) || 0;
+      
+      // If calories is 0 but at least one macro is entered, auto-calculate
+      if (finalCalories === 0 && (carbs > 0 || protein > 0 || fat > 0)) {
+        finalCalories = Math.round((carbs * 4) + (protein * 4) + (fat * 9));
+      }
+
       // Create a quick add food log entry directly (no food record needed)
       const { error: logError } = await supabase
         .from('food_logs')
@@ -124,10 +135,10 @@ export const QuickAddModal = ({ isOpen, onClose, prePopulatedData }: QuickAddMod
           meal_id: formData.mealId,
           quantity: 1,
           grams: 100, // Quick add uses 100g as base unit
-          calories: Number(formData.calories) || 0,
-          carbs: Number(formData.carbs) || 0,
-          protein: Number(formData.protein) || 0,
-          fat: Number(formData.fat) || 0,
+          calories: finalCalories,
+          carbs: carbs,
+          protein: protein,
+          fat: fat,
           log_type: 'quick_add',
           quick_add_name: formData.foodName || 'Quick Add'
         });
