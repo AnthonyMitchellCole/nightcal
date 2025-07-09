@@ -9,6 +9,7 @@ interface CalorieSummaryCardProps {
 
 export const CalorieSummaryCard = ({ calories }: CalorieSummaryCardProps) => {
   const percentage = Math.min((calories.current / calories.goal) * 100, 100);
+  const remaining = calories.goal - calories.current;
   const circumference = 2 * Math.PI * 60;
   const strokeDasharray = circumference;
   const strokeDashoffset = circumference - (percentage / 100) * circumference;
@@ -53,8 +54,12 @@ export const CalorieSummaryCard = ({ calories }: CalorieSummaryCardProps) => {
               />
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-2xl font-bold text-text">{calories.current}</span>
-              <span className="text-base text-text-muted">Cal</span>
+              <span className={`text-2xl font-bold ${remaining < 0 ? 'text-destructive' : 'text-text'}`}>
+                {remaining >= 0 ? remaining : Math.abs(remaining)}
+              </span>
+              <span className="text-base text-text-muted">
+                {remaining >= 0 ? 'Left' : 'Over'}
+              </span>
             </div>
           </div>
           <div className="text-center">

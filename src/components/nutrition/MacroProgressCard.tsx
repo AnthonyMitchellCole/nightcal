@@ -26,6 +26,7 @@ export const MacroProgressCard = ({ macros }: MacroProgressCardProps) => {
     color: string; 
   }) => {
     const percentage = getMacroPercentage(current, goal);
+    const remaining = goal - current;
     const circumference = 2 * Math.PI * 45;
     const strokeDasharray = circumference;
     const strokeDashoffset = circumference - (percentage / 100) * circumference;
@@ -63,13 +64,21 @@ export const MacroProgressCard = ({ macros }: MacroProgressCardProps) => {
               className="transition-all duration-700 ease-out"
             />
           </svg>
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-lg font-bold text-text">{Math.round(percentage)}%</span>
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <span className={`text-lg font-bold ${remaining < 0 ? 'text-destructive' : 'text-text'}`}>
+              {remaining >= 0 ? remaining : Math.abs(remaining)}
+            </span>
+            <span className="text-xs text-text-muted">
+              {remaining >= 0 ? 'left' : 'over'}
+            </span>
           </div>
         </div>
         <div className="text-center">
           <p className="text-base font-semibold text-text">{label}</p>
           <p className="text-sm text-text-muted">{current}g / {goal}g</p>
+          <p className="text-xs text-text-muted">
+            ({Math.round(percentage)}% of goal)
+          </p>
         </div>
       </div>
     );
