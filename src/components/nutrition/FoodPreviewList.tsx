@@ -84,7 +84,7 @@ export const FoodPreviewList = ({ foods, dailyGoals }: FoodPreviewListProps) => 
         return (
           <Card 
             key={food.logId} 
-            className="bg-glass border-glass backdrop-blur-glass shadow-soft hover:shadow-layered transition-all duration-300 group cursor-pointer"
+            className="glass-elevated shadow-layered hover:shadow-deep transition-all duration-300 group cursor-pointer"
             onClick={handleFoodClick}
           >
             <CardContent className="p-4">

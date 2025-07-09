@@ -10,7 +10,7 @@ export const EditFoodHeader = ({ canEdit }: EditFoodHeaderProps) => {
   const navigate = useNavigate();
 
   return (
-    <div className="sticky top-0 bg-glass border-b border-glass backdrop-blur-glass p-4">
+    <div className="sticky-header bg-gradient-glass border-b border-glass backdrop-blur-glass shadow-deep p-4">
       <div className="flex items-center space-x-3">
         <Button 
           variant="ghost" 

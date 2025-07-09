@@ -69,6 +69,7 @@ export default {
 			boxShadow: {
 				'soft': 'var(--shadow-soft)',
 				'layered': 'var(--shadow-layered)',
+				'deep': 'var(--shadow-deep)',
 				'glass': '0 8px 32px 0 hsl(224 84% 6% / 0.37)'
 			},
 			backdropBlur: {
@@ -76,6 +77,12 @@ export default {
 			},
 			backgroundColor: {
 				'glass': 'hsl(var(--glass-bg))'
+			},
+			backgroundImage: {
+				'gradient-primary': 'var(--gradient-primary)',
+				'gradient-surface': 'var(--gradient-surface)', 
+				'gradient-glass': 'var(--gradient-glass)',
+				'gradient-accent': 'var(--gradient-accent)'
 			},
 			borderColor: {
 				'glass': 'hsl(var(--glass-border))'

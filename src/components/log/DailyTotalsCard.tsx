@@ -22,7 +22,7 @@ interface DailyTotalsCardProps {
 
 export const DailyTotalsCard = ({ dailyTotals, dailyGoals }: DailyTotalsCardProps) => {
   return (
-    <Card className="bg-glass border-glass">
+    <Card className="glass-elevated shadow-deep backdrop-blur-glass">
       <CardHeader>
         <CardTitle>Daily Totals</CardTitle>
       </CardHeader>

@@ -48,6 +48,13 @@ All colors MUST be HSL.
     --glass-border: 229 100% 80% / 0.2;
     --shadow-soft: 0 4px 20px hsl(238 77% 8% / 0.3);
     --shadow-layered: 0 2px 10px hsl(238 77% 8% / 0.2), 0 8px 30px hsl(238 77% 8% / 0.4);
+    --shadow-deep: 0 20px 40px hsl(238 77% 8% / 0.5), 0 4px 12px hsl(238 77% 8% / 0.3);
+    
+    /* Enhanced gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--info)) 100%);
+    --gradient-surface: linear-gradient(135deg, hsl(var(--bg-light)) 0%, hsl(var(--bg)) 100%);
+    --gradient-glass: linear-gradient(135deg, hsl(var(--glass-bg)) 0%, hsl(233 59% 13% / 0.6) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(var(--primary) / 0.1) 0%, hsl(var(--info) / 0.1) 100%);
   }
 
   .light {
@@ -89,6 +96,13 @@ All colors MUST be HSL.
     --glass-border: 233 47% 37% / 0.2;
     --shadow-soft: 0 4px 20px hsl(227 100% 95% / 0.3);
     --shadow-layered: 0 2px 10px hsl(227 100% 95% / 0.2), 0 8px 30px hsl(227 100% 95% / 0.4);
+    --shadow-deep: 0 20px 40px hsl(227 100% 95% / 0.5), 0 4px 12px hsl(227 100% 95% / 0.3);
+    
+    /* Light mode gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--info)) 100%);
+    --gradient-surface: linear-gradient(135deg, hsl(var(--bg-light)) 0%, hsl(var(--bg)) 100%);
+    --gradient-glass: linear-gradient(135deg, hsl(var(--glass-bg)) 0%, hsl(227 100% 100% / 0.7) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(var(--primary) / 0.1) 0%, hsl(var(--info) / 0.1) 100%);
   }
 }
 
@@ -129,5 +143,32 @@ All colors MUST be HSL.
     background: hsl(var(--glass-bg));
     backdrop-filter: blur(10px);
     border: 1px solid hsl(var(--glass-border));
+  }
+
+  /* Enhanced depth and layering */
+  .sticky-header {
+    z-index: 50;
+    position: sticky;
+    top: 0;
+  }
+
+  .surface-elevated {
+    background: var(--gradient-surface);
+    box-shadow: var(--shadow-layered);
+  }
+
+  .glass-elevated {
+    background: var(--gradient-glass);
+    backdrop-filter: blur(12px);
+    border: 1px solid hsl(var(--glass-border));
+    box-shadow: var(--shadow-deep);
+  }
+
+  .gradient-primary {
+    background: var(--gradient-primary);
+  }
+
+  .gradient-accent {
+    background: var(--gradient-accent);
   }
 }

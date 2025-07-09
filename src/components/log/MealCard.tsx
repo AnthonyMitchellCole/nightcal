@@ -43,7 +43,7 @@ export const MealCard = ({ meal, dailyGoals }: MealCardProps) => {
   const mealFatPercentage = Math.round((meal.totals.fat / dailyGoals.fat) * 100);
 
   return (
-    <Card className="bg-glass border-glass backdrop-blur-glass shadow-soft">
+    <Card className="glass-elevated shadow-deep backdrop-blur-glass">
       <CardHeader className="pb-3">
         <CardTitle className="flex justify-between items-center">
           {/* Meal Name Section */}

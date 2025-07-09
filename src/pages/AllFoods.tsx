@@ -25,7 +25,7 @@ const AllFoods = () => {
   return (
     <div className="min-h-screen bg-bg text-text">
       {/* Header */}
-      <div className="sticky top-0 bg-glass border-b border-glass backdrop-blur-glass p-4">
+      <div className="sticky-header bg-gradient-glass border-b border-glass backdrop-blur-glass shadow-deep p-4">
         <div className="flex items-center space-x-3 mb-4">
           <Button 
             variant="ghost" 
