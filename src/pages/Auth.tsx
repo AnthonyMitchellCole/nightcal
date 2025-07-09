@@ -70,9 +70,13 @@ const Auth = () => {
     <div className="min-h-screen bg-bg flex items-center justify-center p-4">
       <Card className="w-full max-w-md bg-glass border-glass backdrop-blur-glass shadow-layered">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold text-text">
-            Nutrition Tracker
-          </CardTitle>
+          <div className="flex justify-center mb-4">
+            <img 
+              src="https://ebdtrwkrelzbtjdwuxbk.supabase.co/storage/v1/object/public/branding/nightcal-logo.png" 
+              alt="NightCal" 
+              className="h-16 w-auto"
+            />
+          </div>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="signin" className="w-full">

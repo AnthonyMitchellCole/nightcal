@@ -12,7 +12,7 @@ export const BottomNavigation = ({ activeTab, onTabChange, onAddFood }: BottomNa
   const navigate = useNavigate();
   
   const navItems = [
-    { id: 'home', icon: Home, label: 'Home', route: '/' },
+    { id: 'home', icon: Home, label: 'Home', route: '/', useEmblem: true },
     { id: 'log', icon: FileText, label: 'Full Log', route: '/full-log' },
     { id: 'add', icon: Plus, label: 'Add', isSpecial: true },
     { id: 'foods', icon: Package, label: 'All Foods', route: '/all-foods' },
@@ -57,7 +57,15 @@ export const BottomNavigation = ({ activeTab, onTabChange, onAddFood }: BottomNa
                   : 'text-text-muted hover:text-text hover:bg-bg-light/50'
               }`}
             >
-              <Icon className={`w-5 h-5 mb-1 ${isActive ? 'text-primary' : ''}`} />
+              {item.useEmblem && isActive ? (
+                <img 
+                  src="https://ebdtrwkrelzbtjdwuxbk.supabase.co/storage/v1/object/public/branding/nightcal-emblem.png" 
+                  alt="NightCal" 
+                  className="w-5 h-5 mb-1" 
+                />
+              ) : (
+                <Icon className={`w-5 h-5 mb-1 ${isActive ? 'text-primary' : ''}`} />
+              )}
               <span className="text-xs font-medium">{item.label}</span>
             </button>
           );
