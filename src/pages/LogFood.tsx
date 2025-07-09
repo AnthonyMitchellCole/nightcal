@@ -320,8 +320,8 @@ const LogFood = () => {
                   {calculatedNutrition.calories}
                 </div>
                 <div className="text-lg text-text">
-                  = {Math.round(summary.calories + calculatedNutrition.calories)} / {dailyGoals.calories} Cal  
-                  <span className="font-bold text-text">({Math.max(0, dailyGoals.calories - Math.round(summary.calories + calculatedNutrition.calories))} Left)</span>
+                  = {Math.round(summary.calories + calculatedNutrition.calories)} / {dailyGoals.calories} Cal 
+                  <span className="font-bold text-text"> ({Math.max(0, dailyGoals.calories - Math.round(summary.calories + calculatedNutrition.calories))} Left)</span>
                 </div>
               </div>
               <div className="space-y-1">
