@@ -31,7 +31,7 @@ export const CalorieSummaryCard = ({ calories }: CalorieSummaryCardProps) => {
                 r="55"
                 fill="none"
                 stroke="hsl(var(--border-muted))"
-                strokeWidth="24"
+                strokeWidth="18"
               />
               {/* Progress ring with subtle gradient */}
               <defs>
@@ -46,7 +46,7 @@ export const CalorieSummaryCard = ({ calories }: CalorieSummaryCardProps) => {
                 r="55"
                 fill="none"
                 stroke="url(#calorie-gradient)"
-                strokeWidth="24"
+                strokeWidth="18"
                 strokeLinecap="round"
                 strokeDasharray={strokeDasharray}
                 strokeDashoffset={strokeDashoffset}

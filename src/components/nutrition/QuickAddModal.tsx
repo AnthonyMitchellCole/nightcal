@@ -304,9 +304,9 @@ export const QuickAddModal = ({ isOpen, onClose, prePopulatedData }: QuickAddMod
                 <h4 className="font-medium mb-2">Quick Log Summary</h4>
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div>Calories: {formData.calories || 0}</div>
+                  <div>Fat: {formData.fat || 0}g</div>
                   <div>Carbs: {formData.carbs || 0}g</div>
                   <div>Protein: {formData.protein || 0}g</div>
-                  <div>Fat: {formData.fat || 0}g</div>
                 </div>
               </CardContent>
             </Card>

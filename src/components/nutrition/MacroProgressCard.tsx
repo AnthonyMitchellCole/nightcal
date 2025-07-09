@@ -42,7 +42,7 @@ export const MacroProgressCard = ({ macros }: MacroProgressCardProps) => {
               r="40"
               fill="none"
               stroke="hsl(var(--border-muted))"
-              strokeWidth="20"
+              strokeWidth="15"
             />
             {/* Progress ring with subtle gradient */}
             <defs>
@@ -57,7 +57,7 @@ export const MacroProgressCard = ({ macros }: MacroProgressCardProps) => {
               r="40"
               fill="none"
               stroke={`url(#gradient-${label})`}
-              strokeWidth="20"
+              strokeWidth="15"
               strokeLinecap="round"
               strokeDasharray={strokeDasharray}
               strokeDashoffset={strokeDashoffset}

@@ -98,9 +98,9 @@ const SearchFood = () => {
                       <h3 className="font-medium text-text">{food.name}</h3>
                       <p className="text-sm text-text-muted">{food.brand || 'No brand'}</p>
                       <div className="flex space-x-4 mt-2 text-xs text-text-muted">
+                        <span>F: {food.fat_per_100g}g</span>
                         <span>C: {food.carbs_per_100g}g</span>
                         <span>P: {food.protein_per_100g}g</span>
-                        <span>F: {food.fat_per_100g}g</span>
                       </div>
                     </div>
                     <div className="text-right">
