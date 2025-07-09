@@ -25,6 +25,7 @@ const LogFood = () => {
   const presetQuantity = searchParams.get('quantity');
   const presetMealId = searchParams.get('mealId');
   const presetServingSizeId = searchParams.get('servingSizeId');
+  const isFromBarcode = searchParams.get('source') === 'barcode';
 
   const [quantity, setQuantity] = useState(presetQuantity || '1');
   const [selectedMeal, setSelectedMeal] = useState(presetMealId || '');
@@ -223,8 +224,15 @@ const LogFood = () => {
         >
           <ArrowLeft className="w-5 h-5" />
         </Button>
-        <div>
-          <h1 className="text-lg font-semibold">{food.name}</h1>
+        <div className="flex-1">
+          <div className="flex items-center gap-2">
+            <h1 className="text-lg font-semibold">{food.name}</h1>
+            {isFromBarcode && (
+              <span className="bg-success/20 text-success text-xs px-2 py-1 rounded-full border border-success/30">
+                Scanned
+              </span>
+            )}
+          </div>
           <p className="text-sm text-text-muted">{food.brand}</p>
         </div>
       </div>

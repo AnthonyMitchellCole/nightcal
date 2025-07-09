@@ -39,7 +39,14 @@ const AddFood = () => {
         >
           <ArrowLeft className="w-5 h-5" />
         </Button>
-        <h1 className="text-lg font-semibold">Add New Food</h1>
+        <div className="flex items-center gap-2">
+          <h1 className="text-lg font-semibold">Add New Food</h1>
+          {initialBasicData.barcode && (
+            <span className="bg-info/20 text-info text-xs px-2 py-1 rounded-full border border-info/30">
+              Barcode Scanned
+            </span>
+          )}
+        </div>
       </div>
 
       <div className="p-4">

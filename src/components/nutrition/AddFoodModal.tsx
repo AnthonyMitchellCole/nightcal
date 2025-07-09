@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Search, Camera, Zap } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { QuickAddModal } from "./QuickAddModal";
+import { BarcodeScannerModal } from "@/components/barcode/BarcodeScannerModal";
+import { useBarcodeScanner } from "@/hooks/useBarcodeScanner";
 
 interface AddFoodModalProps {
   isOpen: boolean;
@@ -19,6 +21,8 @@ export const AddFoodModal = ({ isOpen, onClose }: AddFoodModalProps) => {
   const navigate = useNavigate();
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [showQuickAdd, setShowQuickAdd] = useState(false);
+  const [showBarcodeScanner, setShowBarcodeScanner] = useState(false);
+  const { handleBarcodeResult, handleScanError } = useBarcodeScanner();
 
   const handleSearchFood = () => {
     onClose();
@@ -32,8 +36,20 @@ export const AddFoodModal = ({ isOpen, onClose }: AddFoodModalProps) => {
 
   const handleBarcodeScan = () => {
     onClose();
-    // TODO: Implement barcode scanning
-    console.log('Barcode scanning not yet implemented');
+    setShowBarcodeScanner(true);
+  };
+
+  const handleBarcodeSuccess = (barcode: string) => {
+    setShowBarcodeScanner(false);
+    handleBarcodeResult(barcode);
+  };
+
+  const handleBarcodeError = (error: string) => {
+    handleScanError(error);
+  };
+
+  const handleBarcodeScannerClose = () => {
+    setShowBarcodeScanner(false);
   };
 
   const options = [
@@ -125,6 +141,13 @@ export const AddFoodModal = ({ isOpen, onClose }: AddFoodModalProps) => {
       <QuickAddModal 
         isOpen={showQuickAdd} 
         onClose={() => setShowQuickAdd(false)} 
+      />
+
+      <BarcodeScannerModal
+        isOpen={showBarcodeScanner}
+        onClose={handleBarcodeScannerClose}
+        onResult={handleBarcodeSuccess}
+        onError={handleBarcodeError}
       />
     </>
   );
