@@ -145,7 +145,8 @@ export const useMealSummary = (date?: string) => {
       fat: log.fat,
       quantity: log.quantity,
       grams: log.grams,
-      servingSizeId: log.serving_size_id
+      servingSizeId: log.serving_size_id,
+      isQuickAdd: log.log_type === 'quick_add' // Add this field to the meal summary
     });
 
     meal.totals.calories += log.calories;

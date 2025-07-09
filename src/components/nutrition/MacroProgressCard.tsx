@@ -33,7 +33,7 @@ export const MacroProgressCard = ({ macros }: MacroProgressCardProps) => {
     return (
       <div className="flex flex-col items-center">
         <div className="relative w-24 h-24 mb-3">
-          <svg className="w-24 h-24 transform -rotate-90 ring-enhanced" viewBox="0 0 100 100">
+          <svg className="w-24 h-24 transform -rotate-90" viewBox="0 0 100 100">
             {/* Background ring */}
             <circle
               cx="50"
@@ -43,11 +43,11 @@ export const MacroProgressCard = ({ macros }: MacroProgressCardProps) => {
               stroke="hsl(var(--border-muted))"
               strokeWidth="20"
             />
-            {/* Progress ring with gradient */}
+            {/* Progress ring with subtle gradient */}
             <defs>
               <linearGradient id={`gradient-${label}`} x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stopColor={color} />
-                <stop offset="100%" stopColor={color} stopOpacity="0.7" />
+                <stop offset="100%" stopColor={color} stopOpacity="0.9" />
               </linearGradient>
             </defs>
             <circle
@@ -60,7 +60,7 @@ export const MacroProgressCard = ({ macros }: MacroProgressCardProps) => {
               strokeLinecap="round"
               strokeDasharray={strokeDasharray}
               strokeDashoffset={strokeDashoffset}
-              className="transition-all duration-700 ease-out filter drop-shadow-lg"
+              className="transition-all duration-700 ease-out"
             />
           </svg>
           <div className="absolute inset-0 flex items-center justify-center">

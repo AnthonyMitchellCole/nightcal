@@ -22,7 +22,7 @@ export const CalorieSummaryCard = ({ calories }: CalorieSummaryCardProps) => {
         </div>
         <div className="flex flex-col items-center">
           <div className="relative w-32 h-32 mb-4">
-            <svg className="w-32 h-32 transform -rotate-90 ring-enhanced" viewBox="0 0 140 140">
+            <svg className="w-32 h-32 transform -rotate-90" viewBox="0 0 140 140">
               {/* Background ring */}
               <circle
                 cx="70"
@@ -32,11 +32,10 @@ export const CalorieSummaryCard = ({ calories }: CalorieSummaryCardProps) => {
                 stroke="hsl(var(--border-muted))"
                 strokeWidth="24"
               />
-              {/* Progress ring with gradient */}
+              {/* Progress ring with subtle gradient */}
               <defs>
                 <linearGradient id="calorie-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
                   <stop offset="0%" stopColor="hsl(var(--primary))" />
-                  <stop offset="50%" stopColor="hsl(var(--primary-glow))" />
                   <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0.8" />
                 </linearGradient>
               </defs>
@@ -50,7 +49,7 @@ export const CalorieSummaryCard = ({ calories }: CalorieSummaryCardProps) => {
                 strokeLinecap="round"
                 strokeDasharray={strokeDasharray}
                 strokeDashoffset={strokeDashoffset}
-                className="transition-all duration-1000 ease-out filter drop-shadow-lg ring-glow"
+                className="transition-all duration-1000 ease-out"
               />
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
