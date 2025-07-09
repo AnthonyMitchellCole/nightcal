@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
-import type { Tables } from '@/integrations/supabase/types';
+import type { Tables, TablesUpdate } from '@/integrations/supabase/types';
 
 type Profile = Tables<'profiles'>;
 
@@ -38,5 +38,71 @@ export const useProfile = () => {
     fetchProfile();
   }, [user]);
 
-  return { profile, loading, error };
+  const updateProfile = async (updates: Partial<TablesUpdate<'profiles'>>) => {
+    if (!user || !profile) return { error: 'No user or profile found' };
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .update(updates)
+        .eq('user_id', user.id)
+        .select()
+        .single();
+
+      if (error) throw error;
+      
+      setProfile(data);
+      return { data, error: null };
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to update profile';
+      setError(errorMessage);
+      return { error: errorMessage };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const uploadAvatar = async (file: File) => {
+    if (!user) return { error: 'No user found' };
+
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${user.id}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('profile-pictures')
+        .upload(filePath, file, {
+          upsert: true
+        });
+
+      if (uploadError) throw uploadError;
+
+      const { data } = supabase.storage
+        .from('profile-pictures')
+        .getPublicUrl(filePath);
+
+      const { error: updateError } = await updateProfile({
+        avatar_url: data.publicUrl
+      });
+
+      if (updateError) throw new Error(updateError);
+
+      return { data: data.publicUrl, error: null };
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to upload avatar';
+      return { error: errorMessage };
+    }
+  };
+
+  return { 
+    profile, 
+    loading, 
+    error, 
+    updateProfile,
+    uploadAvatar
+  };
 };

@@ -2,16 +2,22 @@ import { ArrowLeft, LogOut, User, Target, Utensils, Moon, Sun } from 'lucide-rea
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useProfile } from '@/hooks/useProfile';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { toast } from '@/hooks/use-toast';
+import { EditProfileDialog } from '@/components/settings/EditProfileDialog';
+import { GoalSettingsDialog } from '@/components/settings/GoalSettingsDialog';
+import { MealsManagementDialog } from '@/components/settings/MealsManagementDialog';
 
 const Settings = () => {
   const navigate = useNavigate();
   const { signOut, user } = useAuth();
   const { theme, setTheme } = useTheme();
+  const { profile, loading: profileLoading } = useProfile();
 
   const handleSignOut = async () => {
     const { error } = await signOut();
@@ -54,13 +60,25 @@ const Settings = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="p-3 bg-bg-light rounded-lg border border-border">
-              <p className="text-sm text-text-muted">Email</p>
-              <p className="font-medium text-text">{user?.email}</p>
+            <div className="flex items-center space-x-4 p-3 bg-bg-light rounded-lg border border-border">
+              <Avatar className="w-12 h-12">
+                <AvatarImage src={profile?.avatar_url || ''} alt="Profile" />
+                <AvatarFallback className="bg-primary/20 text-primary">
+                  <User className="w-6 h-6" />
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex-1">
+                <p className="font-medium text-text">
+                  {profile?.display_name || 'No name set'}
+                </p>
+                <p className="text-sm text-text-muted">{user?.email}</p>
+              </div>
             </div>
-            <Button variant="outline" className="w-full bg-glass border-border hover:bg-bg-light">
-              Edit Profile
-            </Button>
+            <EditProfileDialog>
+              <Button variant="outline" className="w-full bg-glass border-border hover:bg-bg-light">
+                Edit Profile
+              </Button>
+            </EditProfileDialog>
           </CardContent>
         </Card>
 
@@ -73,14 +91,30 @@ const Settings = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            <Button variant="outline" className="w-full justify-start bg-glass border-border hover:bg-bg-light">
-              Set Calorie Goal
-            </Button>
-            <Button variant="outline" className="w-full justify-start bg-glass border-border hover:bg-bg-light">
-              Set Macro Targets
-            </Button>
-            <Button variant="outline" className="w-full justify-start bg-glass border-border hover:bg-bg-light">
-              Custom Nutrient Tracking
+            {/* Current Goals Display */}
+            {profile && (
+              <div className="p-3 bg-bg-light rounded-lg border border-border space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-text-muted">Daily Goal</span>
+                  <span className="font-medium text-text">{profile.calorie_goal || 2000} calories</span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-text-muted">Mode</span>
+                  <span className="text-text capitalize">{profile.goal_type || 'grams'}</span>
+                </div>
+              </div>
+            )}
+            
+            <GoalSettingsDialog>
+              <Button variant="outline" className="w-full justify-start bg-glass border-border hover:bg-bg-light">
+                <Target className="w-4 h-4 mr-2" />
+                Set Nutrition Goals
+              </Button>
+            </GoalSettingsDialog>
+            
+            <Button variant="outline" className="w-full justify-start bg-glass border-border hover:bg-bg-light" disabled>
+              <span className="opacity-50">Custom Nutrient Tracking</span>
+              <span className="ml-auto text-xs text-text-muted">Coming Soon</span>
             </Button>
           </CardContent>
         </Card>
@@ -94,9 +128,12 @@ const Settings = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <Button variant="outline" className="w-full justify-start bg-glass border-border hover:bg-bg-light">
-              Manage Meals & Time Slots
-            </Button>
+            <MealsManagementDialog>
+              <Button variant="outline" className="w-full justify-start bg-glass border-border hover:bg-bg-light">
+                <Utensils className="w-4 h-4 mr-2" />
+                Manage Meals & Time Slots
+              </Button>
+            </MealsManagementDialog>
           </CardContent>
         </Card>
 
@@ -125,11 +162,13 @@ const Settings = () => {
                 onCheckedChange={(checked) => setTheme(checked ? 'light' : 'dark')}
               />
             </div>
-            <Button variant="outline" className="w-full justify-start bg-glass border-border hover:bg-bg-light">
-              Notifications
+            <Button variant="outline" className="w-full justify-start bg-glass border-border hover:bg-bg-light" disabled>
+              <span className="opacity-50">Notifications</span>
+              <span className="ml-auto text-xs text-text-muted">Coming Soon</span>
             </Button>
-            <Button variant="outline" className="w-full justify-start bg-glass border-border hover:bg-bg-light">
-              Data Export
+            <Button variant="outline" className="w-full justify-start bg-glass border-border hover:bg-bg-light" disabled>
+              <span className="opacity-50">Data Export</span>
+              <span className="ml-auto text-xs text-text-muted">Coming Soon</span>
             </Button>
           </CardContent>
         </Card>
