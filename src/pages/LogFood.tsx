@@ -347,12 +347,12 @@ const LogFood = () => {
                 <div className="relative h-3 bg-border-muted rounded-full overflow-hidden">
                   {/* Already logged amount */}
                   <div 
-                    className="absolute top-0 left-0 h-full bg-text-muted/30 rounded-full"
+                    className="absolute top-0 left-0 h-full bg-text-muted/30 rounded-l-full"
                     style={{ width: `${Math.min((summary.fat / dailyGoals.fat) * 100, 100)}%` }}
                   />
                   {/* Current food amount stacked on top */}
                   <div 
-                    className="absolute top-0 h-full bg-warning rounded-full"
+                    className="absolute top-0 h-full bg-warning rounded-r-full"
                     style={{ 
                       left: `${Math.min((summary.fat / dailyGoals.fat) * 100, 100)}%`,
                       width: `${Math.min((calculatedNutrition.fat / dailyGoals.fat) * 100, 100 - Math.min((summary.fat / dailyGoals.fat) * 100, 100))}%`
@@ -377,12 +377,12 @@ const LogFood = () => {
                 <div className="relative h-3 bg-border-muted rounded-full overflow-hidden">
                   {/* Already logged amount */}
                   <div 
-                    className="absolute top-0 left-0 h-full bg-text-muted/30 rounded-full"
+                    className="absolute top-0 left-0 h-full bg-text-muted/30 rounded-l-full"
                     style={{ width: `${Math.min((summary.carbs / dailyGoals.carbs) * 100, 100)}%` }}
                   />
                   {/* Current food amount stacked on top */}
                   <div 
-                    className="absolute top-0 h-full bg-info rounded-full"
+                    className="absolute top-0 h-full bg-info rounded-r-full"
                     style={{ 
                       left: `${Math.min((summary.carbs / dailyGoals.carbs) * 100, 100)}%`,
                       width: `${Math.min((calculatedNutrition.carbs / dailyGoals.carbs) * 100, 100 - Math.min((summary.carbs / dailyGoals.carbs) * 100, 100))}%`
@@ -407,12 +407,12 @@ const LogFood = () => {
                 <div className="relative h-3 bg-border-muted rounded-full overflow-hidden">
                   {/* Already logged amount */}
                   <div 
-                    className="absolute top-0 left-0 h-full bg-text-muted/30 rounded-full"
+                    className="absolute top-0 left-0 h-full bg-text-muted/30 rounded-l-full"
                     style={{ width: `${Math.min((summary.protein / dailyGoals.protein) * 100, 100)}%` }}
                   />
                   {/* Current food amount stacked on top */}
                   <div 
-                    className="absolute top-0 h-full bg-success rounded-full"
+                    className="absolute top-0 h-full bg-success rounded-r-full"
                     style={{ 
                       left: `${Math.min((summary.protein / dailyGoals.protein) * 100, 100)}%`,
                       width: `${Math.min((calculatedNutrition.protein / dailyGoals.protein) * 100, 100 - Math.min((summary.protein / dailyGoals.protein) * 100, 100))}%`
