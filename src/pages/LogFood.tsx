@@ -342,7 +342,7 @@ const LogFood = () => {
                     <span className="text-text-muted/70">{Math.round(summary.fat)}g + </span>
                     <span className="font-semibold text-warning">{calculatedNutrition.fat}g</span>
                     <span className="text-text"> = {Math.round(summary.fat + calculatedNutrition.fat)}g</span>
-                    <span className="text-text-muted"> / {dailyGoals.fat}g </span><span className="font-bold">({Math.max(0, dailyGoals.fat - Math.round(summary.fat + calculatedNutrition.fat))}g Left)</span>
+                    <span className="text-text-muted"> / {dailyGoals.fat}g </span><span className="font-bold">({Math.max(0, dailyGoals.fat - Math.round(summary.fat + calculatedNutrition.fat))}g left)</span>
                   </div>
                 </div>
                 <div className="relative h-3 bg-border-muted rounded-full overflow-hidden">
