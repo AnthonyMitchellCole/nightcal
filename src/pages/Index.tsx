@@ -1,18 +1,12 @@
-import { useState } from "react";
 import { MacroProgressCard } from "@/components/nutrition/MacroProgressCard";
 import { CalorieSummaryCard } from "@/components/nutrition/CalorieSummaryCard";
 import { CustomNutrientCard } from "@/components/nutrition/CustomNutrientCard";
 import { FoodPreviewList } from "@/components/nutrition/FoodPreviewList";
-import { AddFoodModal } from "@/components/nutrition/AddFoodModal";
-import { BottomNavigation } from "@/components/nutrition/BottomNavigation";
 import { useDailySummary, useFoodLogs } from "@/hooks/useFoodLogs";
 import { useProfile } from "@/hooks/useProfile";
 import { Loader2 } from "lucide-react";
 
 const Index = () => {
-  const [isAddFoodModalOpen, setIsAddFoodModalOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("home");
-
   const { summary, loading: summaryLoading } = useDailySummary();
   const { foodLogs, loading: logsLoading } = useFoodLogs();
   const { profile, loading: profileLoading } = useProfile();
@@ -71,44 +65,28 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-bg text-text">
-      {/* Main Content */}
-      <div className="pb-20">
-        {/* Top Carousel */}
-        <div className="w-full my-6">
-          <div className="flex overflow-x-auto scrollbar-hide snap-x-mandatory px-4 gap-4 md:justify-center md:px-4">
-            <MacroProgressCard macros={macros} />
-            <CalorieSummaryCard calories={calories} />
-            <CustomNutrientCard nutrient={customNutrient} />
-          </div>
-        </div>
-
-        {/* Food Preview List */}
-        <div className="px-4">
-          <div className="mb-4">
-            <h2 className="text-xl font-semibold text-text">Today's Foods</h2>
-            <p className="text-sm text-text-muted">
-              {todaysFoods.length === 0 
-                ? "No foods logged yet today" 
-                : `${todaysFoods.length} item${todaysFoods.length !== 1 ? 's' : ''} logged`
-              }
-            </p>
-          </div>
-          <FoodPreviewList foods={todaysFoods} />
+      {/* Top Carousel */}
+      <div className="w-full my-6">
+        <div className="flex overflow-x-auto scrollbar-hide snap-x-mandatory px-4 gap-4 md:justify-center md:px-4">
+          <MacroProgressCard macros={macros} />
+          <CalorieSummaryCard calories={calories} />
+          <CustomNutrientCard nutrient={customNutrient} />
         </div>
       </div>
 
-      {/* Bottom Navigation */}
-      <BottomNavigation 
-        activeTab={activeTab} 
-        onTabChange={setActiveTab}
-        onAddFood={() => setIsAddFoodModalOpen(true)}
-      />
-
-      {/* Add Food Modal */}
-      <AddFoodModal 
-        isOpen={isAddFoodModalOpen}
-        onClose={() => setIsAddFoodModalOpen(false)}
-      />
+      {/* Food Preview List */}
+      <div className="px-4">
+        <div className="mb-4">
+          <h2 className="text-xl font-semibold text-text">Today's Foods</h2>
+          <p className="text-sm text-text-muted">
+            {todaysFoods.length === 0 
+              ? "No foods logged yet today" 
+              : `${todaysFoods.length} item${todaysFoods.length !== 1 ? 's' : ''} logged`
+            }
+          </p>
+        </div>
+        <FoodPreviewList foods={todaysFoods} />
+      </div>
     </div>
   );
 };

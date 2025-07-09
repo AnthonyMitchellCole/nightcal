@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { AppLayout } from "@/components/layout/AppLayout";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import SearchFood from "./pages/SearchFood";
@@ -28,39 +29,18 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/" element={
               <ProtectedRoute>
-                <Index />
+                <AppLayout />
               </ProtectedRoute>
-            } />
-            <Route path="/search-food" element={
-              <ProtectedRoute>
-                <SearchFood />
-              </ProtectedRoute>
-            } />
-            <Route path="/log-food/:foodId" element={
-              <ProtectedRoute>
-                <LogFood />
-              </ProtectedRoute>
-            } />
-            <Route path="/add-food" element={
-              <ProtectedRoute>
-                <AddFood />
-              </ProtectedRoute>
-            } />
-            <Route path="/full-log" element={
-              <ProtectedRoute>
-                <FullLog />
-              </ProtectedRoute>
-            } />
-            <Route path="/all-foods" element={
-              <ProtectedRoute>
-                <AllFoods />
-              </ProtectedRoute>
-            } />
-            <Route path="/settings" element={
-              <ProtectedRoute>
-                <Settings />
-              </ProtectedRoute>
-            } />
+            }>
+              {/* Nested routes that will render inside AppLayout */}
+              <Route index element={<Index />} />
+              <Route path="search-food" element={<SearchFood />} />
+              <Route path="log-food/:foodId" element={<LogFood />} />
+              <Route path="add-food" element={<AddFood />} />
+              <Route path="full-log" element={<FullLog />} />
+              <Route path="all-foods" element={<AllFoods />} />
+              <Route path="settings" element={<Settings />} />
+            </Route>
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
