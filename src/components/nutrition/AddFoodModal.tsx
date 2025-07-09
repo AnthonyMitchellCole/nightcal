@@ -84,7 +84,7 @@ export const AddFoodModal = ({ isOpen, onClose }: AddFoodModalProps) => {
             <DialogTitle className="text-text text-center text-xl">Add Food</DialogTitle>
           </DialogHeader>
           
-          <div className="space-y-4 py-4">
+          <div className="flex gap-3 py-4">
             {options.map((option) => {
               const Icon = option.icon;
               const isSelected = selectedOption === option.id;
@@ -94,16 +94,16 @@ export const AddFoodModal = ({ isOpen, onClose }: AddFoodModalProps) => {
                   key={option.id}
                   variant="ghost"
                   onClick={() => handleOptionSelect(option.id)}
-                  className={`w-full h-auto p-6 flex flex-col items-center gap-3 hover:bg-bg-light border-2 border-transparent transition-all duration-200 ${
+                  className={`flex-1 h-auto p-4 flex flex-col items-center gap-2 hover:bg-bg-light border-2 border-transparent transition-all duration-200 ${
                     isSelected ? option.color : 'hover:border-border'
                   }`}
                 >
-                  <div className={`p-3 rounded-full ${option.color}`}>
-                    <Icon className="w-6 h-6" />
+                  <div className={`p-2 rounded-full ${option.color}`}>
+                    <Icon className="w-5 h-5" />
                   </div>
                   <div className="text-center">
-                    <h3 className="font-semibold text-text">{option.title}</h3>
-                    <p className="text-sm text-text-muted mt-1">{option.description}</p>
+                    <h3 className="font-medium text-text text-sm">{option.title}</h3>
+                    <p className="text-xs text-text-muted mt-0.5">{option.description}</p>
                   </div>
                 </Button>
               );
