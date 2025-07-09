@@ -1,35 +1,73 @@
-import { useState, useEffect } from "react";
-import { Plus, Home, FileText, Package, Settings } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
+import { useState } from "react";
 import { MacroProgressCard } from "@/components/nutrition/MacroProgressCard";
 import { CalorieSummaryCard } from "@/components/nutrition/CalorieSummaryCard";
 import { CustomNutrientCard } from "@/components/nutrition/CustomNutrientCard";
 import { FoodPreviewList } from "@/components/nutrition/FoodPreviewList";
 import { AddFoodModal } from "@/components/nutrition/AddFoodModal";
 import { BottomNavigation } from "@/components/nutrition/BottomNavigation";
+import { useDailySummary, useFoodLogs } from "@/hooks/useFoodLogs";
+import { useProfile } from "@/hooks/useProfile";
+import { Loader2 } from "lucide-react";
 
 const Index = () => {
   const [isAddFoodModalOpen, setIsAddFoodModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("home");
 
-  // Mock data for demo purposes
-  const mockData = {
-    macros: {
-      carbs: { current: 180, goal: 250 },
-      protein: { current: 120, goal: 150 },
-      fat: { current: 60, goal: 80 }
-    },
-    calories: { current: 1482, goal: 2100 },
-    customNutrient: { name: "Fiber", current: 25, goal: 35, unit: "g" },
-    todaysFoods: [
-      { id: 1, name: "Greek Yogurt", calories: 150, meal: "Breakfast", macros: { carbs: 12, protein: 20, fat: 0 } },
-      { id: 2, name: "Banana", calories: 105, meal: "Breakfast", macros: { carbs: 27, protein: 1, fat: 0 } },
-      { id: 3, name: "Chicken Breast", calories: 231, meal: "Lunch", macros: { carbs: 0, protein: 44, fat: 5 } },
-      { id: 4, name: "Brown Rice", calories: 220, meal: "Lunch", macros: { carbs: 45, protein: 5, fat: 2 } }
-    ]
+  const { summary, loading: summaryLoading } = useDailySummary();
+  const { foodLogs, loading: logsLoading } = useFoodLogs();
+  const { profile, loading: profileLoading } = useProfile();
+
+  const loading = summaryLoading || logsLoading || profileLoading;
+
+  // Default goals if profile not loaded
+  const goals = {
+    calories: profile?.calorie_goal || 2100,
+    carbs: profile?.carb_goal_grams || 250,
+    protein: profile?.protein_goal_grams || 150,
+    fat: profile?.fat_goal_grams || 80
   };
+
+  const macros = {
+    carbs: { current: Math.round(summary.carbs), goal: goals.carbs },
+    protein: { current: Math.round(summary.protein), goal: goals.protein },
+    fat: { current: Math.round(summary.fat), goal: goals.fat }
+  };
+
+  const calories = { 
+    current: Math.round(summary.calories), 
+    goal: goals.calories 
+  };
+
+  const customNutrient = { 
+    name: "Fiber", 
+    current: Math.round(summary.fiber), 
+    goal: 35, 
+    unit: "g" 
+  };
+
+  // Transform food logs for FoodPreviewList
+  const todaysFoods = foodLogs.map(log => ({
+    id: log.id,
+    name: log.foods.name,
+    calories: log.calories,
+    meal: log.meals.name,
+    macros: {
+      carbs: Math.round(log.carbs),
+      protein: Math.round(log.protein),
+      fat: Math.round(log.fat)
+    }
+  }));
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-bg text-text flex items-center justify-center">
+        <div className="flex items-center space-x-2">
+          <Loader2 className="w-6 h-6 animate-spin" />
+          <span>Loading your nutrition data...</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-bg text-text">
@@ -38,9 +76,9 @@ const Index = () => {
         {/* Top Carousel */}
         <div className="w-full my-6">
           <div className="flex overflow-x-auto scrollbar-hide snap-x-mandatory px-4 gap-4 md:justify-center md:px-4">
-            <MacroProgressCard macros={mockData.macros} />
-            <CalorieSummaryCard calories={mockData.calories} />
-            <CustomNutrientCard nutrient={mockData.customNutrient} />
+            <MacroProgressCard macros={macros} />
+            <CalorieSummaryCard calories={calories} />
+            <CustomNutrientCard nutrient={customNutrient} />
           </div>
         </div>
 
@@ -48,9 +86,14 @@ const Index = () => {
         <div className="px-4">
           <div className="mb-4">
             <h2 className="text-xl font-semibold text-text">Today's Foods</h2>
-            <p className="text-sm text-text-muted">Quick overview of logged items</p>
+            <p className="text-sm text-text-muted">
+              {todaysFoods.length === 0 
+                ? "No foods logged yet today" 
+                : `${todaysFoods.length} item${todaysFoods.length !== 1 ? 's' : ''} logged`
+              }
+            </p>
           </div>
-          <FoodPreviewList foods={mockData.todaysFoods} />
+          <FoodPreviewList foods={todaysFoods} />
         </div>
       </div>
 

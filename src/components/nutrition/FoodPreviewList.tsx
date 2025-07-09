@@ -2,7 +2,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
 interface FoodItem {
-  id: number;
+  id: string;
   name: string;
   calories: number;
   meal: string;

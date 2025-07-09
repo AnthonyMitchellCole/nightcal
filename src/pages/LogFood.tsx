@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { ArrowLeft } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { ArrowLeft, Loader2 } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,32 +7,122 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
+import { useLogFood } from '@/hooks/useFoodLogs';
+import { useToast } from '@/hooks/use-toast';
 
 const LogFood = () => {
   const { foodId } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { logFood, loading: logLoading } = useLogFood();
+  const { toast } = useToast();
+
   const [quantity, setQuantity] = useState('1');
-  const [selectedMeal, setSelectedMeal] = useState('breakfast');
+  const [selectedMeal, setSelectedMeal] = useState('');
+  const [selectedServing, setSelectedServing] = useState('');
+  
+  const [food, setFood] = useState<any>(null);
+  const [meals, setMeals] = useState<any[]>([]);
+  const [servingSizes, setServingSizes] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Mock food data - replace with actual Supabase query
-  const food = {
-    id: foodId,
-    name: "Greek Yogurt",
-    brand: "Fage",
-    caloriesPer100g: 97,
-    carbsPer100g: 4,
-    proteinPer100g: 10,
-    fatPer100g: 5
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!foodId || !user) return;
 
-  // Mock serving sizes
-  const servingSizes = [
-    { id: '1', name: '1 cup (245g)', grams: 245 },
-    { id: '2', name: '1/2 cup (123g)', grams: 123 },
-    { id: '3', name: '100g', grams: 100 }
-  ];
+      try {
+        // Fetch food details
+        const { data: foodData, error: foodError } = await supabase
+          .from('foods')
+          .select('*')
+          .eq('id', foodId)
+          .single();
 
-  const [selectedServing, setSelectedServing] = useState(servingSizes[0].id);
+        if (foodError) throw foodError;
+        setFood(foodData);
+
+        // Fetch user's meals
+        const { data: mealsData, error: mealsError } = await supabase
+          .from('meals')
+          .select('*')
+          .eq('user_id', user.id)
+          .eq('is_active', true)
+          .order('display_order');
+
+        if (mealsError) throw mealsError;
+        setMeals(mealsData || []);
+
+        // Auto-select meal based on current time
+        const currentHour = new Date().getHours();
+        const currentTime = `${String(currentHour).padStart(2, '0')}:${String(new Date().getMinutes()).padStart(2, '0')}:00`;
+        
+        const appropriateMeal = mealsData?.find(meal => {
+          if (!meal.time_slot_start || !meal.time_slot_end) return false;
+          return currentTime >= meal.time_slot_start && currentTime <= meal.time_slot_end;
+        });
+
+        if (appropriateMeal) {
+          setSelectedMeal(appropriateMeal.id);
+        } else if (mealsData && mealsData.length > 0) {
+          setSelectedMeal(mealsData[0].id);
+        }
+
+        // Fetch serving sizes
+        const { data: servingData, error: servingError } = await supabase
+          .from('serving_sizes')
+          .select('*')
+          .eq('food_id', foodId)
+          .order('is_default', { ascending: false });
+
+        if (servingError) console.warn('No serving sizes found:', servingError);
+        
+        const defaultServings = servingData || [
+          { id: 'default-100', name: '100g', grams: 100, is_default: true }
+        ];
+        
+        setServingSizes(defaultServings);
+        setSelectedServing(defaultServings[0]?.id || 'default-100');
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        toast({
+          title: "Error",
+          description: "Failed to load food details",
+          variant: "destructive"
+        });
+        navigate(-1);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [foodId, user, navigate, toast]);
+
+  if (loading || !food) {
+    return (
+      <div className="min-h-screen bg-bg text-text">
+        <div className="sticky top-0 bg-glass border-b border-glass backdrop-blur-glass p-4 flex items-center space-x-3">
+          <Button 
+            variant="ghost" 
+            size="icon"
+            onClick={() => navigate(-1)}
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </Button>
+          <h1 className="text-lg font-semibold">Loading...</h1>
+        </div>
+        <div className="flex items-center justify-center p-8">
+          <div className="flex items-center space-x-2">
+            <Loader2 className="w-6 h-6 animate-spin" />
+            <span>Loading food details...</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // Calculate nutrition based on quantity and serving
   const selectedServingData = servingSizes.find(s => s.id === selectedServing);
@@ -40,30 +130,55 @@ const LogFood = () => {
   const multiplier = totalGrams / 100;
 
   const calculatedNutrition = {
-    calories: Math.round(food.caloriesPer100g * multiplier),
-    carbs: Math.round(food.carbsPer100g * multiplier),
-    protein: Math.round(food.proteinPer100g * multiplier),
-    fat: Math.round(food.fatPer100g * multiplier)
+    calories: Math.round(food.calories_per_100g * multiplier),
+    carbs: Math.round(food.carbs_per_100g * multiplier),
+    protein: Math.round(food.protein_per_100g * multiplier),
+    fat: Math.round(food.fat_per_100g * multiplier),
+    fiber: food.fiber_per_100g ? Math.round(food.fiber_per_100g * multiplier) : undefined,
+    sugar: food.sugar_per_100g ? Math.round(food.sugar_per_100g * multiplier) : undefined,
+    sodium: food.sodium_per_100g ? Math.round(food.sodium_per_100g * multiplier) : undefined
   };
 
-  // Mock meal options
-  const meals = [
-    { id: 'breakfast', name: 'Breakfast' },
-    { id: 'lunch', name: 'Lunch' },
-    { id: 'dinner', name: 'Dinner' },
-    { id: 'snacks', name: 'Snacks' }
-  ];
+  const handleSave = async () => {
+    if (!selectedMeal) {
+      toast({
+        title: "Validation Error",
+        description: "Please select a meal",
+        variant: "destructive"
+      });
+      return;
+    }
 
-  const handleSave = () => {
-    // TODO: Save to Supabase
-    console.log('Saving food log:', {
-      foodId,
-      quantity: parseFloat(quantity),
-      servingId: selectedServing,
-      meal: selectedMeal,
-      nutrition: calculatedNutrition
-    });
-    navigate('/');
+    try {
+      await logFood({
+        food_id: food.id,
+        meal_id: selectedMeal,
+        quantity: parseFloat(quantity),
+        grams: totalGrams,
+        calories: calculatedNutrition.calories,
+        carbs: calculatedNutrition.carbs,
+        protein: calculatedNutrition.protein,
+        fat: calculatedNutrition.fat,
+        fiber: calculatedNutrition.fiber,
+        sugar: calculatedNutrition.sugar,
+        sodium: calculatedNutrition.sodium,
+        serving_size_id: selectedServing !== 'default-100' ? selectedServing : undefined
+      });
+
+      toast({
+        title: "Success",
+        description: "Food logged successfully",
+      });
+
+      navigate('/');
+    } catch (error) {
+      console.error('Error logging food:', error);
+      toast({
+        title: "Error",
+        description: "Failed to log food. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   return (
@@ -180,8 +295,12 @@ const LogFood = () => {
         </Card>
 
         {/* Save Button */}
-        <Button onClick={handleSave} className="w-full">
-          Add to Log
+        <Button 
+          onClick={handleSave} 
+          className="w-full" 
+          disabled={logLoading || !selectedMeal}
+        >
+          {logLoading ? 'Adding to Log...' : 'Add to Log'}
         </Button>
       </div>
     </div>

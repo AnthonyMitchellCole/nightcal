@@ -1,56 +1,57 @@
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
+import { useDailySummary, useMealSummary } from '@/hooks/useFoodLogs';
+import { useProfile } from '@/hooks/useProfile';
 
 const FullLog = () => {
   const navigate = useNavigate();
+  
+  const { summary, loading: summaryLoading } = useDailySummary();
+  const { meals, loading: mealsLoading } = useMealSummary();
+  const { profile, loading: profileLoading } = useProfile();
 
-  // Mock data for today's meals
-  const todaysMeals = [
-    {
-      name: 'Breakfast',
-      foods: [
-        { name: 'Greek Yogurt', calories: 150, carbs: 12, protein: 20, fat: 0 },
-        { name: 'Banana', calories: 105, carbs: 27, protein: 1, fat: 0 }
-      ]
-    },
-    {
-      name: 'Lunch',
-      foods: [
-        { name: 'Chicken Breast', calories: 231, carbs: 0, protein: 44, fat: 5 },
-        { name: 'Brown Rice', calories: 220, carbs: 45, protein: 5, fat: 2 }
-      ]
-    },
-    {
-      name: 'Dinner',
-      foods: []
-    },
-    {
-      name: 'Snacks',
-      foods: []
-    }
-  ];
+  const loading = summaryLoading || mealsLoading || profileLoading;
 
-  // Calculate totals
-  const dailyTotals = todaysMeals.reduce((totals, meal) => {
-    meal.foods.forEach(food => {
-      totals.calories += food.calories;
-      totals.carbs += food.carbs;
-      totals.protein += food.protein;
-      totals.fat += food.fat;
-    });
-    return totals;
-  }, { calories: 0, carbs: 0, protein: 0, fat: 0 });
-
-  // Mock daily goals
+  // Get goals from profile or use defaults
   const dailyGoals = {
-    calories: 2100,
-    carbs: 250,
-    protein: 150,
-    fat: 80
+    calories: profile?.calorie_goal || 2100,
+    carbs: profile?.carb_goal_grams || 250,
+    protein: profile?.protein_goal_grams || 150,
+    fat: profile?.fat_goal_grams || 80
   };
+
+  const dailyTotals = {
+    calories: Math.round(summary.calories),
+    carbs: Math.round(summary.carbs),
+    protein: Math.round(summary.protein),
+    fat: Math.round(summary.fat)
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-bg text-text">
+        <div className="sticky top-0 bg-glass border-b border-glass backdrop-blur-glass p-4 flex items-center space-x-3">
+          <Button 
+            variant="ghost" 
+            size="icon"
+            onClick={() => navigate(-1)}
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </Button>
+          <h1 className="text-lg font-semibold">Today's Log</h1>
+        </div>
+        <div className="flex items-center justify-center p-8">
+          <div className="flex items-center space-x-2">
+            <Loader2 className="w-6 h-6 animate-spin" />
+            <span>Loading your food log...</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-bg text-text">
@@ -126,65 +127,59 @@ const FullLog = () => {
         </Card>
 
         {/* Meals */}
-        {todaysMeals.map((meal, index) => {
-          const mealTotals = meal.foods.reduce((totals, food) => {
-            totals.calories += food.calories;
-            totals.carbs += food.carbs;
-            totals.protein += food.protein;
-            totals.fat += food.fat;
-            return totals;
-          }, { calories: 0, carbs: 0, protein: 0, fat: 0 });
-
-          return (
-            <Card key={index} className="bg-glass border-glass">
-              <CardHeader>
-                <CardTitle className="flex justify-between items-center">
-                  <span>{meal.name}</span>
-                  <span className="text-sm font-normal text-text-muted">
-                    {mealTotals.calories} kcal
-                  </span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {meal.foods.length === 0 ? (
-                  <p className="text-text-muted text-center py-4">
-                    No foods logged yet
-                  </p>
-                ) : (
-                  <div className="space-y-3">
-                    {meal.foods.map((food, foodIndex) => (
-                      <div key={foodIndex} className="flex justify-between items-center p-3 bg-bg-light rounded-lg">
-                        <div>
-                          <h4 className="font-medium text-text">{food.name}</h4>
-                          <p className="text-sm text-text-muted">
-                            C: {food.carbs}g • P: {food.protein}g • F: {food.fat}g
-                          </p>
-                        </div>
-                        <span className="font-medium text-text">
-                          {food.calories} kcal
+        {meals.map((meal) => (
+          <Card key={meal.id} className="bg-glass border-glass">
+            <CardHeader>
+              <CardTitle className="flex justify-between items-center">
+                <span>{meal.name}</span>
+                <span className="text-sm font-normal text-text-muted">
+                  {meal.totals.calories} kcal
+                </span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {meal.foods.length === 0 ? (
+                <p className="text-text-muted text-center py-4">
+                  No foods logged yet
+                </p>
+              ) : (
+                <div className="space-y-3">
+                  {meal.foods.map((food) => (
+                    <div key={food.id} className="flex justify-between items-center p-3 bg-bg-light rounded-lg">
+                      <div>
+                        <h4 className="font-medium text-text">{food.name}</h4>
+                        <p className="text-sm text-text-muted">
+                          {food.brand && `${food.brand} • `}
+                          {food.quantity}x ({food.grams}g)
+                        </p>
+                        <p className="text-sm text-text-muted">
+                          C: {food.carbs}g • P: {food.protein}g • F: {food.fat}g
+                        </p>
+                      </div>
+                      <span className="font-medium text-text">
+                        {food.calories} kcal
+                      </span>
+                    </div>
+                  ))}
+                  
+                  {meal.foods.length > 0 && (
+                    <div className="border-t border-border pt-3 mt-3">
+                      <div className="flex justify-between text-sm font-medium">
+                        <span>Meal Total</span>
+                        <span>
+                          {meal.totals.calories} kcal • 
+                          C: {meal.totals.carbs}g • 
+                          P: {meal.totals.protein}g • 
+                          F: {meal.totals.fat}g
                         </span>
                       </div>
-                    ))}
-                    
-                    {meal.foods.length > 0 && (
-                      <div className="border-t border-border pt-3 mt-3">
-                        <div className="flex justify-between text-sm font-medium">
-                          <span>Meal Total</span>
-                          <span>
-                            {mealTotals.calories} kcal • 
-                            C: {mealTotals.carbs}g • 
-                            P: {mealTotals.protein}g • 
-                            F: {mealTotals.fat}g
-                          </span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          );
-        })}
+                    </div>
+                  )}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        ))}
       </div>
     </div>
   );
