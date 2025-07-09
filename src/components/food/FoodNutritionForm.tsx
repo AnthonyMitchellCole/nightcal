@@ -15,6 +15,15 @@ interface FoodNutritionFormProps {
     sugar_per_serving?: number;
     sodium_per_serving?: number;
     fiber_per_serving?: number;
+    saturated_fat_per_serving?: number;
+    trans_fat_per_serving?: number;
+    cholesterol_per_serving?: number;
+    vitamin_a_per_serving?: number;
+    vitamin_c_per_serving?: number;
+    calcium_per_serving?: number;
+    iron_per_serving?: number;
+    potassium_per_serving?: number;
+    magnesium_per_serving?: number;
   };
   onServingNutritionChange: (nutrition: {
     calories: number;
@@ -24,6 +33,15 @@ interface FoodNutritionFormProps {
     sugar?: number;
     sodium?: number;
     fiber?: number;
+    saturated_fat?: number;
+    trans_fat?: number;
+    cholesterol?: number;
+    vitamin_a?: number;
+    vitamin_c?: number;
+    calcium?: number;
+    iron?: number;
+    potassium?: number;
+    magnesium?: number;
   }) => void;
   canEdit: boolean;
 }
@@ -37,6 +55,15 @@ export const FoodNutritionForm = ({ defaultServing, onServingNutritionChange, ca
     sugar: defaultServing?.sugar_per_serving || 0,
     sodium: defaultServing?.sodium_per_serving || 0,
     fiber: defaultServing?.fiber_per_serving || 0,
+    saturated_fat: defaultServing?.saturated_fat_per_serving || 0,
+    trans_fat: defaultServing?.trans_fat_per_serving || 0,
+    cholesterol: defaultServing?.cholesterol_per_serving || 0,
+    vitamin_a: defaultServing?.vitamin_a_per_serving || 0,
+    vitamin_c: defaultServing?.vitamin_c_per_serving || 0,
+    calcium: defaultServing?.calcium_per_serving || 0,
+    iron: defaultServing?.iron_per_serving || 0,
+    potassium: defaultServing?.potassium_per_serving || 0,
+    magnesium: defaultServing?.magnesium_per_serving || 0,
   };
 
   const handleInputChange = (field: string, value: string) => {
@@ -181,6 +208,117 @@ export const FoodNutritionForm = ({ defaultServing, onServingNutritionChange, ca
                 step="0.1"
                 value={servingNutrition.fiber}
                 onChange={(e) => handleInputChange('fiber', e.target.value)}
+                disabled={!canEdit}
+              />
+            </div>
+          </div>
+
+          {/* Additional Nutrients Section */}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="saturated_fat">Saturated Fat (g)</Label>
+              <Input
+                id="saturated_fat"
+                type="number"
+                step="0.1"
+                value={servingNutrition.saturated_fat}
+                onChange={(e) => handleInputChange('saturated_fat', e.target.value)}
+                disabled={!canEdit}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="trans_fat">Trans Fat (g)</Label>
+              <Input
+                id="trans_fat"
+                type="number"
+                step="0.1"
+                value={servingNutrition.trans_fat}
+                onChange={(e) => handleInputChange('trans_fat', e.target.value)}
+                disabled={!canEdit}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="cholesterol">Cholesterol (mg)</Label>
+              <Input
+                id="cholesterol"
+                type="number"
+                step="0.1"
+                value={servingNutrition.cholesterol}
+                onChange={(e) => handleInputChange('cholesterol', e.target.value)}
+                disabled={!canEdit}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="vitamin_a">Vitamin A (mcg)</Label>
+              <Input
+                id="vitamin_a"
+                type="number"
+                step="0.1"
+                value={servingNutrition.vitamin_a}
+                onChange={(e) => handleInputChange('vitamin_a', e.target.value)}
+                disabled={!canEdit}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="vitamin_c">Vitamin C (mg)</Label>
+              <Input
+                id="vitamin_c"
+                type="number"
+                step="0.1"
+                value={servingNutrition.vitamin_c}
+                onChange={(e) => handleInputChange('vitamin_c', e.target.value)}
+                disabled={!canEdit}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="calcium">Calcium (mg)</Label>
+              <Input
+                id="calcium"
+                type="number"
+                step="0.1"
+                value={servingNutrition.calcium}
+                onChange={(e) => handleInputChange('calcium', e.target.value)}
+                disabled={!canEdit}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="iron">Iron (mg)</Label>
+              <Input
+                id="iron"
+                type="number"
+                step="0.1"
+                value={servingNutrition.iron}
+                onChange={(e) => handleInputChange('iron', e.target.value)}
+                disabled={!canEdit}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="potassium">Potassium (mg)</Label>
+              <Input
+                id="potassium"
+                type="number"
+                step="0.1"
+                value={servingNutrition.potassium}
+                onChange={(e) => handleInputChange('potassium', e.target.value)}
+                disabled={!canEdit}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="magnesium">Magnesium (mg)</Label>
+              <Input
+                id="magnesium"
+                type="number"
+                step="0.1"
+                value={servingNutrition.magnesium}
+                onChange={(e) => handleInputChange('magnesium', e.target.value)}
                 disabled={!canEdit}
               />
             </div>

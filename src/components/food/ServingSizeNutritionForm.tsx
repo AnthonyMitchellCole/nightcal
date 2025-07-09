@@ -15,6 +15,15 @@ interface ServingSizeNutritionFormProps {
     sugar?: number;
     sodium?: number;
     fiber?: number;
+    saturated_fat?: number;
+    trans_fat?: number;
+    cholesterol?: number;
+    vitamin_a?: number;
+    vitamin_c?: number;
+    calcium?: number;
+    iron?: number;
+    potassium?: number;
+    magnesium?: number;
   }) => void;
   onCancel: () => void;
   loading?: boolean;
@@ -31,6 +40,15 @@ export const ServingSizeNutritionForm = ({ onSubmit, onCancel, loading }: Servin
     sugar: '',
     sodium: '',
     fiber: '',
+    saturated_fat: '',
+    trans_fat: '',
+    cholesterol: '',
+    vitamin_a: '',
+    vitamin_c: '',
+    calcium: '',
+    iron: '',
+    potassium: '',
+    magnesium: '',
   });
 
   const handleChange = (field: string, value: string) => {
@@ -65,6 +83,15 @@ export const ServingSizeNutritionForm = ({ onSubmit, onCancel, loading }: Servin
       sugar: formData.sugar ? parseFloat(formData.sugar) : undefined,
       sodium: formData.sodium ? parseFloat(formData.sodium) : undefined,
       fiber: formData.fiber ? parseFloat(formData.fiber) : undefined,
+      saturated_fat: formData.saturated_fat ? parseFloat(formData.saturated_fat) : undefined,
+      trans_fat: formData.trans_fat ? parseFloat(formData.trans_fat) : undefined,
+      cholesterol: formData.cholesterol ? parseFloat(formData.cholesterol) : undefined,
+      vitamin_a: formData.vitamin_a ? parseFloat(formData.vitamin_a) : undefined,
+      vitamin_c: formData.vitamin_c ? parseFloat(formData.vitamin_c) : undefined,
+      calcium: formData.calcium ? parseFloat(formData.calcium) : undefined,
+      iron: formData.iron ? parseFloat(formData.iron) : undefined,
+      potassium: formData.potassium ? parseFloat(formData.potassium) : undefined,
+      magnesium: formData.magnesium ? parseFloat(formData.magnesium) : undefined,
     });
   };
 
@@ -202,6 +229,112 @@ export const ServingSizeNutritionForm = ({ onSubmit, onCancel, loading }: Servin
                   placeholder="Optional"
                   value={formData.fiber}
                   onChange={(e) => handleChange('fiber', e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Additional Nutrients Section */}
+          <div className="space-y-4">
+            <h4 className="font-medium text-sm text-text-muted">Additional nutrients (optional)</h4>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="serving-saturated-fat">Saturated Fat (g)</Label>
+                <Input
+                  id="serving-saturated-fat"
+                  type="number"
+                  step="0.1"
+                  placeholder="Optional"
+                  value={formData.saturated_fat}
+                  onChange={(e) => handleChange('saturated_fat', e.target.value)}
+                />
+              </div>
+              <div>
+                <Label htmlFor="serving-trans-fat">Trans Fat (g)</Label>
+                <Input
+                  id="serving-trans-fat"
+                  type="number"
+                  step="0.1"
+                  placeholder="Optional"
+                  value={formData.trans_fat}
+                  onChange={(e) => handleChange('trans_fat', e.target.value)}
+                />
+              </div>
+              <div>
+                <Label htmlFor="serving-cholesterol">Cholesterol (mg)</Label>
+                <Input
+                  id="serving-cholesterol"
+                  type="number"
+                  step="0.1"
+                  placeholder="Optional"
+                  value={formData.cholesterol}
+                  onChange={(e) => handleChange('cholesterol', e.target.value)}
+                />
+              </div>
+              <div>
+                <Label htmlFor="serving-vitamin-a">Vitamin A (mcg)</Label>
+                <Input
+                  id="serving-vitamin-a"
+                  type="number"
+                  step="0.1"
+                  placeholder="Optional"
+                  value={formData.vitamin_a}
+                  onChange={(e) => handleChange('vitamin_a', e.target.value)}
+                />
+              </div>
+              <div>
+                <Label htmlFor="serving-vitamin-c">Vitamin C (mg)</Label>
+                <Input
+                  id="serving-vitamin-c"
+                  type="number"
+                  step="0.1"
+                  placeholder="Optional"
+                  value={formData.vitamin_c}
+                  onChange={(e) => handleChange('vitamin_c', e.target.value)}
+                />
+              </div>
+              <div>
+                <Label htmlFor="serving-calcium">Calcium (mg)</Label>
+                <Input
+                  id="serving-calcium"
+                  type="number"
+                  step="0.1"
+                  placeholder="Optional"
+                  value={formData.calcium}
+                  onChange={(e) => handleChange('calcium', e.target.value)}
+                />
+              </div>
+              <div>
+                <Label htmlFor="serving-iron">Iron (mg)</Label>
+                <Input
+                  id="serving-iron"
+                  type="number"
+                  step="0.1"
+                  placeholder="Optional"
+                  value={formData.iron}
+                  onChange={(e) => handleChange('iron', e.target.value)}
+                />
+              </div>
+              <div>
+                <Label htmlFor="serving-potassium">Potassium (mg)</Label>
+                <Input
+                  id="serving-potassium"
+                  type="number"
+                  step="0.1"
+                  placeholder="Optional"
+                  value={formData.potassium}
+                  onChange={(e) => handleChange('potassium', e.target.value)}
+                />
+              </div>
+              <div>
+                <Label htmlFor="serving-magnesium">Magnesium (mg)</Label>
+                <Input
+                  id="serving-magnesium"
+                  type="number"
+                  step="0.1"
+                  placeholder="Optional"
+                  value={formData.magnesium}
+                  onChange={(e) => handleChange('magnesium', e.target.value)}
                 />
               </div>
             </div>

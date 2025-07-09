@@ -12,6 +12,7 @@ import { toast } from '@/hooks/use-toast';
 import { EditProfileDialog } from '@/components/settings/EditProfileDialog';
 import { GoalSettingsDialog } from '@/components/settings/GoalSettingsDialog';
 import { MealsManagementDialog } from '@/components/settings/MealsManagementDialog';
+import { CustomNutrientSettingsDialog } from '@/components/settings/CustomNutrientSettingsDialog';
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -112,10 +113,12 @@ const Settings = () => {
               </Button>
             </GoalSettingsDialog>
             
-            <Button variant="outline" className="w-full justify-start bg-glass border-border hover:bg-bg-light" disabled>
-              <span className="opacity-50">Custom Nutrient Tracking</span>
-              <span className="ml-auto text-xs text-text-muted">Coming Soon</span>
-            </Button>
+            <CustomNutrientSettingsDialog>
+              <Button variant="outline" className="w-full justify-start bg-glass border-border hover:bg-bg-light">
+                <Target className="w-4 h-4 mr-2" />
+                Custom Nutrient Tracking
+              </Button>
+            </CustomNutrientSettingsDialog>
           </CardContent>
         </Card>
 

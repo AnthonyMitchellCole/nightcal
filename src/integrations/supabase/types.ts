@@ -16,70 +16,97 @@ export type Database = {
     Tables: {
       food_logs: {
         Row: {
+          calcium: number | null
           calories: number
           carbs: number
+          cholesterol: number | null
           created_at: string
           fat: number
           fiber: number | null
           food_id: string | null
           grams: number
           id: string
+          iron: number | null
           log_date: string
           log_time: string
           log_type: string | null
+          magnesium: number | null
           meal_id: string
+          potassium: number | null
           protein: number
           quantity: number
           quick_add_name: string | null
+          saturated_fat: number | null
           serving_size_id: string | null
           sodium: number | null
           sugar: number | null
+          trans_fat: number | null
           updated_at: string
           user_id: string
+          vitamin_a: number | null
+          vitamin_c: number | null
         }
         Insert: {
+          calcium?: number | null
           calories: number
           carbs: number
+          cholesterol?: number | null
           created_at?: string
           fat: number
           fiber?: number | null
           food_id?: string | null
           grams: number
           id?: string
+          iron?: number | null
           log_date?: string
           log_time?: string
           log_type?: string | null
+          magnesium?: number | null
           meal_id: string
+          potassium?: number | null
           protein: number
           quantity?: number
           quick_add_name?: string | null
+          saturated_fat?: number | null
           serving_size_id?: string | null
           sodium?: number | null
           sugar?: number | null
+          trans_fat?: number | null
           updated_at?: string
           user_id: string
+          vitamin_a?: number | null
+          vitamin_c?: number | null
         }
         Update: {
+          calcium?: number | null
           calories?: number
           carbs?: number
+          cholesterol?: number | null
           created_at?: string
           fat?: number
           fiber?: number | null
           food_id?: string | null
           grams?: number
           id?: string
+          iron?: number | null
           log_date?: string
           log_time?: string
           log_type?: string | null
+          magnesium?: number | null
           meal_id?: string
+          potassium?: number | null
           protein?: number
           quantity?: number
           quick_add_name?: string | null
+          saturated_fat?: number | null
           serving_size_id?: string | null
           sodium?: number | null
           sugar?: number | null
+          trans_fat?: number | null
           updated_at?: string
           user_id?: string
+          vitamin_a?: number | null
+          vitamin_c?: number | null
         }
         Relationships: [
           {
@@ -109,59 +136,86 @@ export type Database = {
         Row: {
           barcode: string | null
           brand: string | null
+          calcium_per_100g: number | null
           calories_per_100g: number
           carbs_per_100g: number
           category: string | null
+          cholesterol_per_100g: number | null
           created_at: string
           created_by: string | null
           fat_per_100g: number
           fiber_per_100g: number | null
           id: string
           image_url: string | null
+          iron_per_100g: number | null
           is_custom: boolean | null
+          magnesium_per_100g: number | null
           name: string
+          potassium_per_100g: number | null
           protein_per_100g: number
+          saturated_fat_per_100g: number | null
           sodium_per_100g: number | null
           sugar_per_100g: number | null
+          trans_fat_per_100g: number | null
           updated_at: string
+          vitamin_a_per_100g: number | null
+          vitamin_c_per_100g: number | null
         }
         Insert: {
           barcode?: string | null
           brand?: string | null
+          calcium_per_100g?: number | null
           calories_per_100g: number
           carbs_per_100g?: number
           category?: string | null
+          cholesterol_per_100g?: number | null
           created_at?: string
           created_by?: string | null
           fat_per_100g?: number
           fiber_per_100g?: number | null
           id?: string
           image_url?: string | null
+          iron_per_100g?: number | null
           is_custom?: boolean | null
+          magnesium_per_100g?: number | null
           name: string
+          potassium_per_100g?: number | null
           protein_per_100g?: number
+          saturated_fat_per_100g?: number | null
           sodium_per_100g?: number | null
           sugar_per_100g?: number | null
+          trans_fat_per_100g?: number | null
           updated_at?: string
+          vitamin_a_per_100g?: number | null
+          vitamin_c_per_100g?: number | null
         }
         Update: {
           barcode?: string | null
           brand?: string | null
+          calcium_per_100g?: number | null
           calories_per_100g?: number
           carbs_per_100g?: number
           category?: string | null
+          cholesterol_per_100g?: number | null
           created_at?: string
           created_by?: string | null
           fat_per_100g?: number
           fiber_per_100g?: number | null
           id?: string
           image_url?: string | null
+          iron_per_100g?: number | null
           is_custom?: boolean | null
+          magnesium_per_100g?: number | null
           name?: string
+          potassium_per_100g?: number | null
           protein_per_100g?: number
+          saturated_fat_per_100g?: number | null
           sodium_per_100g?: number | null
           sugar_per_100g?: number | null
+          trans_fat_per_100g?: number | null
           updated_at?: string
+          vitamin_a_per_100g?: number | null
+          vitamin_c_per_100g?: number | null
         }
         Relationships: []
       }
@@ -260,49 +314,76 @@ export type Database = {
       }
       serving_sizes: {
         Row: {
+          calcium_per_serving: number | null
           calories_per_serving: number | null
           carbs_per_serving: number | null
+          cholesterol_per_serving: number | null
           created_at: string
           fat_per_serving: number | null
           fiber_per_serving: number | null
           food_id: string
           grams: number
           id: string
+          iron_per_serving: number | null
           is_default: boolean | null
+          magnesium_per_serving: number | null
           name: string
+          potassium_per_serving: number | null
           protein_per_serving: number | null
+          saturated_fat_per_serving: number | null
           sodium_per_serving: number | null
           sugar_per_serving: number | null
+          trans_fat_per_serving: number | null
+          vitamin_a_per_serving: number | null
+          vitamin_c_per_serving: number | null
         }
         Insert: {
+          calcium_per_serving?: number | null
           calories_per_serving?: number | null
           carbs_per_serving?: number | null
+          cholesterol_per_serving?: number | null
           created_at?: string
           fat_per_serving?: number | null
           fiber_per_serving?: number | null
           food_id: string
           grams: number
           id?: string
+          iron_per_serving?: number | null
           is_default?: boolean | null
+          magnesium_per_serving?: number | null
           name: string
+          potassium_per_serving?: number | null
           protein_per_serving?: number | null
+          saturated_fat_per_serving?: number | null
           sodium_per_serving?: number | null
           sugar_per_serving?: number | null
+          trans_fat_per_serving?: number | null
+          vitamin_a_per_serving?: number | null
+          vitamin_c_per_serving?: number | null
         }
         Update: {
+          calcium_per_serving?: number | null
           calories_per_serving?: number | null
           carbs_per_serving?: number | null
+          cholesterol_per_serving?: number | null
           created_at?: string
           fat_per_serving?: number | null
           fiber_per_serving?: number | null
           food_id?: string
           grams?: number
           id?: string
+          iron_per_serving?: number | null
           is_default?: boolean | null
+          magnesium_per_serving?: number | null
           name?: string
+          potassium_per_serving?: number | null
           protein_per_serving?: number | null
+          saturated_fat_per_serving?: number | null
           sodium_per_serving?: number | null
           sugar_per_serving?: number | null
+          trans_fat_per_serving?: number | null
+          vitamin_a_per_serving?: number | null
+          vitamin_c_per_serving?: number | null
         }
         Relationships: [
           {

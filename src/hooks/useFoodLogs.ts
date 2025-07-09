@@ -99,7 +99,16 @@ export const useDailySummary = (date?: string) => {
     fat: 0,
     fiber: 0,
     sugar: 0,
-    sodium: 0
+    sodium: 0,
+    saturated_fat: 0,
+    trans_fat: 0,
+    cholesterol: 0,
+    vitamin_a: 0,
+    vitamin_c: 0,
+    calcium: 0,
+    iron: 0,
+    potassium: 0,
+    magnesium: 0
   };
 
   foodLogs.forEach(log => {
@@ -110,6 +119,15 @@ export const useDailySummary = (date?: string) => {
     summary.fiber += log.fiber || 0;
     summary.sugar += log.sugar || 0;
     summary.sodium += log.sodium || 0;
+    summary.saturated_fat += log.saturated_fat || 0;
+    summary.trans_fat += log.trans_fat || 0;
+    summary.cholesterol += log.cholesterol || 0;
+    summary.vitamin_a += log.vitamin_a || 0;
+    summary.vitamin_c += log.vitamin_c || 0;
+    summary.calcium += log.calcium || 0;
+    summary.iron += log.iron || 0;
+    summary.potassium += log.potassium || 0;
+    summary.magnesium += log.magnesium || 0;
   });
 
   return { summary, loading, error };
@@ -196,6 +214,15 @@ export const useLogFood = () => {
     fiber?: number;
     sugar?: number;
     sodium?: number;
+    saturated_fat?: number;
+    trans_fat?: number;
+    cholesterol?: number;
+    vitamin_a?: number;
+    vitamin_c?: number;
+    calcium?: number;
+    iron?: number;
+    potassium?: number;
+    magnesium?: number;
     serving_size_id?: string;
   }) => {
     if (!user) throw new Error('User not authenticated');
