@@ -16,9 +16,23 @@ interface FoodItem {
 
 interface FoodPreviewListProps {
   foods: FoodItem[];
+  dailyGoals?: {
+    calories: number;
+    carbs: number;
+    protein: number;
+    fat: number;
+  };
 }
 
-export const FoodPreviewList = ({ foods }: FoodPreviewListProps) => {
+export const FoodPreviewList = ({ foods, dailyGoals }: FoodPreviewListProps) => {
+  // Default goals if not provided
+  const goals = dailyGoals || {
+    calories: 2100,
+    carbs: 250,
+    protein: 150,
+    fat: 80
+  };
+
   const getMealBadgeColor = (meal: string) => {
     switch (meal.toLowerCase()) {
       case 'breakfast':
@@ -36,44 +50,68 @@ export const FoodPreviewList = ({ foods }: FoodPreviewListProps) => {
 
   return (
     <div className="space-y-3">
-      {foods.map((food) => (
-        <Card key={food.id} className="bg-glass border-glass backdrop-blur-glass shadow-soft hover:shadow-layered transition-all duration-300 cursor-pointer group">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-1">
-                  <h4 className="font-medium text-text group-hover:text-primary transition-colors">
-                    {food.name}
-                  </h4>
-                  <Badge 
-                    variant="outline" 
-                    className={`text-xs ${getMealBadgeColor(food.meal)}`}
-                  >
-                    {food.meal}
-                  </Badge>
-                  {food.isQuickAdd && (
+      {foods.map((food) => {
+        const calPercentage = Math.round((food.calories / goals.calories) * 100);
+        const carbPercentage = Math.round((food.macros.carbs / goals.carbs) * 100);
+        const proteinPercentage = Math.round((food.macros.protein / goals.protein) * 100);
+        const fatPercentage = Math.round((food.macros.fat / goals.fat) * 100);
+
+        return (
+          <Card key={food.id} className="bg-glass border-glass backdrop-blur-glass shadow-soft hover:shadow-layered transition-all duration-300 cursor-pointer group">
+            <CardContent className="p-4">
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-2">
+                    <h4 className="font-medium text-text group-hover:text-primary transition-colors">
+                      {food.name}
+                    </h4>
                     <Badge 
                       variant="outline" 
-                      className="text-xs bg-warning/20 text-warning border-warning/30"
+                      className={`text-xs ${getMealBadgeColor(food.meal)}`}
                     >
-                      Quick Add
+                      {food.meal}
                     </Badge>
-                  )}
+                    {food.isQuickAdd && (
+                      <Badge 
+                        variant="outline" 
+                        className="text-xs bg-warning/20 text-warning border-warning/30"
+                      >
+                        Quick Add
+                      </Badge>
+                    )}
+                  </div>
+                  
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-xs font-semibold text-info bg-info/15 px-1.5 py-0.5 rounded">
+                      C: {food.macros.carbs}g
+                    </span>
+                    <span className="text-xs font-semibold text-success bg-success/15 px-1.5 py-0.5 rounded">
+                      P: {food.macros.protein}g
+                    </span>
+                    <span className="text-xs font-semibold text-warning bg-warning/15 px-1.5 py-0.5 rounded">
+                      F: {food.macros.fat}g
+                    </span>
+                  </div>
+                  
+                  <div className="text-xs text-text-muted">
+                    {carbPercentage}% • {proteinPercentage}% • {fatPercentage}% of daily goals
+                  </div>
                 </div>
-                <div className="flex items-center gap-4 text-sm text-text-muted">
-                  <span className="font-medium text-primary">{food.calories} Cal</span>
-                  <span>C: {food.macros.carbs}g</span>
-                  <span>P: {food.macros.protein}g</span>
-                  <span>F: {food.macros.fat}g</span>
+                
+                <div className="text-right ml-3">
+                  <span className="font-semibold text-primary text-lg">{food.calories} Cal</span>
+                  <div className="text-xs text-text-muted">
+                    {calPercentage}% of goal
+                  </div>
+                  <div className="w-6 h-6 rounded-full bg-bg-light border border-border flex items-center justify-center group-hover:bg-primary/10 transition-colors mt-2">
+                    <div className="w-2 h-2 rounded-full bg-primary opacity-60 group-hover:opacity-100 transition-opacity"></div>
+                  </div>
                 </div>
               </div>
-              <div className="w-8 h-8 rounded-full bg-bg-light border border-border flex items-center justify-center group-hover:bg-primary/10 transition-colors">
-                <div className="w-2 h-2 rounded-full bg-primary opacity-60 group-hover:opacity-100 transition-opacity"></div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      ))}
+            </CardContent>
+          </Card>
+        );
+      })}
       
       {foods.length === 0 && (
         <Card className="bg-glass border-glass backdrop-blur-glass shadow-soft">

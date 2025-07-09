@@ -86,7 +86,7 @@ const Index = () => {
             }
           </p>
         </div>
-        <FoodPreviewList foods={todaysFoods} />
+        <FoodPreviewList foods={todaysFoods} dailyGoals={goals} />
       </div>
     </div>
   );
