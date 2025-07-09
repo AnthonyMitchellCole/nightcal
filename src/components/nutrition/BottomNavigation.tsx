@@ -52,7 +52,7 @@ export const BottomNavigation = ({ activeTab, onTabChange, onAddFood }: BottomNa
             <div key={item.id} className="flex-1 flex justify-center">
               <button
                 onClick={() => handleNavigation(item)}
-                className={`flex flex-col items-center justify-center p-2 rounded-lg transition-all duration-200 ${
+                className={`flex flex-col items-center justify-center p-3 rounded-lg transition-all duration-200 min-h-[60px] min-w-[60px] ${
                   isActive 
                     ? 'text-primary bg-primary/10' 
                     : 'text-text-muted hover:text-text hover:bg-bg-light/50'
@@ -65,9 +65,9 @@ export const BottomNavigation = ({ activeTab, onTabChange, onAddFood }: BottomNa
                     className="w-5 h-5 mb-1" 
                   />
                 ) : (
-                  <Icon className={`w-5 h-5 mb-1 ${isActive ? 'text-primary' : ''}`} />
+                  <Icon className={`w-6 h-6 mb-1 ${isActive ? 'text-primary' : ''}`} />
                 )}
-                <span className="text-xs font-medium">{item.label}</span>
+                <span className="text-sm font-medium">{item.label}</span>
               </button>
             </div>
           );

@@ -95,7 +95,7 @@ export const AddFoodModal = ({ isOpen, onClose }: AddFoodModalProps) => {
   return (
     <>
       <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="bg-bg border-border w-[95vw] max-w-md mx-auto p-6">
+        <DialogContent className="bg-bg border-border w-[95vw] max-w-md mx-auto p-6 fixed left-1/2 top-[70%] transform -translate-x-1/2 -translate-y-1/2">
           <DialogHeader className="pb-2">
             <DialogTitle className="text-text text-center text-xl">Add Food</DialogTitle>
           </DialogHeader>
