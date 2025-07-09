@@ -127,49 +127,95 @@ const FullLog = () => {
         </Card>
 
         {/* Meals */}
-        {meals.map((meal) => (
-          <Card key={meal.id} className="bg-glass border-glass">
-            <CardHeader>
-              <CardTitle className="flex justify-between items-center">
-                <div className="flex items-center gap-3">
-                  <span>{meal.name}</span>
-                  <span className="text-sm font-normal text-text-muted">
-                    C: {meal.totals.carbs}g • P: {meal.totals.protein}g • F: {meal.totals.fat}g
-                  </span>
-                </div>
-                <span className="text-lg font-semibold text-primary">
-                  {meal.totals.calories} Cal
-                </span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              {meal.foods.length === 0 ? (
-                <p className="text-text-muted text-center py-4">
-                  No foods logged yet
-                </p>
-              ) : (
-                <div className="space-y-3">
-                  {meal.foods.map((food) => (
-                    <div key={food.id} className="flex justify-between items-center p-3 bg-bg-light rounded-lg">
-                      <div>
-                        <h4 className="font-medium text-text">{food.name}</h4>
-                        {food.brand && (
-                          <p className="text-sm text-text-muted">{food.brand}</p>
-                        )}
-                        <p className="text-sm text-text-muted">
-                          C: {food.carbs}g • P: {food.protein}g • F: {food.fat}g
-                        </p>
-                      </div>
-                      <span className="font-medium text-text">
-                        {food.calories} Cal
+        {meals.map((meal) => {
+          const mealCalPercentage = Math.round((meal.totals.calories / dailyGoals.calories) * 100);
+          const mealCarbPercentage = Math.round((meal.totals.carbs / dailyGoals.carbs) * 100);
+          const mealProteinPercentage = Math.round((meal.totals.protein / dailyGoals.protein) * 100);
+          const mealFatPercentage = Math.round((meal.totals.fat / dailyGoals.fat) * 100);
+
+          return (
+            <Card key={meal.id} className="bg-glass border-glass backdrop-blur-glass shadow-soft">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex justify-between items-start">
+                  <div className="flex flex-col gap-1">
+                    <span className="text-lg font-semibold text-text">{meal.name}</span>
+                    <div className="flex items-center gap-3 text-sm">
+                      <span className="font-bold text-info bg-info/20 px-2 py-1 rounded">
+                        C: {meal.totals.carbs}g
+                      </span>
+                      <span className="font-bold text-success bg-success/20 px-2 py-1 rounded">
+                        P: {meal.totals.protein}g
+                      </span>
+                      <span className="font-bold text-warning bg-warning/20 px-2 py-1 rounded">
+                        F: {meal.totals.fat}g
                       </span>
                     </div>
-                  ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        ))}
+                    <div className="text-xs text-text-muted">
+                      {mealCarbPercentage}% • {mealProteinPercentage}% • {mealFatPercentage}% of daily goals
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-xl font-bold text-primary">
+                      {meal.totals.calories} Cal
+                    </span>
+                    <div className="text-xs text-text-muted">
+                      {mealCalPercentage}% of goal
+                    </div>
+                  </div>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="pt-0">
+                {meal.foods.length === 0 ? (
+                  <p className="text-text-muted text-center py-4">
+                    No foods logged yet
+                  </p>
+                ) : (
+                  <div className="space-y-3">
+                    {meal.foods.map((food) => {
+                      const foodCalPercentage = Math.round((food.calories / dailyGoals.calories) * 100);
+                      const foodCarbPercentage = Math.round((food.carbs / dailyGoals.carbs) * 100);
+                      const foodProteinPercentage = Math.round((food.protein / dailyGoals.protein) * 100);
+                      const foodFatPercentage = Math.round((food.fat / dailyGoals.fat) * 100);
+
+                      return (
+                        <div key={food.id} className="flex justify-between items-start p-3 bg-bg-light rounded-lg border border-border hover:bg-bg-dark/50 transition-colors">
+                          <div className="flex-1">
+                            <h4 className="font-medium text-text mb-1">{food.name}</h4>
+                            {food.brand && (
+                              <p className="text-sm text-text-muted mb-2">{food.brand}</p>
+                            )}
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="text-xs font-semibold text-info bg-info/15 px-1.5 py-0.5 rounded">
+                                C: {food.carbs}g
+                              </span>
+                              <span className="text-xs font-semibold text-success bg-success/15 px-1.5 py-0.5 rounded">
+                                P: {food.protein}g
+                              </span>
+                              <span className="text-xs font-semibold text-warning bg-warning/15 px-1.5 py-0.5 rounded">
+                                F: {food.fat}g
+                              </span>
+                            </div>
+                            <div className="text-xs text-text-muted">
+                              {foodCarbPercentage}% • {foodProteinPercentage}% • {foodFatPercentage}% of daily goals
+                            </div>
+                          </div>
+                          <div className="text-right ml-3">
+                            <span className="font-semibold text-text text-lg">
+                              {food.calories} Cal
+                            </span>
+                            <div className="text-xs text-text-muted">
+                              {foodCalPercentage}% of goal
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
     </div>
   );
