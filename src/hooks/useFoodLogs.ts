@@ -37,8 +37,8 @@ export const useFoodLogs = (date?: string) => {
           `)
           .eq('user_id', user.id)
           .eq('log_date', logDate)
-          .order('meals.time_slot_start', { ascending: true, nullsFirst: false })
-          .order('meals.name', { ascending: true })
+          .order('meals(time_slot_start)', { ascending: true, nullsFirst: false })
+          .order('meals(name)', { ascending: true })
           .order('log_time', { ascending: true });
 
         if (error) throw error;
@@ -72,8 +72,8 @@ export const useFoodLogs = (date?: string) => {
         `)
         .eq('user_id', user.id)
         .eq('log_date', logDate)
-        .order('meals.time_slot_start', { ascending: true, nullsFirst: false })
-        .order('meals.name', { ascending: true })
+        .order('meals(time_slot_start)', { ascending: true, nullsFirst: false })
+        .order('meals(name)', { ascending: true })
         .order('log_time', { ascending: true });
 
       if (error) throw error;
