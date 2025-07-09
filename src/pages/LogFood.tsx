@@ -75,16 +75,24 @@ const LogFood = () => {
           .from('serving_sizes')
           .select('*')
           .eq('food_id', foodId)
-          .order('is_default', { ascending: false });
+          .order('is_default', { ascending: false })
+          .order('name');
 
-        if (servingError) console.warn('No serving sizes found:', servingError);
+        if (servingError) {
+          console.error('Error fetching serving sizes:', servingError);
+          toast({
+            title: "Warning",
+            description: "Could not load serving sizes. Using default 100g.",
+            variant: "destructive"
+          });
+        }
         
-        const defaultServings = servingData || [
-          { id: 'default-100', name: '100g', grams: 100, is_default: true }
+        const servings = servingData && servingData.length > 0 ? servingData : [
+          { id: 'default-100', name: '100g', grams: 100, is_default: true, food_id: foodId, created_at: new Date().toISOString() }
         ];
         
-        setServingSizes(defaultServings);
-        setSelectedServing(defaultServings[0]?.id || 'default-100');
+        setServingSizes(servings);
+        setSelectedServing(servings[0]?.id || 'default-100');
 
       } catch (error) {
         console.error('Error fetching data:', error);
