@@ -60,7 +60,7 @@ export const useFoods = (searchQuery?: string) => {
               carbs_per_serving: perServingValues.carbs,
               protein_per_serving: perServingValues.protein,
               fat_per_serving: perServingValues.fat,
-              serving_display: `1 ${unit}`
+              serving_display: `1 ${unit} (${defaultServing.grams}g)`
             };
           }
           
@@ -151,7 +151,7 @@ export const useRecentFoods = () => {
               carbs_per_serving: perServingValues.carbs,
               protein_per_serving: perServingValues.protein,
               fat_per_serving: perServingValues.fat,
-              serving_display: `1 ${unit}`
+              serving_display: `1 ${unit} (${defaultServing.grams}g)`
             };
           }
           
