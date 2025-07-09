@@ -31,7 +31,11 @@ export const DateNavigation = ({ selectedDate, onDateChange }: DateNavigationPro
   };
 
   const isToday = format(selectedDate, 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd');
-  const isFuture = selectedDate > new Date();
+  
+  // Check if next day would be in the future
+  const nextDay = new Date(selectedDate);
+  nextDay.setDate(nextDay.getDate() + 1);
+  const wouldNextDayBeFuture = format(nextDay, 'yyyy-MM-dd') > format(new Date(), 'yyyy-MM-dd');
 
   return (
     <div className="flex items-center justify-between bg-glass border-glass backdrop-blur-glass p-3 mx-4 mb-4 rounded-lg shadow-layered">
@@ -92,7 +96,7 @@ export const DateNavigation = ({ selectedDate, onDateChange }: DateNavigationPro
         variant="ghost"
         size="sm"
         onClick={goToNextDay}
-        disabled={isFuture}
+        disabled={wouldNextDayBeFuture}
         className="p-2"
       >
         <ChevronRight className="w-4 h-4" />
