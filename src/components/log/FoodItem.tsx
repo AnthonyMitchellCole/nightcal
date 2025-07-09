@@ -62,10 +62,11 @@ export const FoodItem = ({ food, foodLogId, quantity, servingSizeId, mealId, isQ
   return (
     <>
       <div 
-        className="flex justify-between items-start p-3 bg-bg-light rounded-lg border border-border hover:bg-bg-dark/50 transition-colors cursor-pointer" 
+        className="glass-elevated shadow-deep backdrop-blur-glass p-3 rounded-lg hover:shadow-glow transition-all duration-300 cursor-pointer" 
         onClick={handleClick}
       >
-      <div className="flex-1">
+        <div className="flex justify-between items-start w-full">
+        <div className="flex-1">
         <h4 className="font-medium text-text mb-1">{food.name}</h4>
         {food.brand && (
           <p className="text-sm text-text-muted mb-2">{food.brand}</p>
@@ -86,7 +87,8 @@ export const FoodItem = ({ food, foodLogId, quantity, servingSizeId, mealId, isQ
         <span className="font-semibold text-text text-lg">
           {food.calories} Cal <span className="text-xs opacity-75">({foodCalPercentage}%)</span>
         </span>
-      </div>
+        </div>
+        </div>
       </div>
 
       <QuickAddModal 
