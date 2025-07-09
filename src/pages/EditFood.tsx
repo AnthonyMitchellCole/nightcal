@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
-import { ArrowLeft, Save, Trash2, Plus, Edit2, X } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { LoadingEmblem } from '@/components/ui/loading-emblem';
+import { FoodBasicInfoForm } from '@/components/food/FoodBasicInfoForm';
+import { FoodNutritionForm } from '@/components/food/FoodNutritionForm';
+import { ServingSizesManager } from '@/components/food/ServingSizesManager';
+import { FoodActionButtons } from '@/components/food/FoodActionButtons';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
-import { useServingSizes } from '@/hooks/useServingSizes';
 import { toast } from '@/hooks/use-toast';
 
 const EditFood = () => {
@@ -20,16 +20,6 @@ const EditFood = () => {
   const [deleting, setDeleting] = useState(false);
   const [fetchLoading, setFetchLoading] = useState(true);
   const [canEdit, setCanEdit] = useState(false);
-  const [showAddServing, setShowAddServing] = useState(false);
-  const [editingServingId, setEditingServingId] = useState<string | null>(null);
-  
-  const { servingSizes, loading: servingsLoading, createServingSize, updateServingSize, deleteServingSize } = useServingSizes(id);
-  
-  const [newServing, setNewServing] = useState({
-    name: '',
-    grams: '',
-    is_default: false
-  });
   
   const [formData, setFormData] = useState({
     name: '',
@@ -171,74 +161,6 @@ const EditFood = () => {
     }
   };
 
-  const handleAddServing = async () => {
-    if (!newServing.name || !newServing.grams) {
-      toast({
-        title: "Validation Error",
-        description: "Please enter both name and grams",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    try {
-      await createServingSize({
-        name: newServing.name,
-        grams: parseFloat(newServing.grams),
-        is_default: newServing.is_default
-      });
-      
-      setNewServing({ name: '', grams: '', is_default: false });
-      setShowAddServing(false);
-      
-      toast({
-        title: "Success",
-        description: "Serving size added successfully",
-      });
-    } catch (error) {
-      console.error('Error adding serving size:', error);
-      toast({
-        title: "Error",
-        description: "Failed to add serving size",
-        variant: "destructive"
-      });
-    }
-  };
-
-  const handleDeleteServing = async (servingId: string) => {
-    try {
-      await deleteServingSize(servingId);
-      toast({
-        title: "Success",
-        description: "Serving size deleted successfully",
-      });
-    } catch (error) {
-      console.error('Error deleting serving size:', error);
-      toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Failed to delete serving size",
-        variant: "destructive"
-      });
-    }
-  };
-
-  const handleSetDefault = async (servingId: string) => {
-    try {
-      await updateServingSize(servingId, { is_default: true });
-      toast({
-        title: "Success",
-        description: "Default serving size updated",
-      });
-    } catch (error) {
-      console.error('Error updating default serving:', error);
-      toast({
-        title: "Error",
-        description: "Failed to update default serving size",
-        variant: "destructive"
-      });
-    }
-  };
-
   if (fetchLoading) {
     return (
       <div className="min-h-screen bg-bg text-text flex items-center justify-center">
@@ -275,315 +197,33 @@ const EditFood = () => {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <Card className="bg-glass border-glass">
-            <CardHeader>
-              <CardTitle>Basic Information</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <Label htmlFor="name">Food Name *</Label>
-                <Input
-                  id="name"
-                  value={formData.name}
-                  onChange={(e) => handleInputChange('name', e.target.value)}
-                  required
-                  disabled={!canEdit}
-                />
-              </div>
+          <FoodBasicInfoForm 
+            formData={formData}
+            onInputChange={handleInputChange}
+            canEdit={canEdit}
+          />
 
-              <div>
-                <Label htmlFor="brand">Brand</Label>
-                <Input
-                  id="brand"
-                  value={formData.brand}
-                  onChange={(e) => handleInputChange('brand', e.target.value)}
-                  disabled={!canEdit}
-                />
-              </div>
+          <FoodNutritionForm 
+            formData={formData}
+            onInputChange={handleInputChange}
+            canEdit={canEdit}
+          />
 
-              <div>
-                <Label htmlFor="barcode">Barcode</Label>
-                <Input
-                  id="barcode"
-                  value={formData.barcode}
-                  onChange={(e) => handleInputChange('barcode', e.target.value)}
-                  disabled={!canEdit}
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="category">Category</Label>
-                <Input
-                  id="category"
-                  value={formData.category}
-                  onChange={(e) => handleInputChange('category', e.target.value)}
-                  disabled={!canEdit}
-                />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-glass border-glass">
-            <CardHeader>
-              <CardTitle>Nutritional Information (per 100g)</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="calories">Calories *</Label>
-                  <Input
-                    id="calories"
-                    type="number"
-                    value={formData.calories_per_100g}
-                    onChange={(e) => handleInputChange('calories_per_100g', e.target.value)}
-                    required
-                    disabled={!canEdit}
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="carbs">Carbohydrates (g)</Label>
-                  <Input
-                    id="carbs"
-                    type="number"
-                    step="0.1"
-                    value={formData.carbs_per_100g}
-                    onChange={(e) => handleInputChange('carbs_per_100g', e.target.value)}
-                    disabled={!canEdit}
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="protein">Protein (g)</Label>
-                  <Input
-                    id="protein"
-                    type="number"
-                    step="0.1"
-                    value={formData.protein_per_100g}
-                    onChange={(e) => handleInputChange('protein_per_100g', e.target.value)}
-                    disabled={!canEdit}
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="fat">Fat (g)</Label>
-                  <Input
-                    id="fat"
-                    type="number"
-                    step="0.1"
-                    value={formData.fat_per_100g}
-                    onChange={(e) => handleInputChange('fat_per_100g', e.target.value)}
-                    disabled={!canEdit}
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="sugar">Sugar (g)</Label>
-                  <Input
-                    id="sugar"
-                    type="number"
-                    step="0.1"
-                    value={formData.sugar_per_100g}
-                    onChange={(e) => handleInputChange('sugar_per_100g', e.target.value)}
-                    disabled={!canEdit}
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="sodium">Sodium (mg)</Label>
-                  <Input
-                    id="sodium"
-                    type="number"
-                    step="0.1"
-                    value={formData.sodium_per_100g}
-                    onChange={(e) => handleInputChange('sodium_per_100g', e.target.value)}
-                    disabled={!canEdit}
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="fiber">Fiber (g)</Label>
-                  <Input
-                    id="fiber"
-                    type="number"
-                    step="0.1"
-                    value={formData.fiber_per_100g}
-                    onChange={(e) => handleInputChange('fiber_per_100g', e.target.value)}
-                    disabled={!canEdit}
-                  />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {canEdit && (
-            <Card className="bg-glass border-glass">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle>Serving Sizes</CardTitle>
-                  <Button 
-                    type="button"
-                    variant="outline" 
-                    size="sm"
-                    onClick={() => setShowAddServing(true)}
-                  >
-                    <Plus className="w-4 h-4 mr-2" />
-                    Add Serving
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {servingsLoading ? (
-                  <div className="flex items-center justify-center py-4">
-                    <LoadingEmblem size="sm" />
-                  </div>
-                ) : (
-                  <>
-                    {servingSizes.map((serving) => (
-                      <div key={serving.id} className="flex items-center justify-between p-3 bg-bg-light rounded-lg">
-                        <div>
-                          <div className="flex items-center space-x-2">
-                            <span className="font-medium">{serving.name}</span>
-                            {serving.is_default && (
-                              <span className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded">
-                                Default
-                              </span>
-                            )}
-                          </div>
-                          <span className="text-sm text-text-muted">{serving.grams}g</span>
-                        </div>
-                        <div className="flex space-x-2">
-                          {!serving.is_default && (
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleSetDefault(serving.id)}
-                            >
-                              Set Default
-                            </Button>
-                          )}
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleDeleteServing(serving.id)}
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      </div>
-                    ))}
-
-                    {showAddServing && (
-                      <div className="p-4 bg-bg-light rounded-lg space-y-3">
-                        <div className="flex items-center justify-between mb-3">
-                          <h4 className="font-medium">Add New Serving Size</h4>
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => {
-                              setShowAddServing(false);
-                              setNewServing({ name: '', grams: '', is_default: false });
-                            }}
-                          >
-                            <X className="w-4 h-4" />
-                          </Button>
-                        </div>
-                        
-                        <div className="grid grid-cols-2 gap-3">
-                          <div>
-                            <Label htmlFor="serving-name">Serving Name</Label>
-                            <Input
-                              id="serving-name"
-                              placeholder="e.g., 1 medium, 1 cup"
-                              value={newServing.name}
-                              onChange={(e) => setNewServing(prev => ({ ...prev, name: e.target.value }))}
-                            />
-                          </div>
-                          <div>
-                            <Label htmlFor="serving-grams">Grams</Label>
-                            <Input
-                              id="serving-grams"
-                              type="number"
-                              step="0.1"
-                              placeholder="e.g., 118"
-                              value={newServing.grams}
-                              onChange={(e) => setNewServing(prev => ({ ...prev, grams: e.target.value }))}
-                            />
-                          </div>
-                        </div>
-                        
-                        <div className="flex items-center space-x-2">
-                          <input
-                            type="checkbox"
-                            id="is-default"
-                            checked={newServing.is_default}
-                            onChange={(e) => setNewServing(prev => ({ ...prev, is_default: e.target.checked }))}
-                          />
-                          <Label htmlFor="is-default">Set as default serving size</Label>
-                        </div>
-                        
-                        <Button
-                          type="button"
-                          onClick={handleAddServing}
-                          className="w-full"
-                        >
-                          Add Serving Size
-                        </Button>
-                      </div>
-                    )}
-                  </>
-                )}
-              </CardContent>
-            </Card>
+          {id && (
+            <ServingSizesManager 
+              foodId={id}
+              canEdit={canEdit}
+            />
           )}
 
-          {canEdit && (
-            <div className="flex space-x-3">
-              <Button 
-                type="submit" 
-                disabled={loading}
-                className="flex-1"
-              >
-                {loading ? (
-                  <>
-                    <LoadingEmblem size="sm" className="mr-2" />
-                    Saving...
-                  </>
-                ) : (
-                  <>
-                    <Save className="w-4 h-4 mr-2" />
-                    Save Changes
-                  </>
-                )}
-              </Button>
-
-              <Button 
-                type="button"
-                variant="destructive"
-                onClick={handleDelete}
-                disabled={deleting}
-              >
-                {deleting ? (
-                  <LoadingEmblem size="sm" />
-                ) : (
-                  <Trash2 className="w-4 h-4" />
-                )}
-              </Button>
-            </div>
-          )}
-
-          {!canEdit && (
-            <Button 
-              type="button"
-              onClick={() => navigate(`/log-food/${id}`)}
-              className="w-full"
-            >
-              Add to Food Log
-            </Button>
-          )}
+          <FoodActionButtons
+            canEdit={canEdit}
+            loading={loading}
+            deleting={deleting}
+            onSave={handleSubmit}
+            onDelete={handleDelete}
+            onAddToLog={() => navigate(`/log-food/${id}`)}
+          />
         </form>
       </div>
     </div>
