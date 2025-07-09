@@ -9,20 +9,20 @@ All colors MUST be HSL.
 @layer base {
   :root {
     /* Nutrition Tracker Color Theme */
-    --bg-dark: 233 99% 4%;
-    --bg: 224 84% 6%;
-    --bg-light: 219 61% 10%;
-    --text: 219 100% 100%;
-    --text-muted: 219 69% 75%;
-    --highlight: 219 36% 43%;
-    --border: 219 46% 32%;
-    --border-muted: 220 65% 21%;
-    --primary: 219 78% 75%;
-    --secondary: 39 54% 61%;
-    --danger: 9 47% 65%;
-    --warning: 51 32% 52%;
-    --success: 149 31% 55%;
-    --info: 217 52% 67%;
+    --bg-dark: 244 100% 5%;
+    --bg: 238 77% 8%;
+    --bg-light: 233 59% 13%;
+    --text: 228 100% 100%;
+    --text-muted: 228 75% 78%;
+    --highlight: 231 39% 49%;
+    --border: 233 47% 37%;
+    --border-muted: 237 59% 27%;
+    --primary: 229 100% 80%;
+    --secondary: 47 58% 53%;
+    --danger: 8 68% 66%;
+    --warning: 52 59% 44%;
+    --success: 152 45% 49%;
+    --info: 217 80% 68%;
 
     /* Standard mappings for components */
     --background: var(--bg);
@@ -44,27 +44,27 @@ All colors MUST be HSL.
     --radius: 0.75rem;
 
     /* Glassmorphic effects */
-    --glass-bg: 219 61% 10% / 0.8;
-    --glass-border: 219 78% 75% / 0.2;
-    --shadow-soft: 0 4px 20px hsl(224 84% 6% / 0.3);
-    --shadow-layered: 0 2px 10px hsl(224 84% 6% / 0.2), 0 8px 30px hsl(224 84% 6% / 0.4);
+    --glass-bg: 233 59% 13% / 0.8;
+    --glass-border: 229 100% 80% / 0.2;
+    --shadow-soft: 0 4px 20px hsl(238 77% 8% / 0.3);
+    --shadow-layered: 0 2px 10px hsl(238 77% 8% / 0.2), 0 8px 30px hsl(238 77% 8% / 0.4);
   }
 
   .light {
-    --bg-dark: 218 100% 93%;
-    --bg: 218 100% 98%;
-    --bg-light: 218 100% 100%;
-    --text: 234 100% 9%;
-    --text-muted: 219 46% 32%;
-    --highlight: 219 100% 100%;
-    --border: 219 37% 55%;
-    --border-muted: 219 52% 67%;
-    --primary: 219 51% 32%;
-    --secondary: 43 100% 15%;
-    --danger: 8 36% 41%;
-    --warning: 52 58% 28%;
-    --success: 152 45% 31%;
-    --info: 217 38% 43%;
+    --bg-dark: 227 100% 95%;
+    --bg: 227 100% 100%;
+    --bg-light: 227 100% 100%;
+    --text: 254 100% 11%;
+    --text-muted: 233 47% 37%;
+    --highlight: 228 100% 100%;
+    --border: 230 51% 60%;
+    --border-muted: 229 77% 73%;
+    --primary: 233 47% 37%;
+    --secondary: 47 100% 11%;
+    --danger: 7 51% 41%;
+    --warning: 53 100% 15%;
+    --success: 161 100% 17%;
+    --info: 217 54% 44%;
 
     /* Standard mappings for light mode */
     --background: var(--bg);
@@ -85,10 +85,10 @@ All colors MUST be HSL.
     --ring: var(--primary);
 
     /* Light mode glassmorphic effects */
-    --glass-bg: 218 100% 100% / 0.9;
-    --glass-border: 219 51% 32% / 0.2;
-    --shadow-soft: 0 4px 20px hsl(218 100% 93% / 0.3);
-    --shadow-layered: 0 2px 10px hsl(218 100% 93% / 0.2), 0 8px 30px hsl(218 100% 93% / 0.4);
+    --glass-bg: 227 100% 100% / 0.9;
+    --glass-border: 233 47% 37% / 0.2;
+    --shadow-soft: 0 4px 20px hsl(227 100% 95% / 0.3);
+    --shadow-layered: 0 2px 10px hsl(227 100% 95% / 0.2), 0 8px 30px hsl(227 100% 95% / 0.4);
   }
 }
 
