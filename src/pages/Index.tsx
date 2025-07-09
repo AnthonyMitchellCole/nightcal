@@ -61,7 +61,7 @@ const Index = () => {
   const todaysFoods = foodLogs.map(log => ({
     id: log.food_id || log.id, // Use food_id if available for actual food, otherwise log id
     logId: log.id, // The actual food_log id  
-    name: log.log_type === 'quick_add' ? log.quick_add_name || 'Quick Add Entry' : log.foods?.name || 'Unknown Food',
+    name: log.log_type === 'quick_add' ? log.quick_add_name || 'Quick Add' : log.foods?.name || 'Unknown Food',
     calories: log.calories,
     meal: log.meals.name,
     mealId: log.meal_id,

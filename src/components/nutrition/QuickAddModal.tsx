@@ -29,7 +29,7 @@ interface QuickAddModalProps {
 }
 
 export const QuickAddModal = ({ isOpen, onClose, prePopulatedData }: QuickAddModalProps) => {
-  const [mode, setMode] = useState<'calories' | 'macros'>('calories');
+  const [mode, setMode] = useState<'calories' | 'macros'>('macros');
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
   const { toast } = useToast();
@@ -129,7 +129,7 @@ export const QuickAddModal = ({ isOpen, onClose, prePopulatedData }: QuickAddMod
           protein: Number(formData.protein) || 0,
           fat: Number(formData.fat) || 0,
           log_type: 'quick_add',
-          quick_add_name: formData.foodName || 'Quick Add Entry'
+          quick_add_name: formData.foodName || 'Quick Add'
         });
 
       if (logError) throw logError;
@@ -173,19 +173,19 @@ export const QuickAddModal = ({ isOpen, onClose, prePopulatedData }: QuickAddMod
           <div className="flex bg-bg-light rounded-lg p-1">
             <Button
               type="button"
-              variant={mode === 'calories' ? 'default' : 'ghost'}
-              className="flex-1"
-              onClick={() => setMode('calories')}
-            >
-              Calories Only
-            </Button>
-            <Button
-              type="button"
               variant={mode === 'macros' ? 'default' : 'ghost'}
               className="flex-1"
               onClick={() => setMode('macros')}
             >
               Full Macros
+            </Button>
+            <Button
+              type="button"
+              variant={mode === 'calories' ? 'default' : 'ghost'}
+              className="flex-1"
+              onClick={() => setMode('calories')}
+            >
+              Calories Only
             </Button>
           </div>
 
