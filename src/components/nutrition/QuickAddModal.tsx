@@ -45,7 +45,7 @@ export const QuickAddModal = ({ isOpen, onClose, prePopulatedData }: QuickAddMod
 
   const [meals, setMeals] = useState<any[]>([]);
 
-  // Fetch user meals when modal opens and reset form data when prePopulatedData changes
+  // Fetch user meals when modal opens and auto-select appropriate meal
   useEffect(() => {
     if (isOpen && user) {
       const fetchMeals = async () => {
@@ -56,11 +56,30 @@ export const QuickAddModal = ({ isOpen, onClose, prePopulatedData }: QuickAddMod
           .eq('is_active', true)
           .order('display_order');
         
-        if (data) setMeals(data);
+        if (data) {
+          setMeals(data);
+          
+          // Auto-select meal based on time slot if no pre-populated data
+          if (!prePopulatedData?.mealId) {
+            const currentHour = new Date().getHours();
+            const currentTime = `${String(currentHour).padStart(2, '0')}:${String(new Date().getMinutes()).padStart(2, '0')}:00`;
+            
+            const appropriateMeal = data.find(meal => {
+              if (!meal.time_slot_start || !meal.time_slot_end) return false;
+              return currentTime >= meal.time_slot_start && currentTime <= meal.time_slot_end;
+            });
+
+            if (appropriateMeal) {
+              setFormData(prev => ({ ...prev, mealId: appropriateMeal.id }));
+            } else if (data.length > 0) {
+              setFormData(prev => ({ ...prev, mealId: data[0].id }));
+            }
+          }
+        }
       };
       fetchMeals();
     }
-  }, [isOpen, user]);
+  }, [isOpen, user, prePopulatedData?.mealId]);
 
   // Reset form data when prePopulatedData changes
   useEffect(() => {
