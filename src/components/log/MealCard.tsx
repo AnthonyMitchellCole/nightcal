@@ -54,15 +54,15 @@ export const MealCard = ({ meal, dailyGoals }: MealCardProps) => {
           
           {/* Macros Section */}
           <div className="flex flex-col items-center gap-1 flex-1 mx-4">
-            <div className="flex items-center gap-3 text-sm">
-              <span className="font-bold text-info bg-info/20 px-2 py-1 rounded">
-                C: {meal.totals.carbs}g <span className="text-xs opacity-75">({mealCarbPercentage}%)</span>
+            <div className="flex items-center gap-2 text-xs">
+              <span className="font-semibold text-info bg-info/15 px-1.5 py-0.5 rounded">
+                C: {meal.totals.carbs}g <span className="opacity-75">({mealCarbPercentage}%)</span>
               </span>
-              <span className="font-bold text-success bg-success/20 px-2 py-1 rounded">
-                P: {meal.totals.protein}g <span className="text-xs opacity-75">({mealProteinPercentage}%)</span>
+              <span className="font-semibold text-success bg-success/15 px-1.5 py-0.5 rounded">
+                P: {meal.totals.protein}g <span className="opacity-75">({mealProteinPercentage}%)</span>
               </span>
-              <span className="font-bold text-warning bg-warning/20 px-2 py-1 rounded">
-                F: {meal.totals.fat}g <span className="text-xs opacity-75">({mealFatPercentage}%)</span>
+              <span className="font-semibold text-warning bg-warning/15 px-1.5 py-0.5 rounded">
+                F: {meal.totals.fat}g <span className="opacity-75">({mealFatPercentage}%)</span>
               </span>
             </div>
           </div>
