@@ -400,7 +400,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      validate_positive_numeric: {
+        Args: { value: number; field_name: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never

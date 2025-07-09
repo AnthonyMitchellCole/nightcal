@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { toast } from '@/hooks/use-toast';
 import { useProfile } from '@/hooks/useProfile';
+import { sanitizeDisplayName, validateFileUpload } from '@/lib/validation';
 
 interface EditProfileDialogProps {
   children: React.ReactNode;
@@ -22,22 +23,32 @@ export const EditProfileDialog = ({ children }: EditProfileDialogProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    const { error } = await updateProfile({
-      display_name: displayName || null
-    });
+    try {
+      const sanitizedName = sanitizeDisplayName(displayName);
+      
+      const { error } = await updateProfile({
+        display_name: sanitizedName || null
+      });
 
-    if (error) {
+      if (error) {
+        toast({
+          title: "Error updating profile",
+          description: error,
+          variant: "destructive"
+        });
+      } else {
+        toast({
+          title: "Profile updated",
+          description: "Your profile has been updated successfully."
+        });
+        setOpen(false);
+      }
+    } catch (err) {
       toast({
-        title: "Error updating profile",
-        description: error,
+        title: "Validation error",
+        description: err instanceof Error ? err.message : "Invalid input",
         variant: "destructive"
       });
-    } else {
-      toast({
-        title: "Profile updated",
-        description: "Your profile has been updated successfully."
-      });
-      setOpen(false);
     }
   };
 
@@ -45,42 +56,34 @@ export const EditProfileDialog = ({ children }: EditProfileDialogProps) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Validate file size (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
+    try {
+      // Validate file using our security utility
+      validateFileUpload(file);
+
+      setUploading(true);
+      const { error } = await uploadAvatar(file);
+
+      if (error) {
+        toast({
+          title: "Error uploading avatar",
+          description: error,
+          variant: "destructive"
+        });
+      } else {
+        toast({
+          title: "Avatar updated",
+          description: "Your profile picture has been updated."
+        });
+      }
+    } catch (err) {
       toast({
-        title: "File too large",
-        description: "Please select an image smaller than 5MB.",
+        title: "File validation error",
+        description: err instanceof Error ? err.message : "Invalid file",
         variant: "destructive"
       });
-      return;
+    } finally {
+      setUploading(false);
     }
-
-    // Validate file type
-    if (!file.type.startsWith('image/')) {
-      toast({
-        title: "Invalid file type",
-        description: "Please select an image file.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    setUploading(true);
-    const { error } = await uploadAvatar(file);
-
-    if (error) {
-      toast({
-        title: "Error uploading avatar",
-        description: error,
-        variant: "destructive"
-      });
-    } else {
-      toast({
-        title: "Avatar updated",
-        description: "Your profile picture has been updated."
-      });
-    }
-    setUploading(false);
   };
 
   return (

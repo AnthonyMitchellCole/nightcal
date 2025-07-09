@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import type { Tables, TablesUpdate } from '@/integrations/supabase/types';
+import { validateFileUpload, sanitizeDisplayName, getSecureErrorMessage } from '@/lib/validation';
 
 type Profile = Tables<'profiles'>;
 
@@ -29,7 +30,7 @@ export const useProfile = () => {
         setProfile(data);
       } catch (err) {
         console.error('Error fetching profile:', err);
-        setError(err instanceof Error ? err.message : 'Failed to fetch profile');
+        setError(getSecureErrorMessage(err));
       } finally {
         setLoading(false);
       }
@@ -45,9 +46,15 @@ export const useProfile = () => {
     setError(null);
 
     try {
+      // Sanitize display name if provided
+      const sanitizedUpdates = { ...updates };
+      if (sanitizedUpdates.display_name) {
+        sanitizedUpdates.display_name = sanitizeDisplayName(sanitizedUpdates.display_name);
+      }
+
       const { data, error } = await supabase
         .from('profiles')
-        .update(updates)
+        .update(sanitizedUpdates)
         .eq('user_id', user.id)
         .select()
         .single();
@@ -57,7 +64,7 @@ export const useProfile = () => {
       setProfile(data);
       return { data, error: null };
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to update profile';
+      const errorMessage = getSecureErrorMessage(err);
       setError(errorMessage);
       return { error: errorMessage };
     } finally {
@@ -69,6 +76,9 @@ export const useProfile = () => {
     if (!user) return { error: 'No user found' };
 
     try {
+      // Validate file before upload
+      validateFileUpload(file);
+
       const fileExt = file.name.split('.').pop();
       const fileName = `${user.id}.${fileExt}`;
       const filePath = `${fileName}`;
@@ -93,7 +103,7 @@ export const useProfile = () => {
 
       return { data: data.publicUrl, error: null };
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to upload avatar';
+      const errorMessage = getSecureErrorMessage(err);
       return { error: errorMessage };
     }
   };
