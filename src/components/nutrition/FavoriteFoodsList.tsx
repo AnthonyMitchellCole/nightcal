@@ -118,10 +118,16 @@ export const FavoriteFoodsList = () => {
                 <div className="flex-1">
                   <h3 className="font-medium text-text">{food.name}</h3>
                   <p className="text-sm text-text-muted">{food.brand || 'No brand'}</p>
-                  <div className="flex space-x-4 mt-2 text-xs text-text-muted">
-                    <span>F: {nutrition.fat}g</span>
-                    <span>C: {nutrition.carbs}g</span>
-                    <span>P: {nutrition.protein}g</span>
+                  <div className="flex items-center gap-2 mt-2">
+                    <span className="text-xs font-medium text-text-muted bg-border-muted/30 px-1.5 py-0.5 rounded">
+                      F: {nutrition.fat}g
+                    </span>
+                    <span className="text-xs font-medium text-text-muted bg-border-muted/30 px-1.5 py-0.5 rounded">
+                      C: {nutrition.carbs}g
+                    </span>
+                    <span className="text-xs font-medium text-text-muted bg-border-muted/30 px-1.5 py-0.5 rounded">
+                      P: {nutrition.protein}g
+                    </span>
                   </div>
                 </div>
                 <div className="text-right">
