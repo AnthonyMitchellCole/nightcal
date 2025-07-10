@@ -71,14 +71,14 @@ export const MealCard = ({ meal, dailyGoals }: MealCardProps) => {
               </div>
               
               {/* Bottom row: Macro badges */}
-              <div className="flex items-center gap-2 text-xs">
-                <span className="font-semibold text-warning bg-warning/15 px-1.5 py-0.5 rounded">
+              <div className="grid grid-cols-3 gap-1 text-xs">
+                <span className="font-semibold text-warning bg-warning/15 px-1.5 py-0.5 rounded text-center">
                   F: {meal.totals.fat}g <span className="opacity-75">({mealFatPercentage}%)</span>
                 </span>
-                <span className="font-semibold text-info bg-info/15 px-1.5 py-0.5 rounded">
+                <span className="font-semibold text-info bg-info/15 px-1.5 py-0.5 rounded text-center">
                   C: {meal.totals.carbs}g <span className="opacity-75">({mealCarbPercentage}%)</span>
                 </span>
-                <span className="font-semibold text-success bg-success/15 px-1.5 py-0.5 rounded">
+                <span className="font-semibold text-success bg-success/15 px-1.5 py-0.5 rounded text-center">
                   P: {meal.totals.protein}g <span className="opacity-75">({mealProteinPercentage}%)</span>
                 </span>
               </div>
