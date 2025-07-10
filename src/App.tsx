@@ -19,8 +19,14 @@ import EditFood from "./pages/EditFood";
 import USDASearchFood from "./pages/USDASearchFood";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
+import { useRealtimeSync } from "./hooks/useRealtimeSync";
 
 const queryClient = new QueryClient();
+
+const AppWithSync = () => {
+  useRealtimeSync(); // Enable realtime cache synchronization
+  return null;
+};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -29,6 +35,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <AuthProvider>
+        <AppWithSync />
         <ThemeProvider>
           <BrowserRouter>
           <Routes>

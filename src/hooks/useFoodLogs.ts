@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import type { Tables } from '@/integrations/supabase/types';
@@ -14,90 +14,68 @@ export interface FoodLogWithDetails extends FoodLog {
   serving_sizes: ServingSize | null;
 }
 
+// Query key factories for consistent cache management
+const foodLogsKeys = {
+  all: ['foodLogs'] as const,
+  byUser: (userId: string) => [...foodLogsKeys.all, userId] as const,
+  byDate: (userId: string, date: string) => [...foodLogsKeys.byUser(userId), date] as const,
+  dailySummary: (userId: string, date: string) => [...foodLogsKeys.byDate(userId, date), 'summary'] as const,
+  mealSummary: (userId: string, date: string) => [...foodLogsKeys.byDate(userId, date), 'meals'] as const,
+};
+
+// Fetch food logs for a specific date
+const fetchFoodLogs = async (userId: string, date: string): Promise<FoodLogWithDetails[]> => {
+  const { data, error } = await supabase
+    .from('food_logs')
+    .select(`
+      *,
+      foods (*),
+      meals (*),
+      serving_sizes (*)
+    `)
+    .eq('user_id', userId)
+    .eq('log_date', date)
+    .order('meals(time_slot_start)', { ascending: true, nullsFirst: false })
+    .order('meals(name)', { ascending: true })
+    .order('log_time', { ascending: true });
+
+  if (error) throw error;
+  return (data || []) as FoodLogWithDetails[];
+};
+
 export const useFoodLogs = (date?: string) => {
-  const [foodLogs, setFoodLogs] = useState<FoodLogWithDetails[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
+  const logDate = date || new Date().toLocaleDateString('en-CA'); // en-CA gives YYYY-MM-DD format
 
-  useEffect(() => {
-    const fetchFoodLogs = async () => {
-      if (!user) return;
+  const {
+    data: foodLogs = [],
+    isLoading: loading,
+    error: queryError,
+    refetch
+  } = useQuery({
+    queryKey: foodLogsKeys.byDate(user?.id || '', logDate),
+    queryFn: () => fetchFoodLogs(user!.id, logDate),
+    enabled: !!user,
+    staleTime: 5 * 60 * 1000, // Food logs cached for 5 minutes
+    gcTime: 15 * 60 * 1000, // Keep in memory for 15 minutes
+  });
 
-      setLoading(true);
-      setError(null);
+  const error = queryError instanceof Error ? queryError.message : null;
 
-      try {
-        // Use local timezone for date - format as YYYY-MM-DD in local timezone
-        const logDate = date || new Date().toLocaleDateString('en-CA'); // en-CA gives YYYY-MM-DD format
-        
-        const { data, error } = await supabase
-          .from('food_logs')
-          .select(`
-            *,
-            foods (*),
-            meals (*),
-            serving_sizes (*)
-          `)
-          .eq('user_id', user.id)
-          .eq('log_date', logDate)
-          .order('meals(time_slot_start)', { ascending: true, nullsFirst: false })
-          .order('meals(name)', { ascending: true })
-          .order('log_time', { ascending: true });
-
-        if (error) throw error;
-        setFoodLogs((data || []) as FoodLogWithDetails[]);
-      } catch (err) {
-        console.error('Error fetching food logs:', err);
-        setError(err instanceof Error ? err.message : 'Failed to fetch food logs');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchFoodLogs();
-  }, [user, date]);
-
-  const refetch = async () => {
-    if (!user) return;
-
-    setLoading(true);
-    setError(null);
-
-    try {
-      // Use local timezone for date - format as YYYY-MM-DD in local timezone
-      const logDate = date || new Date().toLocaleDateString('en-CA'); // en-CA gives YYYY-MM-DD format
-      
-      const { data, error } = await supabase
-        .from('food_logs')
-        .select(`
-          *,
-          foods (*),
-          meals (*),
-          serving_sizes (*)
-        `)
-        .eq('user_id', user.id)
-        .eq('log_date', logDate)
-        .order('meals(time_slot_start)', { ascending: true, nullsFirst: false })
-        .order('meals(name)', { ascending: true })
-        .order('log_time', { ascending: true });
-
-      if (error) throw error;
-      setFoodLogs((data || []) as FoodLogWithDetails[]);
-    } catch (err) {
-      console.error('Error fetching food logs:', err);
-      setError(err instanceof Error ? err.message : 'Failed to fetch food logs');
-    } finally {
-      setLoading(false);
-    }
+  return { 
+    foodLogs, 
+    loading, 
+    error, 
+    refetch: () => refetch()
   };
-
-  return { foodLogs, loading, error, refetch };
 };
 
 export const useDailySummary = (date?: string) => {
+  const { user } = useAuth();
+  const logDate = date || new Date().toLocaleDateString('en-CA');
   const { foodLogs, loading, error } = useFoodLogs(date);
 
+  // Calculate summary from cached food logs
   const summary = {
     calories: 0,
     carbs: 0,
@@ -140,8 +118,11 @@ export const useDailySummary = (date?: string) => {
 };
 
 export const useMealSummary = (date?: string) => {
+  const { user } = useAuth();
+  const logDate = date || new Date().toLocaleDateString('en-CA');
   const { foodLogs, loading, error } = useFoodLogs(date);
 
+  // Calculate meal summary from cached food logs
   const mealSummary = new Map();
 
   foodLogs.forEach(log => {
@@ -159,8 +140,8 @@ export const useMealSummary = (date?: string) => {
 
     const meal = mealSummary.get(mealId);
     meal.foods.push({
-      id: log.foods?.id || log.id, // Use food_id if available, fallback to log id
-      logId: log.id, // The actual food_log id
+      id: log.foods?.id || log.id,
+      logId: log.id,
       name: log.log_type === 'quick_add' ? log.quick_add_name || 'Quick Add' : log.foods?.name || 'Unknown Food',
       brand: log.foods?.brand || null,
       calories: log.calories,
@@ -171,7 +152,7 @@ export const useMealSummary = (date?: string) => {
       grams: log.grams,
       servingSizeId: log.serving_size_id,
       servingSizeName: log.serving_sizes?.name || null,
-      isQuickAdd: log.log_type === 'quick_add' // Add this field to the meal summary
+      isQuickAdd: log.log_type === 'quick_add'
     });
 
     meal.totals.calories += log.calories;
@@ -185,16 +166,13 @@ export const useMealSummary = (date?: string) => {
     const mealA = foodLogs.find(log => log.meal_id === a.id)?.meals;
     const mealB = foodLogs.find(log => log.meal_id === b.id)?.meals;
     
-    // If both have time slots, sort by time
     if (mealA?.time_slot_start && mealB?.time_slot_start) {
       return mealA.time_slot_start.localeCompare(mealB.time_slot_start);
     }
     
-    // If only one has time slot, put it first
     if (mealA?.time_slot_start && !mealB?.time_slot_start) return -1;
     if (!mealA?.time_slot_start && mealB?.time_slot_start) return 1;
     
-    // If neither has time slot, sort alphabetically
     return a.name.localeCompare(b.name);
   });
 
@@ -206,40 +184,38 @@ export const useMealSummary = (date?: string) => {
 };
 
 export const useLogFood = () => {
-  const [loading, setLoading] = useState(false);
   const { user } = useAuth();
+  const queryClient = useQueryClient();
 
-  const logFood = async (foodLog: {
-    food_id: string;
-    meal_id: string;
-    quantity: number;
-    grams: number;
-    calories: number;
-    carbs: number;
-    protein: number;
-    fat: number;
-    fiber?: number;
-    sugar?: number;
-    sodium?: number;
-    saturated_fat?: number;
-    trans_fat?: number;
-    cholesterol?: number;
-    vitamin_a?: number;
-    vitamin_c?: number;
-    calcium?: number;
-    iron?: number;
-    potassium?: number;
-    magnesium?: number;
-    serving_size_id?: string;
-  }) => {
-    if (!user) throw new Error('User not authenticated');
+  const logFoodMutation = useMutation({
+    mutationFn: async (foodLog: {
+      food_id: string;
+      meal_id: string;
+      quantity: number;
+      grams: number;
+      calories: number;
+      carbs: number;
+      protein: number;
+      fat: number;
+      fiber?: number;
+      sugar?: number;
+      sodium?: number;
+      saturated_fat?: number;
+      trans_fat?: number;
+      cholesterol?: number;
+      vitamin_a?: number;
+      vitamin_c?: number;
+      calcium?: number;
+      iron?: number;
+      potassium?: number;
+      magnesium?: number;
+      serving_size_id?: string;
+    }) => {
+      if (!user) throw new Error('User not authenticated');
 
-    setLoading(true);
-    try {
-      // Get current date and time in local timezone
       const now = new Date();
-      const localDate = now.toLocaleDateString('en-CA'); // YYYY-MM-DD format
-      const localTime = now.toISOString(); // Keep as ISO string for timestamp with timezone
+      const localDate = now.toLocaleDateString('en-CA');
+      const localTime = now.toISOString();
       
       const { data, error } = await supabase
         .from('food_logs')
@@ -254,13 +230,30 @@ export const useLogFood = () => {
 
       if (error) throw error;
       return data;
+    },
+    onSuccess: (data) => {
+      // Invalidate relevant queries to refetch food logs
+      const logDate = data.log_date;
+      queryClient.invalidateQueries({ 
+        queryKey: foodLogsKeys.byDate(user!.id, logDate) 
+      });
+      
+      // Also invalidate recent foods as this affects the recent list
+      queryClient.invalidateQueries({ 
+        queryKey: ['foods', 'recent', user!.id] 
+      });
+    },
+  });
+
+  const logFood = async (foodLog: Parameters<typeof logFoodMutation.mutateAsync>[0]) => {
+    try {
+      const data = await logFoodMutation.mutateAsync(foodLog);
+      return data;
     } catch (err) {
       console.error('Error logging food:', err);
       throw err;
-    } finally {
-      setLoading(false);
     }
   };
 
-  return { logFood, loading };
+  return { logFood, loading: logFoodMutation.isPending };
 };
