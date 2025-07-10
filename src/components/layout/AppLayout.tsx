@@ -81,6 +81,8 @@ export const AppLayout = () => {
   const getFloatingActions = () => {
     switch (location.pathname) {
       case '/all-foods':
+      case '/':
+      case '/full-log':
         return [
           {
             icon: Database,
@@ -90,32 +92,6 @@ export const AppLayout = () => {
           {
             icon: PlusCircle,
             label: "Add Food", 
-            onClick: () => navigate('/add-food')
-          }
-        ];
-      case '/':
-        return [
-          {
-            icon: Search,
-            label: "Search Foods",
-            onClick: () => navigate('/search-food')
-          },
-          {
-            icon: PlusCircle,
-            label: "Add Food",
-            onClick: () => navigate('/add-food')
-          }
-        ];
-      case '/full-log':
-        return [
-          {
-            icon: Search,
-            label: "Search Foods", 
-            onClick: () => navigate('/search-food')
-          },
-          {
-            icon: PlusCircle,
-            label: "Add Food",
             onClick: () => navigate('/add-food')
           }
         ];
