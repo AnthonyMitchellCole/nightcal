@@ -112,7 +112,8 @@ export const MealCard = ({ meal, dailyGoals }: MealCardProps) => {
                     servingSizeName={food.servingSizeName}
                     mealId={meal.id}
                     isQuickAdd={food.isQuickAdd}
-                    dailyGoals={dailyGoals} 
+                    dailyGoals={dailyGoals}
+                    mealTotals={meal.totals}
                   />
                 ))}
               </div>

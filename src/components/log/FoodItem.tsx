@@ -24,9 +24,15 @@ interface FoodItemProps {
     protein: number;
     fat: number;
   };
+  mealTotals: {
+    calories: number;
+    carbs: number;
+    protein: number;
+    fat: number;
+  };
 }
 
-export const FoodItem = ({ food, foodLogId, quantity, servingSizeId, servingSizeName, mealId, isQuickAdd, dailyGoals }: FoodItemProps) => {
+export const FoodItem = ({ food, foodLogId, quantity, servingSizeId, servingSizeName, mealId, isQuickAdd, dailyGoals, mealTotals }: FoodItemProps) => {
   const navigate = useNavigate();
   const [showQuickAddModal, setShowQuickAddModal] = useState(false);
   const [quickAddData, setQuickAddData] = useState<any>(null);
@@ -35,6 +41,12 @@ export const FoodItem = ({ food, foodLogId, quantity, servingSizeId, servingSize
   const foodCarbPercentage = Math.round((food.carbs / dailyGoals.carbs) * 100);
   const foodProteinPercentage = Math.round((food.protein / dailyGoals.protein) * 100);
   const foodFatPercentage = Math.round((food.fat / dailyGoals.fat) * 100);
+
+  // Calculate percentage of this food item within the meal
+  const mealCalPercentage = mealTotals.calories > 0 ? Math.round((food.calories / mealTotals.calories) * 100) : 0;
+  const mealCarbPercentage = mealTotals.carbs > 0 ? Math.round((food.carbs / mealTotals.carbs) * 100) : 0;
+  const mealProteinPercentage = mealTotals.protein > 0 ? Math.round((food.protein / mealTotals.protein) * 100) : 0;
+  const mealFatPercentage = mealTotals.fat > 0 ? Math.round((food.fat / mealTotals.fat) * 100) : 0;
 
   // Parse serving size name to extract number and unit, then multiply by quantity
   const getServingInfo = () => {
@@ -105,14 +117,25 @@ export const FoodItem = ({ food, foodLogId, quantity, servingSizeId, servingSize
             {servingInfo}
           </p>
         )}
-        <div className="text-xs text-text-muted">
-          F: {food.fat}g • C: {food.carbs}g • P: {food.protein}g
+        <div className="flex items-center gap-2 mb-1">
+          <span className="text-xs font-semibold text-warning bg-warning/15 px-1.5 py-0.5 rounded">
+            F: {food.fat}g <span className="opacity-75">({foodFatPercentage}%)</span>
+          </span>
+          <span className="text-xs font-semibold text-info bg-info/15 px-1.5 py-0.5 rounded">
+            C: {food.carbs}g <span className="opacity-75">({foodCarbPercentage}%)</span>
+          </span>
+          <span className="text-xs font-semibold text-success bg-success/15 px-1.5 py-0.5 rounded">
+            P: {food.protein}g <span className="opacity-75">({foodProteinPercentage}%)</span>
+          </span>
         </div>
       </div>
       <div className="text-right ml-3">
         <span className="font-semibold text-text text-lg">
           {food.calories} Cal <span className="text-xs opacity-75">({foodCalPercentage}%)</span>
         </span>
+        <div className="text-xs text-text-muted">
+          {mealCalPercentage}% of meal
+        </div>
         </div>
         </div>
       </div>
