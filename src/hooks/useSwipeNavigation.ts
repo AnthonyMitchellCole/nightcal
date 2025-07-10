@@ -1,6 +1,7 @@
 import { useCallback, useRef, useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useIsMobile } from './use-mobile';
+import { NAVIGATION_CONFIG, useNavigationState } from './useNavigationState';
 
 interface TouchPoint {
   x: number;
@@ -19,6 +20,7 @@ export const useSwipeNavigation = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const isMobile = useIsMobile();
+  const { getAdjacentRoute, getCurrentRouteIndex } = useNavigationState();
   const touchStart = useRef<TouchPoint | null>(null);
   const touchEnd = useRef<TouchPoint | null>(null);
   const [swipeState, setSwipeState] = useState<SwipeState>({
@@ -28,33 +30,9 @@ export const useSwipeNavigation = () => {
     willNavigate: false
   });
 
-  // Define the main navigation routes in order
-  const routes = ['/', '/full-log', '/all-foods', '/settings'];
-  const routeNames = ['Home', 'Full Log', 'All Foods', 'Settings'];
-  
-  const getCurrentRouteIndex = useCallback(() => {
-    return routes.indexOf(location.pathname);
-  }, [location.pathname]);
-
   const getRouteInfo = useCallback((direction: 'left' | 'right') => {
-    const currentIndex = getCurrentRouteIndex();
-    if (currentIndex === -1) return null;
-
-    let nextIndex;
-    if (direction === 'left') {
-      // Swipe left = go to next page (like mobile carousel behavior)
-      nextIndex = currentIndex < routes.length - 1 ? currentIndex + 1 : 0;
-    } else {
-      // Swipe right = go to previous page
-      nextIndex = currentIndex > 0 ? currentIndex - 1 : routes.length - 1;
-    }
-
-    return {
-      route: routes[nextIndex],
-      name: routeNames[nextIndex],
-      index: nextIndex
-    };
-  }, [getCurrentRouteIndex]);
+    return getAdjacentRoute(direction);
+  }, [getAdjacentRoute]);
 
   const navigateToRoute = useCallback((direction: 'left' | 'right') => {
     const routeInfo = getRouteInfo(direction);
@@ -194,11 +172,6 @@ export const useSwipeNavigation = () => {
     handleTouchEnd,
     isSwipeEnabled: isMobile && getCurrentRouteIndex() !== -1,
     swipeState,
-    currentRoute: {
-      index: getCurrentRouteIndex(),
-      name: routeNames[getCurrentRouteIndex()] || 'Unknown',
-      total: routes.length
-    },
     getRouteInfo
   };
 };

@@ -6,21 +6,17 @@ import { InstallPrompt } from "@/components/pwa/InstallPrompt";
 import { SwipeIndicator } from "@/components/ui/swipe-indicator";
 import { FloatingActionMenu } from "@/components/ui/floating-action-menu";
 import { useSwipeNavigation } from "@/hooks/useSwipeNavigation";
+import { useNavigationState } from "@/hooks/useNavigationState";
 import { Database, PlusCircle, Search } from "lucide-react";
 
 export const AppLayout = () => {
   const [isAddFoodModalOpen, setIsAddFoodModalOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const [displayActiveTab, setDisplayActiveTab] = useState(() => {
-    // Initialize with correct active tab based on current route
-    const path = location.pathname;
-    if (path === '/') return 'home';
-    if (path === '/full-log') return 'log';
-    if (path === '/all-foods') return 'foods';
-    if (path === '/settings') return 'settings';
-    return 'home';
-  });
+  
+  // Use unified navigation state
+  const { activeTab, setActiveTab } = useNavigationState();
+  
   const { 
     handleTouchStart, 
     handleTouchMove, 
@@ -30,29 +26,9 @@ export const AppLayout = () => {
     getRouteInfo 
   } = useSwipeNavigation();
   
-  // Determine active tab based on current route
-  const getActiveTab = () => {
-    const path = location.pathname;
-    if (path === '/') return 'home';
-    if (path === '/full-log') return 'log';
-    if (path === '/all-foods') return 'foods';
-    if (path === '/settings') return 'settings';
-    return 'home';
-  };
-
-  // Update display active tab with a delay during swipe navigation to prevent flickering
-  useEffect(() => {
-    if (!swipeState.isActive) {
-      // When not swiping, immediately update to current route
-      setDisplayActiveTab(getActiveTab());
-    }
-    // When swiping, keep the old active tab until swipe is complete
-  }, [location.pathname, swipeState.isActive]);
-
   const handleTabChange = (tab: string) => {
-    // Navigation is handled by the BottomNavigation component itself
-    // This is just for maintaining state consistency
-    setDisplayActiveTab(tab);
+    // Update the active tab immediately for instant UI feedback
+    setActiveTab(tab);
   };
 
   // Add touch event listeners for swipe navigation
@@ -164,7 +140,7 @@ export const AppLayout = () => {
 
       {/* Persistent Bottom Navigation */}
       <BottomNavigation 
-        activeTab={displayActiveTab} 
+        activeTab={activeTab} 
         onTabChange={handleTabChange}
         onAddFood={() => setIsAddFoodModalOpen(true)}
       />
