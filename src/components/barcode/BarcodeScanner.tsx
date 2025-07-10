@@ -32,6 +32,15 @@ export const BarcodeScanner = ({ onResult, onError, onClose }: BarcodeScannerPro
       } else {
         onError('Error accessing camera. Please try again.');
       }
+    },
+    // Performance optimizations
+    constraints: {
+      video: {
+        facingMode: 'environment', // Use back camera for better barcode scanning
+        width: { ideal: 1280 },
+        height: { ideal: 720 },
+        frameRate: { ideal: 30, max: 30 } // Limit frame rate for better performance
+      }
     }
   });
 
