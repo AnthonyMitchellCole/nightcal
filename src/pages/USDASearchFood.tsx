@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ArrowLeft, Search, Database } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -11,6 +11,14 @@ const USDASearchFood = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
   const { foods, loading, error, totalHits } = useUSDASearch(searchQuery);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    // Auto-focus the search input when component mounts
+    if (searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, []);
 
   const handleSelectFood = (food: USDAFood) => {
     // Create URL params to pre-populate the Add Food form
@@ -64,6 +72,7 @@ const USDASearchFood = () => {
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-text-muted" />
           <Input
+            ref={searchInputRef}
             type="text"
             placeholder="Search USDA food database..."
             value={searchQuery}
