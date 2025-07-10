@@ -6,7 +6,7 @@ import { InstallPrompt } from "@/components/pwa/InstallPrompt";
 import { SwipeIndicator } from "@/components/ui/swipe-indicator";
 import { FloatingActionMenu } from "@/components/ui/floating-action-menu";
 import { useSwipeNavigation } from "@/hooks/useSwipeNavigation";
-import { Database, PlusCircle } from "lucide-react";
+import { Database, PlusCircle, Search } from "lucide-react";
 
 export const AppLayout = () => {
   const [isAddFoodModalOpen, setIsAddFoodModalOpen] = useState(false);
@@ -79,21 +79,49 @@ export const AppLayout = () => {
 
   // Define floating actions for specific pages
   const getFloatingActions = () => {
-    if (location.pathname === '/all-foods') {
-      return [
-        {
-          icon: Database,
-          label: "USDA Search",
-          onClick: () => navigate('/usda-search')
-        },
-        {
-          icon: PlusCircle,
-          label: "Add Food", 
-          onClick: () => navigate('/add-food')
-        }
-      ];
+    switch (location.pathname) {
+      case '/all-foods':
+        return [
+          {
+            icon: Database,
+            label: "USDA Search",
+            onClick: () => navigate('/usda-search')
+          },
+          {
+            icon: PlusCircle,
+            label: "Add Food", 
+            onClick: () => navigate('/add-food')
+          }
+        ];
+      case '/':
+        return [
+          {
+            icon: Search,
+            label: "Search Foods",
+            onClick: () => navigate('/search-food')
+          },
+          {
+            icon: PlusCircle,
+            label: "Add Food",
+            onClick: () => navigate('/add-food')
+          }
+        ];
+      case '/full-log':
+        return [
+          {
+            icon: Search,
+            label: "Search Foods", 
+            onClick: () => navigate('/search-food')
+          },
+          {
+            icon: PlusCircle,
+            label: "Add Food",
+            onClick: () => navigate('/add-food')
+          }
+        ];
+      default:
+        return null;
     }
-    return null;
   };
 
   const floatingActions = getFloatingActions();
