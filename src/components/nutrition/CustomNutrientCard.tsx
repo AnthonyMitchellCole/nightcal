@@ -37,7 +37,8 @@ export const CustomNutrientCard = ({ nutrients, isPlaceholder = false }: CustomN
           ) : (
             <div className="space-y-6">
               {nutrients.map((nutrient, index) => {
-                const percentage = Math.min((nutrient.current / nutrient.goal) * 100, 100);
+                const percentage = Math.round((nutrient.current / nutrient.goal) * 100);
+                const progressValue = Math.min(percentage, 100); // Cap progress bar at 100% for visual purposes
                 return (
                   <div key={index} className="space-y-3">
                     <div className="flex items-center justify-between">
@@ -49,21 +50,15 @@ export const CustomNutrientCard = ({ nutrients, isPlaceholder = false }: CustomN
                     
                     <div className="space-y-2">
                       <Progress 
-                        value={percentage} 
+                        value={progressValue} 
                         className="h-3 bg-border-muted shadow-inner"
                       />
                       <div className="flex justify-between text-xs text-text-muted">
                         <span>0{nutrient.unit}</span>
-                        <span>{Math.round(percentage)}%</span>
+                        <span className={percentage > 100 ? 'text-warning font-medium' : ''}>{percentage}%</span>
                         <span>{nutrient.goal}{nutrient.unit}</span>
                       </div>
                     </div>
-
-                    {percentage >= 100 && (
-                      <div className="text-xs text-success font-medium">
-                        🎉 Goal reached!
-                      </div>
-                    )}
                   </div>
                 );
               })}

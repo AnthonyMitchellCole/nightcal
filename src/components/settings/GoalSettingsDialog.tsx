@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Target, Calculator } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -17,18 +17,32 @@ interface GoalSettingsDialogProps {
 export const GoalSettingsDialog = ({ children }: GoalSettingsDialogProps) => {
   const { profile, updateProfile, loading } = useProfile();
   const [open, setOpen] = useState(false);
-  const [goalType, setGoalType] = useState<'grams' | 'percentage'>(profile?.goal_type as 'grams' | 'percentage' || 'grams');
+  const [goalType, setGoalType] = useState<'grams' | 'percentage'>('grams');
   
   // Grams mode state
-  const [calories, setCalories] = useState(profile?.calorie_goal?.toString() || '2000');
-  const [carbGrams, setCarbGrams] = useState(profile?.carb_goal_grams?.toString() || '250');
-  const [proteinGrams, setProteinGrams] = useState(profile?.protein_goal_grams?.toString() || '150');
-  const [fatGrams, setFatGrams] = useState(profile?.fat_goal_grams?.toString() || '80');
+  const [calories, setCalories] = useState('2000');
+  const [carbGrams, setCarbGrams] = useState('250');
+  const [proteinGrams, setProteinGrams] = useState('150');
+  const [fatGrams, setFatGrams] = useState('80');
 
   // Percentage mode state
-  const [carbPercent, setCarbPercent] = useState(profile?.carb_goal_percentage || 50);
-  const [proteinPercent, setProteinPercent] = useState(profile?.protein_goal_percentage || 25);
-  const [fatPercent, setFatPercent] = useState(profile?.fat_goal_percentage || 25);
+  const [carbPercent, setCarbPercent] = useState(50);
+  const [proteinPercent, setProteinPercent] = useState(25);
+  const [fatPercent, setFatPercent] = useState(25);
+
+  // Auto-fill form with current profile values when dialog opens
+  useEffect(() => {
+    if (open && profile) {
+      setGoalType(profile.goal_type as 'grams' | 'percentage' || 'grams');
+      setCalories(profile.calorie_goal?.toString() || '2000');
+      setCarbGrams(profile.carb_goal_grams?.toString() || '250');
+      setProteinGrams(profile.protein_goal_grams?.toString() || '150');
+      setFatGrams(profile.fat_goal_grams?.toString() || '80');
+      setCarbPercent(profile.carb_goal_percentage || 50);
+      setProteinPercent(profile.protein_goal_percentage || 25);
+      setFatPercent(profile.fat_goal_percentage || 25);
+    }
+  }, [open, profile]);
 
   const totalPercent = carbPercent + proteinPercent + fatPercent;
   const isValidPercentage = Math.abs(totalPercent - 100) < 0.1;
