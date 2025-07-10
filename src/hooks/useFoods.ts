@@ -51,8 +51,6 @@ export const useFoods = (searchQuery?: string) => {
           
           if (defaultServing) {
             const perServingValues = calculatePerServing(food, defaultServing.grams);
-            // Extract unit from serving name (format: "1 unit")
-            const unit = defaultServing.name.replace(/^1\s*/, ''); // Remove "1 " from the beginning
             return {
               ...food,
               default_serving: defaultServing,
@@ -60,7 +58,7 @@ export const useFoods = (searchQuery?: string) => {
               carbs_per_serving: perServingValues.carbs,
               protein_per_serving: perServingValues.protein,
               fat_per_serving: perServingValues.fat,
-              serving_display: `1 ${unit} (${defaultServing.grams}g)`
+              serving_display: defaultServing.name
             };
           }
           
@@ -142,8 +140,6 @@ export const useRecentFoods = () => {
           
           if (defaultServing) {
             const perServingValues = calculatePerServing(food, defaultServing.grams);
-            // Extract unit from serving name (format: "1 unit")
-            const unit = defaultServing.name.replace(/^1\s*/, ''); // Remove "1 " from the beginning
             return {
               ...food,
               default_serving: defaultServing,
@@ -151,7 +147,7 @@ export const useRecentFoods = () => {
               carbs_per_serving: perServingValues.carbs,
               protein_per_serving: perServingValues.protein,
               fat_per_serving: perServingValues.fat,
-              serving_display: `1 ${unit} (${defaultServing.grams}g)`
+              serving_display: defaultServing.name
             };
           }
           

@@ -144,12 +144,12 @@ const LogFood = () => {
     fat: profile?.fat_goal_grams || 80
   };
 
-  // Calculate remaining amounts (goals - current intake)
+  // Calculate remaining amounts (goals - current intake) - can be negative if over goal
   const remaining = {
-    calories: Math.max(0, dailyGoals.calories - summary.calories),
-    carbs: Math.max(0, dailyGoals.carbs - summary.carbs),
-    protein: Math.max(0, dailyGoals.protein - summary.protein),
-    fat: Math.max(0, dailyGoals.fat - summary.fat)
+    calories: dailyGoals.calories - summary.calories,
+    carbs: dailyGoals.carbs - summary.carbs,
+    protein: dailyGoals.protein - summary.protein,
+    fat: dailyGoals.fat - summary.fat
   };
 
   if (loading || !food || summaryLoading || profileLoading) {
@@ -321,15 +321,15 @@ const LogFood = () => {
                 </div>
                 <div className="text-lg text-text">
                   = {Math.round(summary.calories + calculatedNutrition.calories)} / {dailyGoals.calories} Cal 
-                  <span className="font-bold text-text"> ({Math.max(0, dailyGoals.calories - Math.round(summary.calories + calculatedNutrition.calories))} left)</span>
+                  <span className="font-bold text-text"> ({dailyGoals.calories - Math.round(summary.calories + calculatedNutrition.calories)} left)</span>
                 </div>
               </div>
               <div className="space-y-1">
                 <div className="text-lg font-semibold text-text">
-                  {Math.round((calculatedNutrition.calories / dailyGoals.calories) * 100)}% of goal
+                  {Math.round(((summary.calories + calculatedNutrition.calories) / dailyGoals.calories) * 100)}% of goal
                 </div>
                 <div className="text-sm font-medium text-text-muted">
-                  {remaining.calories > 0 ? Math.round((calculatedNutrition.calories / remaining.calories) * 100) : '100+'}% of remaining
+                  {remaining.calories > 0 ? Math.round((calculatedNutrition.calories / remaining.calories) * 100) : Math.round((calculatedNutrition.calories / Math.abs(remaining.calories)) * 100) + '+'}% of remaining
                 </div>
               </div>
             </div>
@@ -342,7 +342,7 @@ const LogFood = () => {
                     <span className="text-text-muted/70">{Math.round(summary.fat)}g + </span>
                     <span className="font-semibold text-warning">{calculatedNutrition.fat}g</span>
                     <span className="text-text"> = {Math.round(summary.fat + calculatedNutrition.fat)}g</span>
-                    <span className="text-text-muted"> / {dailyGoals.fat}g </span><span className="font-bold">({Math.max(0, dailyGoals.fat - Math.round(summary.fat + calculatedNutrition.fat))}g left)</span>
+                    <span className="text-text-muted"> / {dailyGoals.fat}g </span><span className="font-bold">({dailyGoals.fat - Math.round(summary.fat + calculatedNutrition.fat)}g left)</span>
                   </div>
                 </div>
                 <div className="relative h-3 bg-border-muted rounded-full overflow-hidden">
@@ -361,8 +361,8 @@ const LogFood = () => {
                   />
                 </div>
                 <div className="flex justify-between text-xs text-text-muted mt-1">
-                  <span>{Math.round((calculatedNutrition.fat / dailyGoals.fat) * 100)}% of goal</span>
-                  <span>{remaining.fat > 0 ? Math.round((calculatedNutrition.fat / remaining.fat) * 100) : '100+'}% of remaining</span>
+                  <span>{Math.round(((summary.fat + calculatedNutrition.fat) / dailyGoals.fat) * 100)}% of goal</span>
+                  <span>{remaining.fat > 0 ? Math.round((calculatedNutrition.fat / remaining.fat) * 100) : Math.round((calculatedNutrition.fat / Math.abs(remaining.fat)) * 100) + '+'}% of remaining</span>
                 </div>
               </div>
               <div>
@@ -372,7 +372,7 @@ const LogFood = () => {
                     <span className="text-text-muted/70">{Math.round(summary.carbs)}g + </span>
                     <span className="font-semibold text-info">{calculatedNutrition.carbs}g</span>
                     <span className="text-text"> = {Math.round(summary.carbs + calculatedNutrition.carbs)}g</span>
-                    <span className="text-text-muted"> / {dailyGoals.carbs}g </span><span className="font-bold">({Math.max(0, dailyGoals.carbs - Math.round(summary.carbs + calculatedNutrition.carbs))}g left)</span>
+                    <span className="text-text-muted"> / {dailyGoals.carbs}g </span><span className="font-bold">({dailyGoals.carbs - Math.round(summary.carbs + calculatedNutrition.carbs)}g left)</span>
                   </div>
                 </div>
                 <div className="relative h-3 bg-border-muted rounded-full overflow-hidden">
@@ -391,8 +391,8 @@ const LogFood = () => {
                   />
                 </div>
                 <div className="flex justify-between text-xs text-text-muted mt-1">
-                  <span>{Math.round((calculatedNutrition.carbs / dailyGoals.carbs) * 100)}% of goal</span>
-                  <span>{remaining.carbs > 0 ? Math.round((calculatedNutrition.carbs / remaining.carbs) * 100) : '100+'}% of remaining</span>
+                  <span>{Math.round(((summary.carbs + calculatedNutrition.carbs) / dailyGoals.carbs) * 100)}% of goal</span>
+                  <span>{remaining.carbs > 0 ? Math.round((calculatedNutrition.carbs / remaining.carbs) * 100) : Math.round((calculatedNutrition.carbs / Math.abs(remaining.carbs)) * 100) + '+'}% of remaining</span>
                 </div>
               </div>
               <div>
@@ -402,7 +402,7 @@ const LogFood = () => {
                     <span className="text-text-muted/70">{Math.round(summary.protein)}g + </span>
                     <span className="font-semibold text-success">{calculatedNutrition.protein}g</span>
                     <span className="text-text"> = {Math.round(summary.protein + calculatedNutrition.protein)}g</span>
-                    <span className="text-text-muted"> / {dailyGoals.protein}g </span><span className="font-bold">({Math.max(0, dailyGoals.protein - Math.round(summary.protein + calculatedNutrition.protein))}g left)</span>
+                    <span className="text-text-muted"> / {dailyGoals.protein}g </span><span className="font-bold">({dailyGoals.protein - Math.round(summary.protein + calculatedNutrition.protein)}g left)</span>
                   </div>
                 </div>
                 <div className="relative h-3 bg-border-muted rounded-full overflow-hidden">
@@ -421,8 +421,8 @@ const LogFood = () => {
                   />
                 </div>
                 <div className="flex justify-between text-xs text-text-muted mt-1">
-                  <span>{Math.round((calculatedNutrition.protein / dailyGoals.protein) * 100)}% of goal</span>
-                  <span>{remaining.protein > 0 ? Math.round((calculatedNutrition.protein / remaining.protein) * 100) : '100+'}% of remaining</span>
+                  <span>{Math.round(((summary.protein + calculatedNutrition.protein) / dailyGoals.protein) * 100)}% of goal</span>
+                  <span>{remaining.protein > 0 ? Math.round((calculatedNutrition.protein / remaining.protein) * 100) : Math.round((calculatedNutrition.protein / Math.abs(remaining.protein)) * 100) + '+'}% of remaining</span>
                 </div>
               </div>
             </div>

@@ -36,13 +36,31 @@ export const FoodItem = ({ food, foodLogId, quantity, servingSizeId, servingSize
   const foodProteinPercentage = Math.round((food.protein / dailyGoals.protein) * 100);
   const foodFatPercentage = Math.round((food.fat / dailyGoals.fat) * 100);
 
-  // Extract unit from serving size name (format: "1 unit")
+  // Parse serving size name to extract number and unit, then multiply by quantity
   const getServingInfo = () => {
     if (isQuickAdd || !servingSizeName) return null;
     
-    // Extract unit from "1 unit" format
-    const unit = servingSizeName.replace(/^1\s*/, ''); // Remove "1 " from the beginning
-    return `${quantity} ${unit}`;
+    // Extract number/fraction and unit from serving size name (e.g., "1 cup", "1/2 cup", "6 meatballs")
+    const match = servingSizeName.match(/^([\d./]+)\s*(.+)$/);
+    if (match) {
+      const [, servingNumber, unit] = match;
+      // Convert fraction to decimal if needed
+      let multiplier = 1;
+      if (servingNumber.includes('/')) {
+        const [numerator, denominator] = servingNumber.split('/');
+        multiplier = parseFloat(numerator) / parseFloat(denominator);
+      } else {
+        multiplier = parseFloat(servingNumber);
+      }
+      
+      const totalAmount = quantity * multiplier;
+      // Format the number nicely (remove unnecessary decimals)
+      const formattedAmount = totalAmount % 1 === 0 ? totalAmount.toString() : totalAmount.toFixed(1);
+      return `${formattedAmount} ${unit}`;
+    }
+    
+    // Fallback - just show quantity and serving name
+    return `${quantity} × ${servingSizeName}`;
   };
 
   const servingInfo = getServingInfo();
