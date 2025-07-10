@@ -50,7 +50,7 @@ export function FloatingActionMenu({ items, className }: FloatingActionMenuProps
                 item.onClick();
                 setIsOpen(false);
               }}
-              className="h-12 w-12 rounded-full shadow-elegant hover:shadow-glow transition-all duration-200 border-primary/20 bg-background/80 backdrop-blur-sm hover:bg-primary/10"
+              className="h-12 w-12 rounded-full shadow-elegant hover:shadow-glow transition-all duration-200 border-primary/40 bg-background/80 backdrop-blur-sm hover:bg-primary/10"
             >
               <item.icon className="h-5 w-5" />
             </Button>
@@ -64,7 +64,7 @@ export function FloatingActionMenu({ items, className }: FloatingActionMenuProps
         variant="outline"
         onClick={toggleMenu}
         className={cn(
-          "h-14 w-14 rounded-full shadow-elegant hover:shadow-glow transition-all duration-300 border-primary/20 bg-background/80 backdrop-blur-sm hover:bg-primary/10",
+          "h-14 w-14 rounded-full shadow-elegant hover:shadow-glow transition-all duration-300 border-primary/40 bg-background/80 backdrop-blur-sm hover:bg-primary/10",
           isOpen && "rotate-12"
         )}
       >
