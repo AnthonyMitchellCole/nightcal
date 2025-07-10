@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -38,6 +38,7 @@ const LogFood = () => {
   const [meals, setMeals] = useState<any[]>([]);
   const [servingSizes, setServingSizes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const quantityInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -135,6 +136,13 @@ const LogFood = () => {
 
     fetchData();
   }, [foodId, user, navigate, toast, presetMealId, presetServingSizeId]);
+
+  // Auto-focus quantity input when food data is loaded
+  useEffect(() => {
+    if (!loading && food && quantityInputRef.current) {
+      quantityInputRef.current.focus();
+    }
+  }, [loading, food]);
 
   // Get goals from profile or use defaults
   const dailyGoals = {
@@ -261,6 +269,7 @@ const LogFood = () => {
         <div className="space-y-2">
           <Label htmlFor="quantity">Quantity</Label>
           <Input
+            ref={quantityInputRef}
             id="quantity"
             type="number"
             step="0.1"

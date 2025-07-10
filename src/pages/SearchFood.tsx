@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ArrowLeft, Plus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -11,6 +11,14 @@ const SearchFood = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
   const navigate = useNavigate();
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  // Auto-focus search input on mount
+  useEffect(() => {
+    if (searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, []);
 
   // Debounce search query
   useEffect(() => {
@@ -43,6 +51,7 @@ const SearchFood = () => {
       <div className="p-4 space-y-4">
         {/* Search Input */}
         <Input
+          ref={searchInputRef}
           type="text"
           placeholder="Search for a food..."
           value={searchQuery}

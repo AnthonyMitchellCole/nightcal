@@ -1,19 +1,20 @@
 import { MacroProgressCard } from "@/components/nutrition/MacroProgressCard";
 import { CalorieSummaryCard } from "@/components/nutrition/CalorieSummaryCard";
 import { CustomNutrientCard } from "@/components/nutrition/CustomNutrientCard";
-import { FoodPreviewList } from "@/components/nutrition/FoodPreviewList";
-import { useDailySummary, useFoodLogs } from "@/hooks/useFoodLogs";
+import { FavoriteFoodsList } from "@/components/nutrition/FavoriteFoodsList";
+import { useDailySummary } from "@/hooks/useFoodLogs";
 import { useProfile } from "@/hooks/useProfile";
+import { useFavoriteFoods } from "@/hooks/useFavoriteFoods";
 import { LoadingEmblem } from "@/components/ui/loading-emblem";
 const SUPABASE_URL = "https://ebdtrwkrelzbtjdwuxbk.supabase.co";
 const logoUrl = `${SUPABASE_URL}/storage/v1/object/public/branding/nightcal-logo.png`;
 
 const Index = () => {
   const { summary, loading: summaryLoading } = useDailySummary();
-  const { foodLogs, loading: logsLoading } = useFoodLogs();
   const { profile, loading: profileLoading } = useProfile();
+  const { favoriteFoods, loading: favoritesLoading } = useFavoriteFoods();
 
-  const loading = summaryLoading || logsLoading || profileLoading;
+  const loading = summaryLoading || profileLoading;
 
   // Default goals if profile not loaded
   const goals = {
@@ -57,23 +58,6 @@ const Index = () => {
     });
   }
 
-  // Transform food logs for FoodPreviewList
-  const todaysFoods = foodLogs.map(log => ({
-    id: log.food_id || log.id, // Use food_id if available for actual food, otherwise log id
-    logId: log.id, // The actual food_log id  
-    name: log.log_type === 'quick_add' ? log.quick_add_name || 'Quick Add' : log.foods?.name || 'Unknown Food',
-    calories: log.calories,
-    meal: log.meals.name,
-    mealId: log.meal_id,
-    quantity: log.quantity,
-    servingSizeId: log.serving_size_id,
-    isQuickAdd: log.log_type === 'quick_add',
-    macros: {
-      carbs: Math.round(log.carbs),
-      protein: Math.round(log.protein),
-      fat: Math.round(log.fat)
-    }
-  }));
 
   if (loading) {
     return (
@@ -113,18 +97,20 @@ const Index = () => {
         </div>
       </div>
 
-      {/* Food Preview List */}
+      {/* Favorite Foods List */}
       <div className="px-4">
         <div className="mb-4">
-          <h2 className="text-xl font-semibold text-text">Today's Foods</h2>
+          <h2 className="text-xl font-semibold text-text">Favorite Foods</h2>
           <p className="text-sm text-text-muted">
-            {todaysFoods.length === 0 
-              ? "No foods logged yet today" 
-              : `${todaysFoods.length} item${todaysFoods.length !== 1 ? 's' : ''} logged`
+            {favoritesLoading 
+              ? "Loading favorites..." 
+              : favoriteFoods.length === 0
+                ? "No favorite foods yet"
+                : `${favoriteFoods.length} favorite food${favoriteFoods.length !== 1 ? 's' : ''}`
             }
           </p>
         </div>
-        <FoodPreviewList foods={todaysFoods} dailyGoals={goals} />
+        <FavoriteFoodsList />
       </div>
     </div>
   );
