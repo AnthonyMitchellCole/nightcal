@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Save, Calculator } from 'lucide-react';
 import {
   Dialog,
@@ -33,6 +33,7 @@ export const QuickAddModal = ({ isOpen, onClose, prePopulatedData }: QuickAddMod
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
   const { toast } = useToast();
+  const fatInputRef = useRef<HTMLInputElement>(null);
 
   const [formData, setFormData] = useState({
     foodName: prePopulatedData?.foodName || '',
@@ -94,6 +95,16 @@ export const QuickAddModal = ({ isOpen, onClose, prePopulatedData }: QuickAddMod
       });
     }
   }, [prePopulatedData]);
+
+  // Auto-focus fat input when modal opens and is in macros mode
+  useEffect(() => {
+    if (isOpen && mode === 'macros' && fatInputRef.current) {
+      // Small delay to ensure the modal is fully rendered
+      setTimeout(() => {
+        fatInputRef.current?.focus();
+      }, 100);
+    }
+  }, [isOpen, mode]);
 
   const handleChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -255,6 +266,7 @@ export const QuickAddModal = ({ isOpen, onClose, prePopulatedData }: QuickAddMod
                 <div>
                   <Label htmlFor="fat">Fat (g)</Label>
                   <Input
+                    ref={fatInputRef}
                     id="fat"
                     type="number"
                     step="0.1"

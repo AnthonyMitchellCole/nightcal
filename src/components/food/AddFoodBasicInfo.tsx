@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -17,6 +18,15 @@ interface AddFoodBasicInfoProps {
 }
 
 export const AddFoodBasicInfo = ({ basicData, onDataChange, onNext }: AddFoodBasicInfoProps) => {
+  const foodNameInputRef = useRef<HTMLInputElement>(null);
+
+  // Auto-focus food name input on mount
+  useEffect(() => {
+    if (foodNameInputRef.current) {
+      foodNameInputRef.current.focus();
+    }
+  }, []);
+
   return (
     <Card className="bg-glass border-glass">
       <CardHeader>
@@ -26,6 +36,7 @@ export const AddFoodBasicInfo = ({ basicData, onDataChange, onNext }: AddFoodBas
         <div>
           <Label htmlFor="name">Food Name *</Label>
           <Input
+            ref={foodNameInputRef}
             id="name"
             value={basicData.name}
             onChange={(e) => onDataChange('name', e.target.value)}
