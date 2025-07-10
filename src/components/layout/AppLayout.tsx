@@ -103,22 +103,28 @@ export const AppLayout = () => {
   const floatingActions = getFloatingActions();
 
   return (
-    <div className={`min-h-screen bg-bg text-text relative ${swipeState.isActive ? 'overflow-hidden' : ''}`}>
-      {/* Main content area with swipe transform */}
-      <div 
-        className="pb-20 transition-transform duration-200 ease-out will-change-transform"
-        style={{
-          transform: swipeState.isActive && swipeState.direction 
-            ? `translateX(${
-                swipeState.direction === 'right' 
-                  ? Math.min(swipeState.progress * 100, 25) 
-                  : -Math.min(swipeState.progress * 100, 25)
-              }px)`
-            : 'translateX(0)'
-        }}
-      >
+    <div className="min-h-screen bg-bg text-text relative">
+      {/* Main content area - no transform to avoid layout issues */}
+      <div className="pb-20">
         <Outlet />
       </div>
+
+      {/* Visual transform overlay for swipe effect */}
+      {swipeState.isActive && (
+        <div 
+          className="fixed inset-0 bg-bg pointer-events-none z-40"
+          style={{
+            transform: swipeState.direction 
+              ? `translateX(${
+                  swipeState.direction === 'right' 
+                    ? Math.min(swipeState.progress * 100, 25) 
+                    : -Math.min(swipeState.progress * 100, 25)
+                }px)`
+              : 'translateX(0)',
+            opacity: 0.8
+          }}
+        />
+      )}
 
       {/* Swipe Indicator */}
       <SwipeIndicator
