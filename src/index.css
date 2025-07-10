@@ -126,6 +126,8 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground font-sans;
+    overflow-x: hidden; /* Prevent horizontal scroll during swipe animations */
+    position: relative;
   }
 }
 

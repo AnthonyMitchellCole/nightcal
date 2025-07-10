@@ -103,10 +103,10 @@ export const AppLayout = () => {
   const floatingActions = getFloatingActions();
 
   return (
-    <div className="min-h-screen bg-bg text-text relative">
+    <div className="min-h-screen bg-bg text-text relative overflow-hidden">
       {/* Main content area with swipe transform */}
       <div 
-        className="pb-20 transition-transform duration-200 ease-out"
+        className="pb-20 transition-transform duration-200 ease-out will-change-transform"
         style={{
           transform: swipeState.isActive && swipeState.direction 
             ? `translateX(${
