@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { LoadingEmblem } from '@/components/ui/loading-emblem';
+import { FloatingActionMenu } from '@/components/ui/floating-action-menu';
 import { useFoods } from '@/hooks/useFoods';
 
 const AllFoods = () => {
@@ -22,6 +23,21 @@ const AllFoods = () => {
 
   const { foods, loading } = useFoods(debouncedQuery);
 
+  const floatingActions = [
+    {
+      icon: Database,
+      label: "USDA Search",
+      onClick: () => navigate('/usda-search'),
+      variant: "outline" as const
+    },
+    {
+      icon: Plus,
+      label: "Add Food",
+      onClick: () => navigate('/add-food'),
+      variant: "default" as const
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-bg text-text">
       {/* Header */}
@@ -35,24 +51,6 @@ const AllFoods = () => {
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <h1 className="text-lg font-semibold">All Foods</h1>
-          <div className="flex-1" />
-          <div className="flex space-x-2">
-            <Button 
-              size="sm"
-              variant="outline"
-              onClick={() => navigate('/usda-search')}
-            >
-              <Database className="w-4 h-4 mr-2" />
-              USDA Search
-            </Button>
-            <Button 
-              size="sm"
-              onClick={() => navigate('/add-food')}
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Add Food
-            </Button>
-          </div>
         </div>
         
         {/* Search */}
@@ -118,6 +116,9 @@ const AllFoods = () => {
           </div>
         )}
       </div>
+
+      {/* Floating Action Menu */}
+      <FloatingActionMenu items={floatingActions} />
     </div>
   );
 };
