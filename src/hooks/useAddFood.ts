@@ -29,7 +29,7 @@ export const useAddFood = (initialBasicData: BasicData, initialServingData?: Par
   const { createFood, loading } = useCreateFood();
   const { toast } = useToast();
 
-  const [step, setStep] = useState<'basic' | 'serving' | 'review'>(initialServingData ? 'serving' : 'basic');
+  const [step, setStep] = useState<'basic' | 'serving' | 'review'>(initialServingData ? 'review' : 'basic');
   const [basicData, setBasicData] = useState<BasicData>(initialBasicData);
   const [servingData, setServingData] = useState<ServingData | null>(
     initialServingData ? {

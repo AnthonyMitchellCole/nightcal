@@ -27,28 +27,48 @@ interface ServingSizeNutritionFormProps {
   }) => void;
   onCancel: () => void;
   loading?: boolean;
+  initialData?: {
+    name?: string;
+    grams?: number;
+    calories?: number;
+    carbs?: number;
+    protein?: number;
+    fat?: number;
+    sugar?: number;
+    sodium?: number;
+    fiber?: number;
+    saturated_fat?: number;
+    trans_fat?: number;
+    cholesterol?: number;
+    vitamin_a?: number;
+    vitamin_c?: number;
+    calcium?: number;
+    iron?: number;
+    potassium?: number;
+    magnesium?: number;
+  };
 }
 
-export const ServingSizeNutritionForm = ({ onSubmit, onCancel, loading }: ServingSizeNutritionFormProps) => {
+export const ServingSizeNutritionForm = ({ onSubmit, onCancel, loading, initialData }: ServingSizeNutritionFormProps) => {
   const [formData, setFormData] = useState({
-    name: '',
-    grams: '',
-    calories: '',
-    carbs: '',
-    protein: '',
-    fat: '',
-    sugar: '',
-    sodium: '',
-    fiber: '',
-    saturated_fat: '',
-    trans_fat: '',
-    cholesterol: '',
-    vitamin_a: '',
-    vitamin_c: '',
-    calcium: '',
-    iron: '',
-    potassium: '',
-    magnesium: '',
+    name: initialData?.name?.toString() || '',
+    grams: initialData?.grams?.toString() || '',
+    calories: initialData?.calories?.toString() || '',
+    carbs: initialData?.carbs?.toString() || '',
+    protein: initialData?.protein?.toString() || '',
+    fat: initialData?.fat?.toString() || '',
+    sugar: initialData?.sugar?.toString() || '',
+    sodium: initialData?.sodium?.toString() || '',
+    fiber: initialData?.fiber?.toString() || '',
+    saturated_fat: initialData?.saturated_fat?.toString() || '',
+    trans_fat: initialData?.trans_fat?.toString() || '',
+    cholesterol: initialData?.cholesterol?.toString() || '',
+    vitamin_a: initialData?.vitamin_a?.toString() || '',
+    vitamin_c: initialData?.vitamin_c?.toString() || '',
+    calcium: initialData?.calcium?.toString() || '',
+    iron: initialData?.iron?.toString() || '',
+    potassium: initialData?.potassium?.toString() || '',
+    magnesium: initialData?.magnesium?.toString() || '',
   });
 
   const handleChange = (field: string, value: string) => {

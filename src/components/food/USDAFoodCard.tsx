@@ -1,5 +1,4 @@
 import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { USDAFood } from '@/hooks/useUSDASearch';
 
 interface USDAFoodCardProps {
@@ -9,7 +8,10 @@ interface USDAFoodCardProps {
 
 export const USDAFoodCard = ({ food, onSelect }: USDAFoodCardProps) => {
   return (
-    <Card className="bg-glass border-glass hover:bg-bg-light transition-colors">
+    <Card 
+      className="bg-glass border-glass hover:bg-bg-light transition-colors cursor-pointer"
+      onClick={() => onSelect(food)}
+    >
       <CardContent className="p-4">
         <div className="flex justify-between items-start">
           <div className="flex-1 pr-4">
@@ -28,16 +30,10 @@ export const USDAFoodCard = ({ food, onSelect }: USDAFoodCardProps) => {
             </div>
           </div>
           <div className="text-right">
-            <span className="text-lg font-semibold text-text block mb-2">
+            <span className="text-lg font-semibold text-text">
               {food.nutrition.calories} Cal
             </span>
-            <Button 
-              size="sm" 
-              onClick={() => onSelect(food)}
-              className="w-full"
-            >
-              Select
-            </Button>
+            <p className="text-xs text-text-muted">per 100g</p>
           </div>
         </div>
       </CardContent>

@@ -41,11 +41,11 @@ export const useUSDASearch = (searchQuery?: string) => {
   const [totalHits, setTotalHits] = useState(0);
   const [debouncedQuery, setDebouncedQuery] = useState('');
 
-  // Debounce search query
+  // Debounce search query - longer delay to avoid wasting API calls
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedQuery(searchQuery || '');
-    }, 300);
+    }, 1500); // Increased to 1.5 seconds
     return () => clearTimeout(timer);
   }, [searchQuery]);
 

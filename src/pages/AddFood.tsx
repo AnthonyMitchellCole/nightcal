@@ -75,6 +75,7 @@ const AddFood = () => {
             onSubmit={handleServingSubmit}
             onCancel={() => setStep('basic')}
             loading={loading}
+            initialData={initialServingData}
           />
         )}
         {step === 'review' && servingData && (
