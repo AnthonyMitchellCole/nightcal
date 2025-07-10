@@ -56,7 +56,7 @@ export const AppLayout = () => {
   const nextPageInfo = swipeState.direction ? getRouteInfo(swipeState.direction) : null;
 
   return (
-    <div className="min-h-screen bg-bg text-text overflow-hidden">
+    <div className="min-h-screen bg-bg text-text relative">
       {/* Main content area with swipe transform */}
       <div 
         className="pb-20 transition-transform duration-200 ease-out"
