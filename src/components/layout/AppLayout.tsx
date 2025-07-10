@@ -1,14 +1,17 @@
 import { useState, useEffect } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { BottomNavigation } from "@/components/nutrition/BottomNavigation";
 import { AddFoodModal } from "@/components/nutrition/AddFoodModal";
 import { InstallPrompt } from "@/components/pwa/InstallPrompt";
 import { SwipeIndicator } from "@/components/ui/swipe-indicator";
+import { FloatingActionMenu } from "@/components/ui/floating-action-menu";
 import { useSwipeNavigation } from "@/hooks/useSwipeNavigation";
+import { Database, PlusCircle } from "lucide-react";
 
 export const AppLayout = () => {
   const [isAddFoodModalOpen, setIsAddFoodModalOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const [displayActiveTab, setDisplayActiveTab] = useState(() => {
     // Initialize with correct active tab based on current route
     const path = location.pathname;
@@ -74,6 +77,27 @@ export const AppLayout = () => {
   // Get next page info for swipe indicator
   const nextPageInfo = swipeState.direction ? getRouteInfo(swipeState.direction) : null;
 
+  // Define floating actions for specific pages
+  const getFloatingActions = () => {
+    if (location.pathname === '/all-foods') {
+      return [
+        {
+          icon: Database,
+          label: "USDA Search",
+          onClick: () => navigate('/usda-search')
+        },
+        {
+          icon: PlusCircle,
+          label: "Add Food", 
+          onClick: () => navigate('/add-food')
+        }
+      ];
+    }
+    return null;
+  };
+
+  const floatingActions = getFloatingActions();
+
   return (
     <div className="min-h-screen bg-bg text-text relative">
       {/* Main content area with swipe transform */}
@@ -113,6 +137,9 @@ export const AppLayout = () => {
         isOpen={isAddFoodModalOpen}
         onClose={() => setIsAddFoodModalOpen(false)}
       />
+
+      {/* Floating Action Menu - Outside transform container */}
+      {floatingActions && <FloatingActionMenu items={floatingActions} />}
 
       {/* PWA Install Prompt */}
       <InstallPrompt />

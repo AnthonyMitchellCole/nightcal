@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { LoadingEmblem } from '@/components/ui/loading-emblem';
-import { FloatingActionMenu } from '@/components/ui/floating-action-menu';
 import { useFoods } from '@/hooks/useFoods';
 
 const AllFoods = () => {
@@ -22,19 +21,6 @@ const AllFoods = () => {
   }, [searchQuery]);
 
   const { foods, loading } = useFoods(debouncedQuery);
-
-  const floatingActions = [
-    {
-      icon: Database,
-      label: "USDA Search",
-      onClick: () => navigate('/usda-search')
-    },
-    {
-      icon: PlusCircle,
-      label: "Add Food",
-      onClick: () => navigate('/add-food')
-    }
-  ];
 
   return (
     <div className="min-h-screen bg-bg text-text">
@@ -115,8 +101,6 @@ const AllFoods = () => {
         )}
       </div>
 
-      {/* Floating Action Menu */}
-      <FloatingActionMenu items={floatingActions} />
     </div>
   );
 };

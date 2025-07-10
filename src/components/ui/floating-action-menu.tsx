@@ -20,16 +20,8 @@ export function FloatingActionMenu({ items, className }: FloatingActionMenuProps
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
-  // Debug logging to check positioning
-  console.log('FloatingActionMenu rendered');
-
   return (
-    <div className={cn("fixed bottom-[5.5rem] right-6 z-50", className)} style={{
-      position: 'fixed',
-      bottom: '5.5rem',
-      right: '1.5rem',
-      zIndex: 9999
-    }}>
+    <div className={cn("fixed bottom-[5.5rem] right-6 z-50", className)}>
       {/* Action Items */}
       <div className={cn(
         "flex flex-col-reverse space-y-reverse space-y-3 mb-3 transition-all duration-300 ease-out",
