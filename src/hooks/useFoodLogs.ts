@@ -15,7 +15,7 @@ export interface FoodLogWithDetails extends FoodLog {
 }
 
 // Query key factories for consistent cache management
-const foodLogsKeys = {
+export const foodLogsKeys = {
   all: ['foodLogs'] as const,
   byUser: (userId: string) => [...foodLogsKeys.all, userId] as const,
   byDate: (userId: string, date: string) => [...foodLogsKeys.byUser(userId), date] as const,

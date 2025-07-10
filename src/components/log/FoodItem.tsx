@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import { QuickAddModal } from '../nutrition/QuickAddModal';
 
@@ -34,6 +34,7 @@ interface FoodItemProps {
 
 export const FoodItem = ({ food, foodLogId, quantity, servingSizeId, servingSizeName, mealId, isQuickAdd, dailyGoals, mealTotals }: FoodItemProps) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [showQuickAddModal, setShowQuickAddModal] = useState(false);
   const [quickAddData, setQuickAddData] = useState<any>(null);
   
@@ -78,6 +79,12 @@ export const FoodItem = ({ food, foodLogId, quantity, servingSizeId, servingSize
   const servingInfo = getServingInfo();
 
   const handleClick = () => {
+    // Check if we're on the Full Log page - if so, navigate to edit instead of log
+    if (location.pathname === '/full-log') {
+      navigate(`/edit-food-log/${foodLogId}`);
+      return;
+    }
+
     if (isQuickAdd) {
       // Open Quick Add modal with pre-populated data
       setQuickAddData({
