@@ -118,13 +118,13 @@ export const FoodItem = ({ food, foodLogId, quantity, servingSizeId, servingSize
           </p>
         )}
         <div className="flex items-center gap-2 mb-1">
-          <span className="text-xs font-semibold text-text-muted bg-border px-1.5 py-0.5 rounded">
+          <span className="text-xs font-medium text-text-muted bg-border-muted/30 px-1.5 py-0.5 rounded">
             F: {food.fat}g <span className="opacity-75">({foodFatPercentage}%)</span>
           </span>
-          <span className="text-xs font-semibold text-text-muted bg-border px-1.5 py-0.5 rounded">
+          <span className="text-xs font-medium text-text-muted bg-border-muted/30 px-1.5 py-0.5 rounded">
             C: {food.carbs}g <span className="opacity-75">({foodCarbPercentage}%)</span>
           </span>
-          <span className="text-xs font-semibold text-text-muted bg-border px-1.5 py-0.5 rounded">
+          <span className="text-xs font-medium text-text-muted bg-border-muted/30 px-1.5 py-0.5 rounded">
             P: {food.protein}g <span className="opacity-75">({foodProteinPercentage}%)</span>
           </span>
         </div>
