@@ -9,6 +9,15 @@ import { useSwipeNavigation } from "@/hooks/useSwipeNavigation";
 export const AppLayout = () => {
   const [isAddFoodModalOpen, setIsAddFoodModalOpen] = useState(false);
   const location = useLocation();
+  const [displayActiveTab, setDisplayActiveTab] = useState(() => {
+    // Initialize with correct active tab based on current route
+    const path = location.pathname;
+    if (path === '/') return 'home';
+    if (path === '/full-log') return 'log';
+    if (path === '/all-foods') return 'foods';
+    if (path === '/settings') return 'settings';
+    return 'home';
+  });
   const { 
     handleTouchStart, 
     handleTouchMove, 
@@ -28,9 +37,19 @@ export const AppLayout = () => {
     return 'home';
   };
 
+  // Update display active tab with a delay during swipe navigation to prevent flickering
+  useEffect(() => {
+    if (!swipeState.isActive) {
+      // When not swiping, immediately update to current route
+      setDisplayActiveTab(getActiveTab());
+    }
+    // When swiping, keep the old active tab until swipe is complete
+  }, [location.pathname, swipeState.isActive]);
+
   const handleTabChange = (tab: string) => {
     // Navigation is handled by the BottomNavigation component itself
     // This is just for maintaining state consistency
+    setDisplayActiveTab(tab);
   };
 
   // Add touch event listeners for swipe navigation
@@ -84,7 +103,7 @@ export const AppLayout = () => {
 
       {/* Persistent Bottom Navigation */}
       <BottomNavigation 
-        activeTab={getActiveTab()} 
+        activeTab={displayActiveTab} 
         onTabChange={handleTabChange}
         onAddFood={() => setIsAddFoodModalOpen(true)}
       />
