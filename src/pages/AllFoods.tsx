@@ -27,14 +27,12 @@ const AllFoods = () => {
     {
       icon: Database,
       label: "USDA Search",
-      onClick: () => navigate('/usda-search'),
-      variant: "outline" as const
+      onClick: () => navigate('/usda-search')
     },
     {
       icon: PlusCircle,
       label: "Add Food",
-      onClick: () => navigate('/add-food'),
-      variant: "default" as const
+      onClick: () => navigate('/add-food')
     }
   ];
 

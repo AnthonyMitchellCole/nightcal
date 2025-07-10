@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Apple, X } from 'lucide-react';
+import { Apple } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -45,7 +45,7 @@ export function FloatingActionMenu({ items, className }: FloatingActionMenuProps
             {/* Button */}
             <Button
               size="icon"
-              variant={item.variant || "default"}
+              variant="secondary"
               onClick={() => {
                 item.onClick();
                 setIsOpen(false);
@@ -61,17 +61,14 @@ export function FloatingActionMenu({ items, className }: FloatingActionMenuProps
       {/* Main FAB */}
       <Button
         size="icon"
+        variant="secondary"
         onClick={toggleMenu}
         className={cn(
           "h-14 w-14 rounded-full shadow-elegant hover:shadow-glow transition-all duration-300",
-          isOpen && "rotate-45"
+          isOpen && "rotate-12"
         )}
       >
-        {isOpen ? (
-          <X className="h-6 w-6" />
-        ) : (
-          <Apple className="h-6 w-6" />
-        )}
+        <Apple className="h-6 w-6" />
       </Button>
     </div>
   );
