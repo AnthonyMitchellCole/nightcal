@@ -16,6 +16,7 @@ import AddFood from "./pages/AddFood";
 import FullLog from "./pages/FullLog";
 import AllFoods from "./pages/AllFoods";
 import EditFood from "./pages/EditFood";
+import USDASearchFood from "./pages/USDASearchFood";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
@@ -45,6 +46,7 @@ const App = () => (
               <Route path="edit-food/:id" element={<EditFood />} />
               <Route path="full-log" element={<FullLog />} />
               <Route path="all-foods" element={<AllFoods />} />
+              <Route path="usda-search" element={<USDASearchFood />} />
               <Route path="settings" element={<Settings />} />
             </Route>
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

@@ -12,10 +12,23 @@ const AddFood = () => {
 
   const initialBasicData = {
     name: searchParams.get('name') || '',
-    brand: '',
+    brand: searchParams.get('brand') || '',
     barcode: searchParams.get('barcode') || '',
-    category: ''
+    category: searchParams.get('category') || '',
   };
+
+  // Check for pre-filled serving data from URL params (e.g., from USDA search)
+  const initialServingData = searchParams.get('source') === 'usda' ? {
+    name: searchParams.get('servingName') || '100g',
+    grams: Number(searchParams.get('servingGrams')) || 100,
+    calories: Number(searchParams.get('calories')) || 0,
+    carbs: Number(searchParams.get('carbs')) || 0,
+    protein: Number(searchParams.get('protein')) || 0,
+    fat: Number(searchParams.get('fat')) || 0,
+    sugar: searchParams.get('sugar') ? Number(searchParams.get('sugar')) : undefined,
+    sodium: searchParams.get('sodium') ? Number(searchParams.get('sodium')) : undefined,
+    fiber: searchParams.get('fiber') ? Number(searchParams.get('fiber')) : undefined,
+  } : undefined;
 
   const {
     step,
@@ -26,7 +39,7 @@ const AddFood = () => {
     handleBasicChange,
     handleServingSubmit,
     handleFinalSubmit
-  } = useAddFood(initialBasicData);
+  } = useAddFood(initialBasicData, initialServingData);
 
   return (
     <div className="min-h-screen bg-bg text-text">

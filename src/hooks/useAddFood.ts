@@ -24,14 +24,26 @@ interface ServingData {
   fiber?: number;
 }
 
-export const useAddFood = (initialBasicData: BasicData) => {
+export const useAddFood = (initialBasicData: BasicData, initialServingData?: Partial<ServingData>) => {
   const navigate = useNavigate();
   const { createFood, loading } = useCreateFood();
   const { toast } = useToast();
 
-  const [step, setStep] = useState<'basic' | 'serving' | 'review'>('basic');
+  const [step, setStep] = useState<'basic' | 'serving' | 'review'>(initialServingData ? 'serving' : 'basic');
   const [basicData, setBasicData] = useState<BasicData>(initialBasicData);
-  const [servingData, setServingData] = useState<ServingData | null>(null);
+  const [servingData, setServingData] = useState<ServingData | null>(
+    initialServingData ? {
+      name: initialServingData.name || '100g',
+      grams: initialServingData.grams || 100,
+      calories: initialServingData.calories || 0,
+      carbs: initialServingData.carbs || 0,
+      protein: initialServingData.protein || 0,
+      fat: initialServingData.fat || 0,
+      sugar: initialServingData.sugar,
+      sodium: initialServingData.sodium,
+      fiber: initialServingData.fiber,
+    } : null
+  );
 
   const handleBasicChange = (field: string, value: string) => {
     setBasicData(prev => ({ ...prev, [field]: value }));

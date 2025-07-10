@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ArrowLeft, Plus, Search } from 'lucide-react';
+import { ArrowLeft, Plus, Search, Database } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -36,13 +36,23 @@ const AllFoods = () => {
           </Button>
           <h1 className="text-lg font-semibold">All Foods</h1>
           <div className="flex-1" />
-          <Button 
-            size="sm"
-            onClick={() => navigate('/add-food')}
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            Add Food
-          </Button>
+          <div className="flex space-x-2">
+            <Button 
+              size="sm"
+              variant="outline"
+              onClick={() => navigate('/usda-search')}
+            >
+              <Database className="w-4 h-4 mr-2" />
+              USDA Search
+            </Button>
+            <Button 
+              size="sm"
+              onClick={() => navigate('/add-food')}
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Add Food
+            </Button>
+          </div>
         </div>
         
         {/* Search */}
