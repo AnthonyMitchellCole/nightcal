@@ -109,21 +109,48 @@ export const AppLayout = () => {
         <Outlet />
       </div>
 
-      {/* Visual transform overlay for swipe effect */}
-      {swipeState.isActive && (
-        <div 
-          className="fixed inset-0 bg-bg pointer-events-none z-40"
-          style={{
-            transform: swipeState.direction 
-              ? `translateX(${
+      {/* Slide animation overlay for swipe feedback */}
+      {swipeState.isActive && swipeState.direction && (
+        <>
+          {/* Current page overlay with slide effect */}
+          <div 
+            className="fixed inset-0 bg-bg pointer-events-none z-40"
+            style={{
+              transform: `translateX(${
+                swipeState.direction === 'right' 
+                  ? Math.min(swipeState.progress * 25, 25) 
+                  : -Math.min(swipeState.progress * 25, 25)
+              }%)`,
+              transition: 'none'
+            }}
+          >
+            <div className="w-full h-full bg-bg opacity-90" />
+          </div>
+          
+          {/* Next page preview */}
+          {nextPageInfo && (
+            <div 
+              className="fixed inset-0 pointer-events-none z-30 flex items-center justify-center"
+              style={{
+                transform: `translateX(${
                   swipeState.direction === 'right' 
-                    ? Math.min(swipeState.progress * 100, 25) 
-                    : -Math.min(swipeState.progress * 100, 25)
-                }px)`
-              : 'translateX(0)',
-            opacity: 0.8
-          }}
-        />
+                    ? -100 + Math.min(swipeState.progress * 25, 25)
+                    : 100 - Math.min(swipeState.progress * 25, 25)
+                }%)`,
+                transition: 'none'
+              }}
+            >
+              <div className="text-center">
+                <div className="text-sm text-text-muted mb-2">
+                  {swipeState.direction === 'right' ? '← Previous' : 'Next →'}
+                </div>
+                <div className="text-lg font-medium text-text">
+                  {nextPageInfo.name}
+                </div>
+              </div>
+            </div>
+          )}
+        </>
       )}
 
       {/* Swipe Indicator */}

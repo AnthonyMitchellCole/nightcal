@@ -41,12 +41,12 @@ export const useSwipeNavigation = () => {
     if (currentIndex === -1) return null;
 
     let nextIndex;
-    if (direction === 'right') {
+    if (direction === 'left') {
+      // Swipe left = go to next page (like mobile carousel behavior)
+      nextIndex = currentIndex < routes.length - 1 ? currentIndex + 1 : 0;
+    } else {
       // Swipe right = go to previous page
       nextIndex = currentIndex > 0 ? currentIndex - 1 : routes.length - 1;
-    } else {
-      // Swipe left = go to next page  
-      nextIndex = currentIndex < routes.length - 1 ? currentIndex + 1 : 0;
     }
 
     return {
