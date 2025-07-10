@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ArrowLeft, Plus, Search, Database } from 'lucide-react';
+import { ArrowLeft, PlusCircle, Search, Database } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -31,7 +31,7 @@ const AllFoods = () => {
       variant: "outline" as const
     },
     {
-      icon: Plus,
+      icon: PlusCircle,
       label: "Add Food",
       onClick: () => navigate('/add-food'),
       variant: "default" as const
@@ -110,7 +110,7 @@ const AllFoods = () => {
           <div className="text-center py-8">
             <p className="text-text-muted mb-4">No foods found for "{searchQuery}"</p>
             <Button onClick={() => navigate(`/add-food?name=${encodeURIComponent(searchQuery)}`)}>
-              <Plus className="w-4 h-4 mr-2" />
+              <PlusCircle className="w-4 h-4 mr-2" />
               Add "{searchQuery}" as new food
             </Button>
           </div>

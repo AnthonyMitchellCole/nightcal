@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, X } from 'lucide-react';
+import { Apple, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -70,7 +70,7 @@ export function FloatingActionMenu({ items, className }: FloatingActionMenuProps
         {isOpen ? (
           <X className="h-6 w-6" />
         ) : (
-          <Plus className="h-6 w-6" />
+          <Apple className="h-6 w-6" />
         )}
       </Button>
     </div>
