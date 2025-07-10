@@ -3,12 +3,20 @@ import { Outlet, useLocation } from "react-router-dom";
 import { BottomNavigation } from "@/components/nutrition/BottomNavigation";
 import { AddFoodModal } from "@/components/nutrition/AddFoodModal";
 import { InstallPrompt } from "@/components/pwa/InstallPrompt";
+import { SwipeIndicator } from "@/components/ui/swipe-indicator";
 import { useSwipeNavigation } from "@/hooks/useSwipeNavigation";
 
 export const AppLayout = () => {
   const [isAddFoodModalOpen, setIsAddFoodModalOpen] = useState(false);
   const location = useLocation();
-  const { handleTouchStart, handleTouchMove, handleTouchEnd, isSwipeEnabled } = useSwipeNavigation();
+  const { 
+    handleTouchStart, 
+    handleTouchMove, 
+    handleTouchEnd, 
+    isSwipeEnabled, 
+    swipeState,
+    getRouteInfo 
+  } = useSwipeNavigation();
   
   // Determine active tab based on current route
   const getActiveTab = () => {
@@ -34,7 +42,7 @@ export const AppLayout = () => {
     const touchEndHandler = () => handleTouchEnd();
 
     document.addEventListener('touchstart', touchStartHandler, { passive: true });
-    document.addEventListener('touchmove', touchMoveHandler, { passive: true });
+    document.addEventListener('touchmove', touchMoveHandler, { passive: false }); // Not passive to allow preventDefault
     document.addEventListener('touchend', touchEndHandler, { passive: true });
 
     return () => {
@@ -44,12 +52,35 @@ export const AppLayout = () => {
     };
   }, [isSwipeEnabled, handleTouchStart, handleTouchMove, handleTouchEnd]);
 
+  // Get next page info for swipe indicator
+  const nextPageInfo = swipeState.direction ? getRouteInfo(swipeState.direction) : null;
+
   return (
-    <div className="min-h-screen bg-bg text-text">
-      {/* Main content area */}
-      <div className="pb-20">
+    <div className="min-h-screen bg-bg text-text overflow-hidden">
+      {/* Main content area with swipe transform */}
+      <div 
+        className="pb-20 transition-transform duration-200 ease-out"
+        style={{
+          transform: swipeState.isActive && swipeState.direction 
+            ? `translateX(${
+                swipeState.direction === 'right' 
+                  ? Math.min(swipeState.progress * 100, 25) 
+                  : -Math.min(swipeState.progress * 100, 25)
+              }px)`
+            : 'translateX(0)'
+        }}
+      >
         <Outlet />
       </div>
+
+      {/* Swipe Indicator */}
+      <SwipeIndicator
+        isActive={swipeState.isActive}
+        direction={swipeState.direction}
+        progress={swipeState.progress}
+        willNavigate={swipeState.willNavigate}
+        nextPageName={nextPageInfo?.name}
+      />
 
       {/* Persistent Bottom Navigation */}
       <BottomNavigation 
