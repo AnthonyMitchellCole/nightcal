@@ -132,6 +132,48 @@ export type Database = {
           },
         ]
       }
+      favorite_serving_sizes: {
+        Row: {
+          created_at: string
+          food_id: string
+          id: string
+          serving_size_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          food_id: string
+          id?: string
+          serving_size_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          food_id?: string
+          id?: string
+          serving_size_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "favorite_serving_sizes_food_id_fkey"
+            columns: ["food_id"]
+            isOneToOne: false
+            referencedRelation: "foods"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "favorite_serving_sizes_serving_size_id_fkey"
+            columns: ["serving_size_id"]
+            isOneToOne: false
+            referencedRelation: "serving_sizes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       foods: {
         Row: {
           barcode: string | null

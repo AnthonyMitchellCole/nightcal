@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
-import { ArrowLeft } from 'lucide-react';
+import { useState, useEffect, useRef, useMemo } from 'react';
+import { ArrowLeft, Star } from 'lucide-react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,6 +13,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLogFood, useDailySummary } from '@/hooks/useFoodLogs';
 import { useProfile } from '@/hooks/useProfile';
 import { useToast } from '@/hooks/use-toast';
+import { useFavoriteServingSizes } from '@/hooks/useFavoriteServingSizes';
 
 const LogFood = () => {
   const { foodId } = useParams();
@@ -23,6 +24,7 @@ const LogFood = () => {
   const { summary, loading: summaryLoading } = useDailySummary();
   const { profile, loading: profileLoading } = useProfile();
   const { toast } = useToast();
+  const { getFavoriteForFood, setFavoriteServing, deleteFavoriteServing } = useFavoriteServingSizes();
 
   // Get URL parameters for pre-population
   const presetQuantity = searchParams.get('quantity');
@@ -39,6 +41,13 @@ const LogFood = () => {
   const [servingSizes, setServingSizes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const quantityInputRef = useRef<HTMLInputElement>(null);
+
+  // Check if current serving size is favorited
+  const isFavoriteServing = useMemo(() => {
+    if (!food || !selectedServing) return false;
+    const favoriteServing = getFavoriteForFood(food.id);
+    return favoriteServing?.serving_size_id === selectedServing;
+  }, [food, selectedServing, getFavoriteForFood]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -114,11 +123,17 @@ const LogFood = () => {
         
         setServingSizes(servings);
         
-        // Set serving size based on preset or default
+        // Set serving size based on preset, favorite, or default
         if (presetServingSizeId && servings.find(s => s.id === presetServingSizeId)) {
           setSelectedServing(presetServingSizeId);
         } else {
-          setSelectedServing(servings[0]?.id || 'default-100');
+          // Check if user has a favorite serving size for this food
+          const favoriteServing = getFavoriteForFood(foodId);
+          if (favoriteServing && servings.find(s => s.id === favoriteServing.serving_size_id)) {
+            setSelectedServing(favoriteServing.serving_size_id);
+          } else {
+            setSelectedServing(servings[0]?.id || 'default-100');
+          }
         }
 
       } catch (error) {
@@ -196,6 +211,33 @@ const LogFood = () => {
     fiber: food.fiber_per_100g ? Math.round(food.fiber_per_100g * multiplier) : undefined,
     sugar: food.sugar_per_100g ? Math.round(food.sugar_per_100g * multiplier) : undefined,
     sodium: food.sodium_per_100g ? Math.round(food.sodium_per_100g * multiplier) : undefined
+  };
+
+  const handleToggleFavoriteServing = async () => {
+    if (!food || !selectedServing) return;
+
+    try {
+      if (isFavoriteServing) {
+        await deleteFavoriteServing(food.id);
+        toast({
+          title: "Success",
+          description: "Serving size removed from favorites",
+        });
+      } else {
+        await setFavoriteServing(food.id, selectedServing);
+        toast({
+          title: "Success",
+          description: "Serving size added to favorites",
+        });
+      }
+    } catch (error) {
+      console.error('Error toggling favorite serving size:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update favorite serving size",
+        variant: "destructive"
+      });
+    }
   };
 
   const handleSave = async () => {
@@ -283,18 +325,30 @@ const LogFood = () => {
         {/* Serving Size Selection */}
         <div className="space-y-2">
           <Label>Serving Size</Label>
-          <Select value={selectedServing} onValueChange={setSelectedServing}>
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {servingSizes.map((serving) => (
-                <SelectItem key={serving.id} value={serving.id}>
-                  {serving.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <div className="flex items-center space-x-2">
+            <div className="flex-1">
+              <Select value={selectedServing} onValueChange={setSelectedServing}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {servingSizes.map((serving) => (
+                    <SelectItem key={serving.id} value={serving.id}>
+                      {serving.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => handleToggleFavoriteServing()}
+              className="p-1"
+            >
+              <Star className={`w-4 h-4 ${isFavoriteServing ? 'fill-yellow-400 text-yellow-400' : 'text-gray-400'}`} />
+            </Button>
+          </div>
         </div>
 
         {/* Meal Selection */}

@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { Plus, Trash2, X } from 'lucide-react';
+import { Plus, Trash2, X, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LoadingEmblem } from '@/components/ui/loading-emblem';
 import { useServingSizes } from '@/hooks/useServingSizes';
+import { useFavoriteServingSizes } from '@/hooks/useFavoriteServingSizes';
 import { toast } from '@/hooks/use-toast';
 
 interface ServingSizesManagerProps {
@@ -22,6 +23,7 @@ export const ServingSizesManager = ({ foodId, canEdit }: ServingSizesManagerProp
   });
 
   const { servingSizes, loading: servingsLoading, createServingSize, updateServingSize, deleteServingSize } = useServingSizes(foodId);
+  const { getFavoriteServingSize, setFavoriteServing, deleteFavoriteServing, loading: favoritesLoading } = useFavoriteServingSizes();
 
   const handleAddServing = async () => {
     if (!newServing.name || !newServing.grams) {
@@ -74,6 +76,39 @@ export const ServingSizesManager = ({ foodId, canEdit }: ServingSizesManagerProp
     }
   };
 
+  const handleToggleFavoriteServing = async (servingId: string) => {
+    try {
+      const currentFavorite = getFavoriteServingSize(foodId);
+      
+      if (currentFavorite === servingId) {
+        // If this serving is already favorite, remove it
+        await deleteFavoriteServing(foodId);
+        toast({
+          title: "Success",
+          description: "Favorite serving size removed",
+        });
+      } else {
+        // Set this serving as favorite
+        await setFavoriteServing(foodId, servingId);
+        toast({
+          title: "Success",
+          description: "Favorite serving size set",
+        });
+      }
+    } catch (error) {
+      console.error('Error toggling favorite serving size:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update favorite serving size",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const isFavoriteServing = (servingId: string): boolean => {
+    return getFavoriteServingSize(foodId) === servingId;
+  };
+
 
   if (!canEdit) return null;
 
@@ -94,7 +129,7 @@ export const ServingSizesManager = ({ foodId, canEdit }: ServingSizesManagerProp
         </div>
       </CardHeader>
       <CardContent className="space-y-3">
-        {servingsLoading ? (
+        {servingsLoading || favoritesLoading ? (
           <div className="flex items-center justify-center py-4">
             <LoadingEmblem size="sm" />
           </div>
@@ -105,6 +140,14 @@ export const ServingSizesManager = ({ foodId, canEdit }: ServingSizesManagerProp
                 <div>
                   <div className="flex items-center space-x-2">
                     <span className="font-medium">{serving.name}</span>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleToggleFavoriteServing(serving.id)}
+                      className="p-1"
+                    >
+                      <Star className={`w-3 h-3 ${isFavoriteServing(serving.id) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-400'}`} />
+                    </Button>
                     {serving.is_default && (
                       <span className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded">
                         Default

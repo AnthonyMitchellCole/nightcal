@@ -5,11 +5,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Available Commands
 
 ### Development
-- `npm run dev` - Start development server with hot reloading
 - `npm run build` - Build for production 
 - `npm run build:dev` - Build with development mode
 - `npm run lint` - Run ESLint to check code quality
-- `npm run preview` - Preview production build locally
 
 ### Dependencies
 - `npm i` - Install dependencies (use this after cloning)
