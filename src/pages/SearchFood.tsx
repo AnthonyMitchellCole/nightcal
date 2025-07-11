@@ -48,7 +48,7 @@ const SearchFood = () => {
         <h1 className="text-lg font-semibold">Search Food</h1>
       </div>
 
-      <div className="p-4 space-y-4">
+      <div className="p-4 pb-8 space-y-4">
         {/* Search Input */}
         <Input
           ref={searchInputRef}

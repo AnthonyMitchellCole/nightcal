@@ -45,7 +45,7 @@ const FullLog = () => {
         />
       </div>
       
-      <div className="px-4 pb-4 space-y-4">
+      <div className="px-4 pb-8 space-y-4">
         <DailyTotalsCard 
           dailyTotals={dailyTotals} 
           dailyGoals={dailyGoals} 

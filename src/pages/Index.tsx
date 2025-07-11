@@ -98,7 +98,7 @@ const Index = () => {
       </div>
 
       {/* Favorite Foods List */}
-      <div className="px-4">
+      <div className="px-4 pb-8">
         <div className="mb-4">
           <h2 className="text-xl font-semibold text-text">Favorite Foods</h2>
           <p className="text-sm text-text-muted">

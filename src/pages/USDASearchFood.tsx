@@ -82,7 +82,7 @@ const USDASearchFood = () => {
         </div>
       </div>
 
-      <div className="p-4">
+      <div className="p-4 pb-8">
         {/* Results count */}
         <div className="flex items-center justify-between mb-4">
           <p className="text-sm text-text-muted">
