@@ -74,22 +74,6 @@ export const ServingSizesManager = ({ foodId, canEdit }: ServingSizesManagerProp
     }
   };
 
-  const handleSetDefault = async (servingId: string) => {
-    try {
-      await updateServingSize(servingId, { is_default: true });
-      toast({
-        title: "Success",
-        description: "Default serving size updated",
-      });
-    } catch (error) {
-      console.error('Error updating default serving:', error);
-      toast({
-        title: "Error",
-        description: "Failed to update default serving size",
-        variant: "destructive"
-      });
-    }
-  };
 
   if (!canEdit) return null;
 
@@ -130,16 +114,6 @@ export const ServingSizesManager = ({ foodId, canEdit }: ServingSizesManagerProp
                   <span className="text-sm text-text-muted">{serving.grams}g</span>
                 </div>
                 <div className="flex space-x-2">
-                  {!serving.is_default && (
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleSetDefault(serving.id)}
-                    >
-                      Set Default
-                    </Button>
-                  )}
                   <Button
                     type="button"
                     variant="ghost"

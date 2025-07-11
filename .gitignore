@@ -25,3 +25,4 @@ dist-ssr
 
 # MCP tool configs
 .cursor/mcp.json
+mcp.json
