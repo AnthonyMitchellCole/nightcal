@@ -24,7 +24,7 @@ const LogFood = () => {
   const { summary, loading: summaryLoading } = useDailySummary();
   const { profile, loading: profileLoading } = useProfile();
   const { toast } = useToast();
-  const { getFavoriteForFood, setFavoriteServing, deleteFavoriteServing } = useFavoriteServingSizes();
+  const { getFavoriteForFood, setFavoriteServing, deleteFavoriteServing, loading: favoritesLoading } = useFavoriteServingSizes();
 
   // Get URL parameters for pre-population
   const presetQuantity = searchParams.get('quantity');
@@ -123,17 +123,12 @@ const LogFood = () => {
         
         setServingSizes(servings);
         
-        // Set serving size based on preset, favorite, or default
+        // Set serving size based on preset, or default (favorites will be handled separately)
         if (presetServingSizeId && servings.find(s => s.id === presetServingSizeId)) {
           setSelectedServing(presetServingSizeId);
         } else {
-          // Check if user has a favorite serving size for this food
-          const favoriteServing = getFavoriteForFood(foodId);
-          if (favoriteServing && servings.find(s => s.id === favoriteServing.serving_size_id)) {
-            setSelectedServing(favoriteServing.serving_size_id);
-          } else {
-            setSelectedServing(servings[0]?.id || 'default-100');
-          }
+          // Set default serving size first - favorites will be applied when they load
+          setSelectedServing(servings[0]?.id || 'default-100');
         }
 
       } catch (error) {
@@ -159,6 +154,16 @@ const LogFood = () => {
     }
   }, [loading, food]);
 
+  // Handle favorite serving size updates once favorites load
+  useEffect(() => {
+    if (!favoritesLoading && food && servingSizes.length > 0 && !presetServingSizeId) {
+      const favoriteServing = getFavoriteForFood(food.id);
+      if (favoriteServing && servingSizes.find(s => s.id === favoriteServing.serving_size_id)) {
+        setSelectedServing(favoriteServing.serving_size_id);
+      }
+    }
+  }, [favoritesLoading, food, servingSizes, getFavoriteForFood, presetServingSizeId]);
+
   // Get goals from profile or use defaults
   const dailyGoals = {
     calories: profile?.calorie_goal || 2100,
@@ -175,7 +180,7 @@ const LogFood = () => {
     fat: dailyGoals.fat - summary.fat
   };
 
-  if (loading || !food || summaryLoading || profileLoading) {
+  if (loading || !food || summaryLoading || profileLoading || favoritesLoading) {
     return (
       <div className="min-h-screen bg-bg text-text">
         <div className="sticky-header bg-gradient-glass border-b border-glass backdrop-blur-glass shadow-deep p-4 flex items-center space-x-3">
