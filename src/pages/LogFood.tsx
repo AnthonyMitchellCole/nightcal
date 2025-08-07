@@ -373,6 +373,15 @@ const LogFood = () => {
           </Select>
         </div>
 
+        {/* Save Button */}
+        <Button 
+          onClick={handleSave} 
+          className="w-full" 
+          disabled={logLoading || !selectedMeal}
+        >
+          {logLoading ? 'Adding to Log...' : 'Add to Log'}
+        </Button>
+
         {/* Nutrition Summary */}
         <Card className="glass-elevated shadow-deep backdrop-blur-glass">
           <CardHeader>
@@ -500,15 +509,6 @@ const LogFood = () => {
             </div>
           </CardContent>
         </Card>
-
-        {/* Save Button */}
-        <Button 
-          onClick={handleSave} 
-          className="w-full" 
-          disabled={logLoading || !selectedMeal}
-        >
-          {logLoading ? 'Adding to Log...' : 'Add to Log'}
-        </Button>
       </div>
     </div>
   );
