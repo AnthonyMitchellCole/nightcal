@@ -209,15 +209,6 @@ export const ServingSizesManager = ({ foodId, canEdit }: ServingSizesManagerProp
                   </div>
                 </div>
                 
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    id="is-default"
-                    checked={newServing.is_default}
-                    onChange={(e) => setNewServing(prev => ({ ...prev, is_default: e.target.checked }))}
-                  />
-                  <Label htmlFor="is-default">Set as default serving size</Label>
-                </div>
                 
                 <Button
                   type="button"
