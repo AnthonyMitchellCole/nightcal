@@ -85,14 +85,14 @@ export const QuickAddModal = ({ isOpen, onClose, prePopulatedData }: QuickAddMod
   // Reset form data when prePopulatedData changes
   useEffect(() => {
     if (prePopulatedData) {
-      setFormData({
-        foodName: prePopulatedData.foodName || '',
-        mealId: prePopulatedData.mealId || '',
-        calories: prePopulatedData.calories || '',
-        carbs: prePopulatedData.carbs || '',
-        protein: prePopulatedData.protein || '',
-        fat: prePopulatedData.fat || ''
-      });
+      setFormData(prev => ({
+        foodName: prePopulatedData.foodName ?? prev.foodName,
+        mealId: prePopulatedData.mealId ?? prev.mealId,
+        calories: prePopulatedData.calories ?? prev.calories,
+        carbs: prePopulatedData.carbs ?? prev.carbs,
+        protein: prePopulatedData.protein ?? prev.protein,
+        fat: prePopulatedData.fat ?? prev.fat
+      }));
     }
   }, [prePopulatedData]);
 
